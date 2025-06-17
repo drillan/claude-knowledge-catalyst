@@ -1,140 +1,148 @@
 """Configuration management for Claude Knowledge Catalyst."""
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import yaml
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class SyncTarget(BaseModel):
     """Configuration for sync target (e.g., Obsidian vault)."""
-    
+
     name: str = Field(..., description="Name of the sync target")
     type: str = Field(..., description="Type of sync target (obsidian, notion, etc.)")
     path: Path = Field(..., description="Path to the sync target")
-    enabled: bool = Field(default=True, description="Whether this sync target is enabled")
-    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
-    
-    @validator("type")
+    enabled: bool = Field(
+        default=True, description="Whether this sync target is enabled"
+    )
+    metadata: dict[str, Any] = Field(
+        default_factory=dict, description="Additional metadata"
+    )
+
+    @field_validator("type")
+    @classmethod
     def validate_type(cls, v: str) -> str:
         """Validate sync target type."""
         supported_types = ["obsidian", "notion", "file"]
         if v.lower() not in supported_types:
-            raise ValueError(f"Unsupported sync type: {v}. Supported: {supported_types}")
+            raise ValueError(
+                f"Unsupported sync type: {v}. Supported: {supported_types}"
+            )
         return v.lower()
 
 
 class TagConfig(BaseModel):
     """Configuration for tag management."""
-    
-    category_tags: List[str] = Field(
+
+    category_tags: list[str] = Field(
         default=["prompt", "code", "concept", "resource", "project_log"],
-        description="Category tags for content classification"
+        description="Category tags for content classification",
     )
-    tech_tags: List[str] = Field(
+    tech_tags: list[str] = Field(
         default=["python", "javascript", "react", "nodejs"],
-        description="Technology-specific tags"
+        description="Technology-specific tags",
     )
-    claude_tags: List[str] = Field(
-        default=["opus", "sonnet", "haiku"],
-        description="Claude model-specific tags"
+    claude_tags: list[str] = Field(
+        default=["opus", "sonnet", "haiku"], description="Claude model-specific tags"
     )
-    status_tags: List[str] = Field(
+    status_tags: list[str] = Field(
         default=["draft", "tested", "production", "deprecated"],
-        description="Status tags for content lifecycle"
+        description="Status tags for content lifecycle",
     )
-    quality_tags: List[str] = Field(
+    quality_tags: list[str] = Field(
         default=["high", "medium", "low", "experimental"],
-        description="Quality assessment tags"
+        description="Quality assessment tags",
     )
 
 
 class WatchConfig(BaseModel):
     """Configuration for file watching."""
-    
-    watch_paths: List[Path] = Field(
-        default=[Path(".claude")],
-        description="Paths to watch for changes"
+
+    watch_paths: list[Path] = Field(
+        default=[Path(".claude")], description="Paths to watch for changes"
     )
-    file_patterns: List[str] = Field(
-        default=["*.md", "*.txt"],
-        description="File patterns to watch"
+    file_patterns: list[str] = Field(
+        default=["*.md", "*.txt"], description="File patterns to watch"
     )
-    ignore_patterns: List[str] = Field(
-        default=[".git", "__pycache__", "*.pyc"],
-        description="Patterns to ignore"
+    ignore_patterns: list[str] = Field(
+        default=[".git", "__pycache__", "*.pyc"], description="Patterns to ignore"
     )
     debounce_seconds: float = Field(
-        default=1.0,
-        description="Debounce time for file change events"
+        default=1.0, description="Debounce time for file change events"
     )
 
 
 class CKCConfig(BaseModel):
     """Main configuration for Claude Knowledge Catalyst."""
-    
+
     version: str = Field(default="1.0", description="Configuration version")
     project_name: str = Field(default="", description="Name of the project")
-    project_root: Path = Field(default=Path("."), description="Root path of the project")
-    
-    # Sync configuration
-    sync_targets: List[SyncTarget] = Field(
-        default_factory=list,
-        description="List of sync targets"
+    project_root: Path = Field(
+        default_factory=lambda: Path.cwd(), description="Root path of the project"
     )
-    auto_sync: bool = Field(default=True, description="Enable automatic synchronization")
-    
+
+    # Sync configuration
+    sync_targets: list[SyncTarget] = Field(
+        default_factory=list, description="List of sync targets"
+    )
+    auto_sync: bool = Field(
+        default=True, description="Enable automatic synchronization"
+    )
+
     # Tag and metadata configuration
     tags: TagConfig = Field(default_factory=TagConfig, description="Tag configuration")
-    
+
     # File watching configuration
-    watch: WatchConfig = Field(default_factory=WatchConfig, description="File watching configuration")
-    
+    watch: WatchConfig = Field(
+        default_factory=WatchConfig, description="File watching configuration"
+    )
+
     # Template configuration
     template_path: Path = Field(
-        default=Path("templates"),
-        description="Path to template files"
+        default=Path("templates"), description="Path to template files"
     )
-    
+
     # Git integration
     git_integration: bool = Field(default=True, description="Enable Git integration")
     auto_commit: bool = Field(default=False, description="Enable automatic commits")
-    
-    @validator("project_root", "template_path", pre=True)
-    def resolve_paths(cls, v: Union[str, Path]) -> Path:
+
+    @field_validator("project_root", "template_path", mode="before")
+    @classmethod
+    def resolve_paths(cls, v: str | Path) -> Path:
         """Resolve relative paths."""
         return Path(v).resolve()
-    
+
     @classmethod
-    def load_from_file(cls, config_path: Union[str, Path]) -> "CKCConfig":
+    def load_from_file(cls, config_path: str | Path) -> "CKCConfig":
         """Load configuration from YAML file."""
         config_path = Path(config_path)
-        
+
         if not config_path.exists():
             # Create default config if it doesn't exist
             config = cls()
             config.save_to_file(config_path)
             return config
-        
-        with open(config_path, "r", encoding="utf-8") as f:
+
+        with open(config_path, encoding="utf-8") as f:
             data = yaml.safe_load(f)
-        
+
         return cls(**data)
-    
-    def save_to_file(self, config_path: Union[str, Path]) -> None:
+
+    def save_to_file(self, config_path: str | Path) -> None:
         """Save configuration to YAML file."""
         config_path = Path(config_path)
-        config_path.parent.mkdir(parents=True, exist_ok=True)
-        
+        # Note: Don't create parent directories as config files are typically 
+        # saved in existing directories (like project root)
+
         # Convert to dict and handle Path objects
-        data = self.dict()
+        data = self.model_dump()
         self._convert_paths_to_str(data)
-        
+
         with open(config_path, "w", encoding="utf-8") as f:
             yaml.dump(data, f, default_flow_style=False, allow_unicode=True)
-    
-    def _convert_paths_to_str(self, data: Dict[str, Any]) -> None:
+
+    def _convert_paths_to_str(self, data: dict[str, Any]) -> None:
         """Convert Path objects to strings for YAML serialization."""
         for key, value in data.items():
             if isinstance(value, Path):
@@ -147,17 +155,17 @@ class CKCConfig(BaseModel):
                         value[i] = str(item)
                     elif isinstance(item, dict):
                         self._convert_paths_to_str(item)
-    
-    def get_enabled_sync_targets(self) -> List[SyncTarget]:
+
+    def get_enabled_sync_targets(self) -> list[SyncTarget]:
         """Get list of enabled sync targets."""
         return [target for target in self.sync_targets if target.enabled]
-    
+
     def add_sync_target(self, target: SyncTarget) -> None:
         """Add a new sync target."""
         # Remove existing target with same name
         self.sync_targets = [t for t in self.sync_targets if t.name != target.name]
         self.sync_targets.append(target)
-    
+
     def remove_sync_target(self, name: str) -> bool:
         """Remove sync target by name."""
         original_count = len(self.sync_targets)
@@ -170,7 +178,7 @@ def get_default_config_path() -> Path:
     return Path.cwd() / "ckc_config.yaml"
 
 
-def load_config(config_path: Optional[Union[str, Path]] = None) -> CKCConfig:
+def load_config(config_path: str | Path | None = None) -> CKCConfig:
     """Load configuration from file or create default."""
     if config_path is None:
         config_path = get_default_config_path()
