@@ -1,0 +1,94 @@
+# Sample Configuration for Claude Knowledge Catalyst
+# Copy this to your project root as 'ckc_config.yaml' and customize as needed
+
+version: "1.0"
+project_name: "My AI-Assisted Project"
+project_root: "."
+
+# Synchronization settings
+auto_sync: true
+git_integration: true
+auto_commit: false
+
+# Sync targets - add your knowledge management tools here
+sync_targets:
+  - name: "main-obsidian-vault"
+    type: "obsidian"
+    path: "/Users/yourname/Documents/ObsidianVault"
+    enabled: true
+    metadata:
+      description: "Primary knowledge vault for AI development insights"
+
+  - name: "backup-vault"
+    type: "obsidian"
+    path: "/Users/yourname/Dropbox/BackupVault"
+    enabled: false
+    metadata:
+      description: "Backup vault for important knowledge items"
+
+# Tag configuration for knowledge classification
+tags:
+  category_tags:
+    - "prompt"
+    - "code"
+    - "concept"
+    - "resource"
+    - "project_log"
+    - "improvement_log"
+  
+  tech_tags:
+    - "python"
+    - "javascript"
+    - "typescript"
+    - "react"
+    - "nodejs"
+    - "fastapi"
+    - "docker"
+    - "git"
+  
+  claude_tags:
+    - "opus"
+    - "sonnet"
+    - "haiku"
+  
+  status_tags:
+    - "draft"
+    - "review"
+    - "tested"
+    - "production"
+    - "deprecated"
+  
+  quality_tags:
+    - "high"
+    - "medium"
+    - "low"
+    - "experimental"
+
+# File watching configuration
+watch:
+  watch_paths:
+    - ".claude"
+    - "docs/claude"  # Additional directory to watch
+  
+  file_patterns:
+    - "*.md"
+    - "*.txt"
+    - "*.json"  # Watch JSON files too
+  
+  ignore_patterns:
+    - ".git"
+    - "__pycache__"
+    - "*.pyc"
+    - ".DS_Store"
+    - "node_modules"
+  
+  debounce_seconds: 1.0
+
+# Template configuration
+template_path: "templates"
+
+# Example custom metadata for this project
+metadata:
+  team: "AI Development Team"
+  repository: "https://github.com/yourorg/your-repo"
+  documentation: "https://your-docs-site.com"
