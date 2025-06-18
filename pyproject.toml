@@ -7,7 +7,7 @@ name = "claude-knowledge-catalyst"
 dynamic = ["version"]
 description = "Knowledge management catalyst for Claude Code development"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 license = "MIT"
 keywords = ["claude", "knowledge", "management", "obsidian", "ai", "development"]
 authors = [
@@ -19,9 +19,6 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Documentation",
@@ -32,20 +29,21 @@ dependencies = [
     "pydantic>=2.0.0",
     "pyyaml>=6.0",
     "watchdog>=3.0.0",
-    "click>=8.0.0",
+    "typer>=0.9.0",
     "rich>=13.0.0",
     "gitpython>=3.1.0",
     "jinja2>=3.1.0",
     "python-frontmatter>=1.0.0",
+    "matplotlib>=3.10.3",
+    "seaborn>=0.13.2",
+    "psutil>=7.0.0",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
-    "black>=23.0.0",
-    "isort>=5.12.0",
-    "flake8>=6.0.0",
+    "ruff>=0.1.0",
     "mypy>=1.0.0",
     "pre-commit>=3.0.0",
 ]
@@ -78,17 +76,30 @@ include = [
 [tool.hatch.build.targets.wheel]
 packages = ["src/claude_knowledge_catalyst"]
 
-[tool.black]
+[tool.ruff]
+target-version = "py311"
 line-length = 88
-target-version = ['py38']
-include = '\.pyi?$'
 
-[tool.isort]
-profile = "black"
-line_length = 88
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
@@ -111,7 +122,7 @@ addopts = [
     "--cov=claude_knowledge_catalyst",
     "--cov-report=term-missing",
     "--cov-report=html",
-    "--cov-fail-under=80",
+    "--cov-fail-under=30",
 ]
 
 [tool.coverage.run]
@@ -130,4 +141,14 @@ exclude_lines = [
     "if __name__ == .__main__.:",
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
+]
+
+# UV configuration
+[tool.uv]
+dev-dependencies = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
 ]

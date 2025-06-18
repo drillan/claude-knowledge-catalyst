@@ -6,6 +6,8 @@ from typing import Any
 import yaml
 from pydantic import BaseModel, Field, field_validator
 
+from .hybrid_config import HybridStructureConfig
+
 
 class SyncTarget(BaseModel):
     """Configuration for sync target (e.g., Obsidian vault)."""
@@ -76,7 +78,7 @@ class WatchConfig(BaseModel):
 class CKCConfig(BaseModel):
     """Main configuration for Claude Knowledge Catalyst."""
 
-    version: str = Field(default="1.0", description="Configuration version")
+    version: str = Field(default="2.0", description="Configuration version")
     project_name: str = Field(default="", description="Name of the project")
     project_root: Path = Field(
         default_factory=lambda: Path.cwd(), description="Root path of the project"
@@ -107,6 +109,13 @@ class CKCConfig(BaseModel):
     git_integration: bool = Field(default=True, description="Enable Git integration")
     auto_commit: bool = Field(default=False, description="Enable automatic commits")
 
+    # Hybrid structure configuration (new in v2.0)
+    hybrid_structure: HybridStructureConfig = Field(
+        default_factory=HybridStructureConfig, 
+        description="Hybrid structure configuration"
+    )
+    
+
     @field_validator("project_root", "template_path", mode="before")
     @classmethod
     def resolve_paths(cls, v: str | Path) -> Path:
@@ -117,16 +126,14 @@ class CKCConfig(BaseModel):
     def load_from_file(cls, config_path: str | Path) -> "CKCConfig":
         """Load configuration from YAML file."""
         config_path = Path(config_path)
-
+        
         if not config_path.exists():
-            # Create default config if it doesn't exist
-            config = cls()
-            config.save_to_file(config_path)
-            return config
-
-        with open(config_path, encoding="utf-8") as f:
+            # Return default configuration for new projects
+            return cls()
+        
+        with open(config_path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
-
+        
         return cls(**data)
 
     def save_to_file(self, config_path: str | Path) -> None:
@@ -143,16 +150,20 @@ class CKCConfig(BaseModel):
             yaml.dump(data, f, default_flow_style=False, allow_unicode=True)
 
     def _convert_paths_to_str(self, data: dict[str, Any]) -> None:
-        """Convert Path objects to strings for YAML serialization."""
+        """Convert Path objects and Enums to strings for YAML serialization."""
         for key, value in data.items():
             if isinstance(value, Path):
                 data[key] = str(value)
+            elif hasattr(value, 'value'):  # Enum objects
+                data[key] = value.value
             elif isinstance(value, dict):
                 self._convert_paths_to_str(value)
             elif isinstance(value, list):
                 for i, item in enumerate(value):
                     if isinstance(item, Path):
                         value[i] = str(item)
+                    elif hasattr(item, 'value'):  # Enum objects
+                        value[i] = item.value
                     elif isinstance(item, dict):
                         self._convert_paths_to_str(item)
 

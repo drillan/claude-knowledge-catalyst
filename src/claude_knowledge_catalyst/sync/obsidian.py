@@ -20,24 +20,29 @@ class ObsidianVaultManager:
         self.vault_path = Path(vault_path)
         self.metadata_manager = metadata_manager
 
-        # Standard Obsidian vault structure based on my-plan.md
+        # Hybrid vault structure with 10-step numbering system
         self.vault_structure = {
-            "00_Inbox": "未整理のアイデアや一時メモ",
-            "01_Projects": "プロジェクト別管理",
-            "02_Knowledge_Base": "共有知識ベース",
-            "02_Knowledge_Base/Prompts": "プロンプト関連",
-            "02_Knowledge_Base/Prompts/Templates": "汎用プロンプトテンプレート",
-            "02_Knowledge_Base/Prompts/Best_Practices": "成功事例とベストプラクティス",
-            "02_Knowledge_Base/Prompts/Improvement_Log": "プロンプト改善の記録",
-            "02_Knowledge_Base/Code_Snippets": "コードスニペット",
-            "02_Knowledge_Base/Code_Snippets/Python": "Python関連",
-            "02_Knowledge_Base/Code_Snippets/JavaScript": "JavaScript関連",
-            "02_Knowledge_Base/Code_Snippets/Other_Languages": "その他言語",
-            "02_Knowledge_Base/Concepts": "AI・LLM関連の概念整理",
-            "02_Knowledge_Base/Resources": "学習リソースと外部参考資料",
-            "03_Templates": "ノート作成用テンプレート",
-            "04_Analytics": "知見の活用状況分析",
-            "05_Archive": "古い・非推奨の知見",
+            "00_Catalyst_Lab": "実験・アイデア孵化の場",
+            "10_Projects": "アクティブプロジェクト管理",
+            "20_Knowledge_Base": "体系化された知見",
+            "20_Knowledge_Base/Prompts": "プロンプト関連",
+            "20_Knowledge_Base/Prompts/Templates": "汎用プロンプトテンプレート",
+            "20_Knowledge_Base/Prompts/Best_Practices": "成功事例とベストプラクティス",
+            "20_Knowledge_Base/Prompts/Improvement_Log": "プロンプト改善の記録",
+            "20_Knowledge_Base/Code_Snippets": "再利用可能なコードスニペット",
+            "20_Knowledge_Base/Code_Snippets/Python": "Python関連",
+            "20_Knowledge_Base/Code_Snippets/JavaScript": "JavaScript関連",
+            "20_Knowledge_Base/Code_Snippets/Bash": "Bash/Shell関連",
+            "20_Knowledge_Base/Code_Snippets/Other_Languages": "その他言語",
+            "20_Knowledge_Base/Concepts": "AI・LLM関連の概念整理",
+            "20_Knowledge_Base/Concepts/API_Design": "API設計原則",
+            "20_Knowledge_Base/Concepts/Software_Architecture": "ソフトウェア設計",
+            "20_Knowledge_Base/Concepts/Development_Practices": "開発手法",
+            "20_Knowledge_Base/Resources": "学習リソースと外部参考資料",
+            "30_Wisdom_Archive": "高品質な知識資産",
+            "_templates": "システムテンプレート",
+            "Analytics": "知見の活用状況分析",
+            "Archive": "古い・非推奨の知見",
         }
 
     def initialize_vault(self) -> bool:
@@ -96,7 +101,9 @@ class ObsidianVaultManager:
             target_path.parent.mkdir(parents=True, exist_ok=True)
 
             # Copy file with enhanced metadata
-            enhanced_content = self._enhance_content_for_obsidian(source_path, metadata)
+            enhanced_content = self._enhance_content_for_obsidian(
+                source_path, metadata, project_name
+            )
             target_path.write_text(enhanced_content, encoding="utf-8")
 
             print(f"Synced: {source_path} -> {target_path}")
@@ -146,39 +153,61 @@ class ObsidianVaultManager:
         Returns:
             Target path in the vault
         """
-        # Base path determination based on category and tags
-        if "prompt" in metadata.tags:
-            if (
-                metadata.status == "production"
-                and metadata.success_rate
-                and metadata.success_rate > 80
-            ):
-                base_path = "02_Knowledge_Base/Prompts/Best_Practices"
-            elif (
-                "improvement" in str(source_path).lower()
-                or "version" in metadata.model_dump()
-            ):
-                base_path = "02_Knowledge_Base/Prompts/Improvement_Log"
-            else:
-                base_path = "02_Knowledge_Base/Prompts/Templates"
-        elif "code" in metadata.tags:
-            # Determine language from tags or content
-            if "python" in metadata.tags:
-                base_path = "02_Knowledge_Base/Code_Snippets/Python"
-            elif "javascript" in metadata.tags:
-                base_path = "02_Knowledge_Base/Code_Snippets/JavaScript"
-            else:
-                base_path = "02_Knowledge_Base/Code_Snippets/Other_Languages"
-        elif "concept" in metadata.tags:
-            base_path = "02_Knowledge_Base/Concepts"
+        # Shared Knowledge First (共有知識最優先): category-based classification
+        # Always place categorized content in Knowledge_Base regardless of project_name
+
+        # Determine if this is shared knowledge content
+        is_shared_knowledge = metadata.category in ["prompt", "code", "concept"] or any(
+            tag in ["prompt", "code", "concept"] for tag in metadata.tags
+        )
+
+        if is_shared_knowledge:
+            # Force shared knowledge placement
+            if metadata.category == "prompt" or "prompt" in metadata.tags:
+                if (
+                    metadata.status == "production"
+                    and metadata.success_rate
+                    and metadata.success_rate > 80
+                ):
+                    base_path = "20_Knowledge_Base/Prompts/Best_Practices"
+                elif (
+                    "improvement" in str(source_path).lower()
+                    or "version" in metadata.model_dump()
+                ):
+                    base_path = "20_Knowledge_Base/Prompts/Improvement_Log"
+                else:
+                    base_path = "20_Knowledge_Base/Prompts/Templates"
+            elif metadata.category == "code" or "code" in metadata.tags:
+                # Determine language from tags or content
+                if "python" in metadata.tags:
+                    base_path = "20_Knowledge_Base/Code_Snippets/Python"
+                elif "javascript" in metadata.tags:
+                    base_path = "20_Knowledge_Base/Code_Snippets/JavaScript"
+                elif any(tag in ["bash", "shell", "git"] for tag in metadata.tags):
+                    base_path = "20_Knowledge_Base/Code_Snippets/Bash"
+                else:
+                    base_path = "20_Knowledge_Base/Code_Snippets/Other_Languages"
+            elif metadata.category == "concept" or "concept" in metadata.tags:
+                # Enhanced concept categorization
+                if any(tag in ["api", "design"] for tag in metadata.tags):
+                    base_path = "20_Knowledge_Base/Concepts/API_Design"
+                elif any(tag in ["architecture", "system"] for tag in metadata.tags):
+                    base_path = "20_Knowledge_Base/Concepts/Software_Architecture"
+                elif any(
+                    tag in ["development", "practices", "methodology"]
+                    for tag in metadata.tags
+                ):
+                    base_path = "20_Knowledge_Base/Concepts/Development_Practices"
+                else:
+                    base_path = "20_Knowledge_Base/Concepts"
         elif "resource" in metadata.tags:
-            base_path = "02_Knowledge_Base/Resources"
+            base_path = "20_Knowledge_Base/Resources"
         elif project_name:
-            # Project-specific content
-            base_path = f"01_Projects/{project_name}/learnings"
+            # Project-specific content (only for truly uncategorized content)
+            base_path = f"10_Projects/{project_name}/learnings"
         else:
-            # Default to inbox for uncategorized content
-            base_path = "00_Inbox"
+            # Default to catalyst lab for uncategorized content
+            base_path = "00_Catalyst_Lab"
 
         # Generate filename with metadata prefix
         filename = self._generate_filename(metadata, source_path)
@@ -217,13 +246,17 @@ class ObsidianVaultManager:
         return f"{date_prefix}_{clean_name}{version_suffix}.md"
 
     def _enhance_content_for_obsidian(
-        self, source_path: Path, metadata: KnowledgeMetadata
+        self,
+        source_path: Path,
+        metadata: KnowledgeMetadata,
+        project_name: str | None = None,
     ) -> str:
         """Enhance content with Obsidian-specific features.
 
         Args:
             source_path: Original file path
             metadata: File metadata
+            project_name: Optional project name
 
         Returns:
             Enhanced content string
@@ -232,7 +265,7 @@ class ObsidianVaultManager:
         original_content = source_path.read_text(encoding="utf-8")
 
         # Create enhanced frontmatter
-        enhanced_frontmatter = self._create_obsidian_frontmatter(metadata)
+        enhanced_frontmatter = self._create_obsidian_frontmatter(metadata, project_name)
 
         # Add Obsidian-specific enhancements
         enhancements = []
@@ -282,11 +315,14 @@ class ObsidianVaultManager:
 
         return enhanced_content
 
-    def _create_obsidian_frontmatter(self, metadata: KnowledgeMetadata) -> str:
+    def _create_obsidian_frontmatter(
+        self, metadata: KnowledgeMetadata, project_name: str | None = None
+    ) -> str:
         """Create Obsidian-compatible frontmatter.
 
         Args:
             metadata: File metadata
+            project_name: Optional project name to ensure project field is set
 
         Returns:
             YAML frontmatter string
@@ -311,6 +347,12 @@ class ObsidianVaultManager:
             frontmatter_data["success_rate"] = metadata.success_rate
         if metadata.purpose:
             frontmatter_data["purpose"] = metadata.purpose
+
+        # Ensure project field is always included when available
+        project_to_use = metadata.project or project_name
+        if project_to_use:
+            frontmatter_data["project"] = project_to_use
+
         if metadata.related_projects:
             frontmatter_data["related_projects"] = metadata.related_projects
         if metadata.quality:

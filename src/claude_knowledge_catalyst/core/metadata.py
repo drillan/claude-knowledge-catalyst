@@ -31,6 +31,7 @@ class KnowledgeMetadata(BaseModel):
     success_rate: int | None = Field(None, description="Success rate percentage")
 
     # Project context
+    project: str | None = Field(None, description="Primary project name")
     purpose: str | None = Field(None, description="Purpose of this knowledge item")
     related_projects: list[str] = Field(
         default_factory=list, description="Related project names"
@@ -39,6 +40,7 @@ class KnowledgeMetadata(BaseModel):
     # Status and quality
     status: str = Field(default="draft", description="Status of the item")
     quality: str | None = Field(None, description="Quality assessment")
+    complexity: str | None = Field(None, description="Content complexity level")
 
     # Additional metadata
     author: str | None = Field(None, description="Author of the content")
@@ -81,6 +83,9 @@ class MetadataManager:
         # Extract tags from content and metadata
         tags = self._extract_tags(metadata, content)
 
+        # Auto-detect project if not specified
+        project = metadata.get("project") or self._auto_detect_project(file_path)
+
         # Create metadata object
         return KnowledgeMetadata(
             title=title,
@@ -92,6 +97,7 @@ class MetadataManager:
             model=metadata.get("model"),
             confidence=metadata.get("confidence"),
             success_rate=metadata.get("success_rate"),
+            project=project,
             purpose=metadata.get("purpose"),
             related_projects=metadata.get("related_projects", []),
             status=metadata.get("status", "draft"),
@@ -167,10 +173,10 @@ class MetadataManager:
         tags = set()
         content_lower = content.lower()
 
-        # Check for technology mentions
+        # Check for technology mentions (精密なパターンマッチング)
         tech_keywords = {
-            "python": ["python", "pip", "conda", "pytest", "django", "flask"],
-            "javascript": ["javascript", "js", "node", "npm", "react", "vue"],
+            "python": ["python", "pip", "conda", "pytest", "django", "flask", "asyncio", "aiopg"],
+            "javascript": ["javascript", "node.js", "npm install", "react", "vue.js", "const ", "let "],
             "react": ["react", "jsx", "component", "useState", "useEffect"],
             "docker": ["docker", "dockerfile", "container", "image"],
             "git": ["git", "commit", "branch", "merge", "pull request"],
@@ -273,3 +279,82 @@ class MetadataManager:
                 suggestions.append(tag)
 
         return suggestions[:5]  # Limit to top 5 suggestions
+
+    def _auto_detect_project(self, file_path: Path) -> str | None:
+        """Auto-detect project name from file path and git context."""
+        # Method 1: Check for .claude/project.yaml
+        claude_dir = self._find_claude_directory(file_path)
+        if claude_dir:
+            project_config = claude_dir / "project.yaml"
+            if project_config.exists():
+                try:
+                    import yaml
+                    with open(project_config, 'r', encoding='utf-8') as f:
+                        config = yaml.safe_load(f)
+                        return config.get('project_name')
+                except Exception:
+                    pass
+        
+        # Method 2: Extract from git repository name
+        git_project = self._detect_project_from_git(file_path)
+        if git_project:
+            return git_project
+        
+        # Method 3: Use parent directory name as fallback
+        return self._detect_project_from_path(file_path)
+    
+    def _find_claude_directory(self, file_path: Path) -> Path | None:
+        """Find the nearest .claude directory walking up the tree."""
+        current = file_path.parent if file_path.is_file() else file_path
+        
+        while current != current.parent:  # Stop at filesystem root
+            claude_dir = current / ".claude"
+            if claude_dir.exists() and claude_dir.is_dir():
+                return claude_dir
+            current = current.parent
+        
+        return None
+    
+    def _detect_project_from_git(self, file_path: Path) -> str | None:
+        """Detect project name from git repository."""
+        try:
+            import subprocess
+            current = file_path.parent if file_path.is_file() else file_path
+            
+            # Find git root
+            result = subprocess.run(
+                ['git', 'rev-parse', '--show-toplevel'],
+                cwd=current,
+                capture_output=True,
+                text=True
+            )
+            
+            if result.returncode == 0:
+                git_root = Path(result.stdout.strip())
+                return git_root.name
+                
+        except (subprocess.SubprocessError, FileNotFoundError):
+            pass
+        
+        return None
+    
+    def _detect_project_from_path(self, file_path: Path) -> str | None:
+        """Detect project name from file path structure."""
+        # Look for common project indicators
+        current = file_path.parent if file_path.is_file() else file_path
+        
+        # Walk up to find a directory that looks like a project root
+        while current != current.parent:
+            # Check for common project files
+            project_indicators = [
+                'package.json', 'pyproject.toml', 'Cargo.toml', 
+                'go.mod', 'pom.xml', 'build.gradle', 'requirements.txt',
+                '.git', 'README.md'
+            ]
+            
+            if any((current / indicator).exists() for indicator in project_indicators):
+                return current.name
+            
+            current = current.parent
+        
+        return None

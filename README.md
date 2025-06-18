@@ -1,30 +1,91 @@
-# Claude Knowledge Catalyst (CKC)
+# Claude Knowledge Catalyst (CKC) v2.0
 
-A comprehensive knowledge management system that automatically synchronizes your Claude Code development insights with tools like Obsidian, enabling seamless organization, search, and reuse of your AI-assisted development knowledge.
+A comprehensive knowledge management system that automatically synchronizes your Claude Code development insights with advanced analytics, AI assistance, and intelligent organization.
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](RELEASE_NOTES.md)
 
-## Features
+## ✨ What's New in v2.0
+
+### 🏗️ Hybrid Structure System
+- **10-step numbering** (00, 10, 20, 30) for flexible directory organization
+- **Three-tier classification**: System directories (_), Core workflow (numbered), Auxiliary (unnumbered)
+- **Backward compatibility** with existing CKC v1.0 vaults
+- **Intelligent content classification** and auto-placement
+
+### 📊 Advanced Analytics & Insights
+- **Comprehensive knowledge analytics** with visualization support
+- **Usage statistics and productivity metrics**
+- **Knowledge evolution tracking** and trend analysis
+- **Performance monitoring** and optimization recommendations
+
+### 🤖 AI-Powered Assistance
+- **Content improvement suggestions** with priority-based recommendations
+- **Intelligent template generation** for 6 content types
+- **Enhanced metadata analysis** with complexity and quality assessment
+- **Smart tagging and categorization** recommendations
+
+### ⚙️ Automation & Maintenance
+- **Automated structure maintenance** with issue detection and auto-fixing
+- **Metadata consistency checking** and enhancement
+- **Health monitoring** with trend analysis
+- **Scheduled maintenance** tasks
+
+## Core Features
 
 - **🔄 Automatic Synchronization**: Watch `.claude/` directories and sync changes in real-time
-- **🏷️ Intelligent Metadata Management**: Auto-extract and enhance metadata with tags, categories, and success metrics
-- **📝 Rich Template System**: Pre-built templates for prompts, code snippets, concepts, and project logs
-- **🔍 Advanced Organization**: Multi-dimensional tagging system for easy discovery and categorization
-- **⚡ CLI Interface**: Powerful command-line tools for setup, management, and monitoring
-- **🎯 Obsidian Integration**: Deep integration with Obsidian vaults including proper directory structure and linking
-- **📊 Success Tracking**: Track prompt effectiveness and improvement over time
-- **🔗 Project Correlation**: Link knowledge items across projects for better insights
+- **🏷️ Intelligent Metadata Management**: Auto-extract and enhance metadata with advanced AI analysis
+- **📝 Rich Template System**: AI-generated templates for prompts, code snippets, concepts, and project logs
+- **🔍 Advanced Organization**: Multi-dimensional tagging and hybrid structure for optimal discovery
+- **⚡ Enhanced CLI Interface**: Comprehensive command-line tools with analytics, AI, and automation features
+- **🎯 Obsidian Integration**: Deep integration with structured vault organization and intelligent linking
+- **📊 Success Tracking**: Advanced analytics for prompt effectiveness and knowledge evolution
+- **🔗 Project Correlation**: Cross-project knowledge linking with relationship mapping
+
+## 🎯 Try CKC in 3 Minutes
+
+**Want to see CKC in action before installing?** Run our interactive demo:
+
+```bash
+# Clone and run the demo
+git clone https://github.com/driller/claude-knowledge-catalyst.git
+cd claude-knowledge-catalyst
+uv sync --dev
+
+# Run main demo (recommended)
+./demo/run_demo.sh user
+
+# Or run directly
+./demo/demo.sh
+
+# Or explore other demos
+./demo/run_demo.sh help
+```
+
+**What the demo shows:**
+- ✅ Real user workflow with actual commands
+- ✅ Automatic content classification and organization
+- ✅ Obsidian vault generation with hybrid structure
+- ✅ Multi-project knowledge sharing capabilities
+
+[📖 Full demo documentation](demo/README.md)
 
 ## Quick Start
 
 ### Installation
 
 ```bash
-# Install from source
+# Install from source using uv (recommended)
 git clone https://github.com/driller/claude-knowledge-catalyst.git
 cd claude-knowledge-catalyst
+
+# Initialize with uv
+uv venv
+uv sync --dev
+
+# Or install with pip
 pip install -e .
 ```
 
@@ -34,56 +95,128 @@ pip install -e .
 # Navigate to your project directory
 cd your-project
 
-# Initialize CKC
-ckc init
+# Initialize CKC with hybrid structure (v2.0)
+uv run ckc init --structure hybrid
 
 # Add Obsidian vault as sync target
-ckc sync add my-vault obsidian /path/to/your/obsidian/vault
+uv run ckc sync add my-vault obsidian /path/to/your/obsidian/vault
 
 # Start watching for changes
-ckc watch
+uv run ckc watch
+
+# Generate analytics report
+uv run ckc analytics report --days 30
+
+# Get AI suggestions for a file
+uv run ckc ai suggest myfile.md
+
+# Run automated maintenance
+uv run ckc maintenance
+```
+
+### Upgrade from CKC v1.0
+
+```bash
+# Update to v2.0
+uv add claude-knowledge-catalyst@2.0.0
+
+# Migrate to hybrid structure
+uv run ckc migrate --to hybrid
+
+# Verify everything works
+uv run ckc status
+uv run ckc structure validate
 ```
 
 ### Sync Existing Knowledge
 
 ```bash
 # Sync all files in .claude directory
-ckc sync run
+uv run ckc sync run
 
 # Sync to specific target
-ckc sync run --target my-vault
+uv run ckc sync run --target my-vault
 
 # Sync with project context
-ckc sync run --project "My Project Name"
+uv run ckc sync run --project "My Project Name"
 ```
 
-## Usage Examples
+## New CLI Commands (v2.0)
 
-### Analyzing a Knowledge File
+### Analytics & Insights
+
+```bash
+# Generate comprehensive analytics report
+uv run ckc analytics report --days 30 --output report.json
+
+# Show usage statistics
+uv run ckc analytics usage --days 7
+
+# View productivity metrics
+uv run ckc analytics report | grep productivity
+```
+
+### AI Assistance
+
+```bash
+# Get content improvement suggestions
+uv run ckc ai suggest .claude/prompt-optimization.md
+
+# Generate intelligent templates
+uv run ckc ai template prompt --title "API Integration"
+uv run ckc ai template code --language python
+uv run ckc ai template concept --title "Design Patterns"
+
+# Get AI insights about content
+uv run ckc ai insights .claude/my-prompt.md
+
+# Get knowledge organization suggestions
+uv run ckc ai organize
+```
+
+### Structure Management
+
+```bash
+# Check structure status
+uv run ckc structure status
+
+# Validate structure integrity
+uv run ckc structure validate
+
+# Configure structure settings
+uv run ckc structure configure
+```
+
+### Migration & Maintenance
+
+```bash
+# Migrate to hybrid structure
+uv run ckc migrate --to hybrid
+
+# Show migration plan
+uv run ckc migrate plan
+
+# Run automated maintenance
+uv run ckc maintenance
+
+# Force maintenance regardless of schedule
+uv run ckc maintenance --force
+```
+
+### Traditional Commands
 
 ```bash
 # Analyze metadata and content
-ckc analyze .claude/prompt-optimization.md
-```
+uv run ckc analyze .claude/prompt-optimization.md
 
-### Managing Sync Targets
-
-```bash
 # List all sync targets
-ckc sync list
+uv run ckc sync list
 
 # Add a new target
-ckc sync add notes-vault obsidian ~/Documents/Notes
+uv run ckc sync add notes-vault obsidian ~/Documents/Notes
 
-# Remove a target
-ckc sync remove old-vault
-```
-
-### Checking System Status
-
-```bash
-# View current configuration and status
-ckc status
+# View current status
+uv run ckc status
 ```
 
 ## Configuration
@@ -197,20 +330,19 @@ Track the effectiveness of your prompts and techniques:
 git clone https://github.com/driller/claude-knowledge-catalyst.git
 cd claude-knowledge-catalyst
 
-# Install development dependencies
-pip install -e ".[dev]"
+# Install development dependencies with uv
+uv sync --dev
 
 # Install pre-commit hooks
-pre-commit install
+uv run pre-commit install
 
 # Run tests
-pytest
+uv run pytest
 
-# Run linting
-black src/ tests/
-isort src/ tests/
-flake8 src/ tests/
-mypy src/
+# Run linting and formatting
+uv run ruff check src/ tests/     # Lint
+uv run ruff format src/ tests/    # Format
+uv run mypy src/                  # Type checking
 ```
 
 ### Project Structure

@@ -1,0 +1,5 @@
+project_name: "Backend-Team"
+description: "Backend development & ML research team - Python, AI/ML, data processing"
+team_type: "backend"
+tech_stack: ["python", "pytorch", "fastapi", "postgresql", "docker"]
+research_areas: ["llm", "nlp", "machine_learning", "architecture"]

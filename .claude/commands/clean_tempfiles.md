@@ -1,0 +1,1 @@
+use subagent: デバッグやテストで生成されたファイルを .claude/debugging-guide.md のルールに従って移動または削除してください
