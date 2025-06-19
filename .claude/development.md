@@ -239,6 +239,65 @@ uv python list --only-installed
 - CI/CDパイプラインでは`uv sync`を使用して高速で確実な環境構築を行う
 - 開発用依存関係は`--dev`オプションを使用して本番環境と分離する
 
+## バージョン管理戦略
+
+### 現在のバージョニング状況（2025年6月19日更新）
+
+CKCプロジェクトでは、適切なセマンティックバージョニング（SemVer）を採用し、パブリックリリースに向けた戦略的なバージョン管理を実装しています。
+
+#### 現在のバージョン設定
+- **現在のバージョン**: `v0.9.0`
+- **開発ステータス**: Beta（プレリリース）
+- **位置づけ**: パブリックリリース前の最終調整段階
+
+#### バージョン管理ファイル
+```
+src/claude_knowledge_catalyst/__init__.py → __version__ = "0.9.0"
+README.md → v0.9.0 表記で統一
+pyproject.toml → "Development Status :: 4 - Beta"
+```
+
+#### 動的バージョン管理
+- **hatch** を使用した動的バージョン管理を採用
+- `pyproject.toml` の `[tool.hatch.version]` 設定により `__init__.py` から自動取得
+- CLI から `uv run ckc --version` でバージョン確認可能
+
+#### 将来のリリース計画
+```
+v0.9.x (現在)     → アルファ版改善・バグ修正
+v1.0.0           → 初回パブリックリリース（機能安定化、ドキュメント完備）
+v1.1.0           → AI支援機能拡張（コンテンツ改善提案、高度アナリティクス）
+v1.2.0           → 構造管理機能（自動最適化、詳細検証）
+v2.0.0           → エンタープライズ機能（Web インターフェース、チーム協働）
+```
+
+#### セマンティックバージョニング原則
+- **PATCH (1.0.0 → 1.0.1)**: 後方互換性のあるバグ修正のみ
+- **MINOR (1.0.0 → 1.1.0)**: 後方互換性のある新機能追加や改善
+- **MAJOR (1.0.0 → 2.0.0)**: 後方互換性のない変更（破壊的変更）
+
+#### バージョン確認コマンド
+```bash
+# バージョン情報の確認
+uv run ckc --version
+uv run ckc -v
+
+# hatchによるバージョン確認
+uv run hatch version
+
+# Pythonからの確認
+python -c "import src.claude_knowledge_catalyst; print(src.claude_knowledge_catalyst.__version__)"
+```
+
+#### バージョン変更プロセス
+1. `src/claude_knowledge_catalyst/__init__.py` の `__version__` を更新
+2. `README.md` 内のバージョン表記を統一
+3. 必要に応じて `pyproject.toml` の Development Status を更新
+4. 動的バージョン管理の動作確認
+5. CLI からのバージョン確認テスト
+
+この戦略により、プロジェクトの成熟度を適切に表現し、パブリックリリースに向けた明確なロードマップを提供しています。
+
 ## Troubleshooting
 
 ### Common Issues

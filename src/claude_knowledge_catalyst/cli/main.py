@@ -13,6 +13,16 @@ from ..core.metadata import MetadataManager
 from ..core.watcher import KnowledgeWatcher
 from ..core.hybrid_config import NumberingSystem
 from ..sync.hybrid_manager import HybridObsidianVaultManager
+from .. import __version__
+
+def version_callback(value: bool) -> None:
+    """Show version information."""
+    if value:
+        console = Console()
+        console.print(f"[bold blue]Claude Knowledge Catalyst (CKC)[/bold blue] v{__version__}")
+        console.print("[dim]A comprehensive knowledge management system for Claude Code development insights.[/dim]")
+        raise typer.Exit()
+
 
 # Initialize Typer app and Rich console
 app = typer.Typer(
@@ -22,6 +32,22 @@ app = typer.Typer(
     rich_markup_mode="rich"
 )
 console = Console()
+
+
+# Add global version option
+@app.callback()
+def main_callback(
+    version: bool = typer.Option(
+        False, 
+        "--version", 
+        "-v",
+        callback=version_callback,
+        is_eager=True,
+        help="Show version information"
+    )
+) -> None:
+    """Claude Knowledge Catalyst CLI."""
+    pass
 
 # Global state
 _config: Optional[CKCConfig] = None
