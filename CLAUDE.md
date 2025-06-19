@@ -12,7 +12,7 @@ Claude Knowledge Catalyst (CKC) is a comprehensive knowledge management system t
 
 ## Project Architecture
 
-> **📋 包括的ドキュメント**: CKCの設計思想、使用方法、実装詳細については、以下の公式ドキュメントを参照してください：
+> **📋 ドキュメント**: CKCの設計思想、使用方法、実装詳細については、以下の公式ドキュメントを参照してください：
 > - [🚀 公式ドキュメント](https://claude-knowledge-catalyst.readthedocs.io/) - 完全なユーザーガイドと開発者リファレンス
 > - [📖 Quick Start](https://claude-knowledge-catalyst.readthedocs.io/en/latest/quick-start/) - 5分で始める導入ガイド
 > - [👥 User Guide](https://claude-knowledge-catalyst.readthedocs.io/en/latest/user-guide/) - 実践的な使用方法

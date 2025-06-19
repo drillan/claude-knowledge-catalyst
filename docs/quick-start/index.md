@@ -11,11 +11,18 @@ Claude Knowledge Catalystを5分で始めるためのガイドです。
 ## Installation
 
 ```bash
-# プロジェクトをクローン
+# PyPIからインストール（推奨）
+uv add claude-knowledge-catalyst
+
+# または uv pip を使用
+uv pip install claude-knowledge-catalyst
+
+# または pip を使用
+pip install claude-knowledge-catalyst
+
+# または開発版をソースからインストール
 git clone https://github.com/drillan/claude-knowledge-catalyst.git
 cd claude-knowledge-catalyst
-
-# 依存関係をインストール
 uv sync --dev
 ```
 

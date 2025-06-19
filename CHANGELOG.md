@@ -69,10 +69,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sync issues with large file batches
 - Cross-platform path handling
 
-## [0.8.x] - Previous Versions
-
-For changelog information about versions prior to 0.9.0, please refer to [RELEASE_NOTES.md](RELEASE_NOTES.md).
-
 ---
 
 ## Legend

@@ -26,7 +26,24 @@ python --version
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### 2. プロジェクトセットアップ
+### 2. CKCのインストール
+
+```bash
+# PyPIからインストール（推奨）
+uv add claude-knowledge-catalyst
+
+# または uv pip を使用
+uv pip install claude-knowledge-catalyst
+
+# または pip を使用
+pip install claude-knowledge-catalyst
+
+# プロジェクトディレクトリで初期化
+cd your-project
+uv run ckc init
+```
+
+#### 開発版のインストール
 
 ```bash
 # リポジトリをクローン

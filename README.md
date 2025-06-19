@@ -5,13 +5,14 @@
 Claude Code との開発プロセスで生まれる知見を自動的に構造化し、Obsidian との深層統合により長期的な知識資産として蓄積・活用するための包括的なプラットフォームです。
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![PyPI version](https://img.shields.io/pypi/v/claude-knowledge-catalyst.svg)](https://pypi.org/project/claude-knowledge-catalyst/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/claude-knowledge-catalyst.svg)](https://pypi.org/project/claude-knowledge-catalyst/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![Version](https://img.shields.io/badge/version-0.9.1-blue.svg)](CHANGELOG.md)
 [![Documentation](https://img.shields.io/badge/docs-readthedocs-brightgreen.svg)](https://claude-knowledge-catalyst.readthedocs.io/)
 [![Read the Docs](https://readthedocs.org/projects/claude-knowledge-catalyst/badge/?version=latest)](https://claude-knowledge-catalyst.readthedocs.io/en/latest/)
 
-> **📋 詳細ドキュメント**: システム設計と実装の詳細については [包括的ドキュメント](https://claude-knowledge-catalyst.readthedocs.io/) を参照してください
+> **📋 詳細ドキュメント**: システム設計と実装の詳細については [ドキュメント](https://claude-knowledge-catalyst.readthedocs.io/) を参照してください
 
 ## ✨ What's New in v0.9.1
 
@@ -87,16 +88,19 @@ uv sync --dev
 ### Installation
 
 ```bash
-# Install from source using uv (recommended)
+# Install from PyPI using uv (recommended)
+uv add claude-knowledge-catalyst
+
+# Or install with uv pip
+uv pip install claude-knowledge-catalyst
+
+# Or using pip
+pip install claude-knowledge-catalyst
+
+# Or install from source for development
 git clone https://github.com/drillan/claude-knowledge-catalyst.git
 cd claude-knowledge-catalyst
-
-# Initialize with uv
-uv venv
 uv sync --dev
-
-# Or install with pip
-pip install -e .
 ```
 
 ### Initialize in Your Project
@@ -105,7 +109,7 @@ pip install -e .
 # Navigate to your project directory
 cd your-project
 
-# Initialize CKC with hybrid structure (v0.9.0)
+# Initialize CKC with hybrid structure
 uv run ckc init
 
 # Add Obsidian vault as sync target
@@ -137,8 +141,14 @@ watch:
 ### Upgrade from Previous Versions
 
 ```bash
-# Update to v0.9.1 (latest)
-uv add claude-knowledge-catalyst@0.9.1
+# Update to v0.9.1 (latest) using uv
+uv add claude-knowledge-catalyst@latest
+
+# Or using uv pip
+uv pip install --upgrade claude-knowledge-catalyst
+
+# Or using pip
+pip install --upgrade claude-knowledge-catalyst
 
 # Verify everything works
 uv run ckc status
