@@ -128,7 +128,9 @@ class KnowledgeClassifier:
         
         # Phase 2: Tag-based classification as fallback
         # More specific tags take precedence over general ones
-        if "code" in metadata.tags:
+        if "command" in metadata.tags:
+            return self._classify_command(content, metadata)
+        elif "code" in metadata.tags:
             return self._classify_code(content, metadata)
         elif "concept" in metadata.tags:
             return self._classify_concept(content, metadata)
@@ -337,6 +339,43 @@ class KnowledgeClassifier:
         # Default to base directory for compatibility
         return base_path
     
+    def _classify_command(self, content: str, metadata: KnowledgeMetadata) -> str:
+        """Classify command content to system _commands directory."""
+        base_path = "_commands"
+        
+        # Priority 1: Check for explicit subcategory in metadata
+        subcategory = getattr(metadata, 'subcategory', None)
+        if subcategory:
+            subcategory_mapping = {
+                'slash_commands': 'Slash_Commands',
+                'cli_tools': 'CLI_Tools',
+                'automation': 'Automation',
+                'scripts': 'Scripts'
+            }
+            mapped_subcategory = subcategory_mapping.get(subcategory.lower(), subcategory)
+            return f"{base_path}/{mapped_subcategory}"
+        
+        content_lower = content.lower()
+        
+        # Detect slash commands (executable files or documentation)
+        if (any(term in content_lower for term in 
+               ["#!/bin/bash", "スラッシュコマンド", "slash command", "/ckc-"]) or
+            content.strip().startswith("#!/")):
+            return f"{base_path}/Slash_Commands"
+        
+        # CLI tools and CKC commands
+        if any(term in content_lower for term in 
+               ["uv run ckc", "cli", "command line", "コマンドライン"]):
+            return f"{base_path}/CLI_Tools"
+        
+        # Automation scripts
+        if any(term in content_lower for term in 
+               ["automation", "script", "自動化", "batch", "pipeline"]):
+            return f"{base_path}/Automation"
+        
+        # Default to Scripts subdirectory
+        return f"{base_path}/Scripts"
+    
     def _classify_for_project(self, metadata: KnowledgeMetadata, 
                              project_name: str) -> str | None:
         """Classify content for specific project."""
@@ -351,6 +390,13 @@ class KnowledgeClassifier:
                                      metadata: KnowledgeMetadata) -> str:
         """Classify based on content analysis when no specific tags."""
         content_lower = content.lower()
+        
+        # Check for command patterns (highest priority for executable content)
+        if (any(pattern in content_lower for pattern in 
+               ["#!/bin/bash", "#!/bin/sh", "uv run ckc", "/ckc-", "スラッシュコマンド",
+                "slash command", "cli command", "automation", "自動化"]) or
+            content.strip().startswith("#!")):
+            return self._classify_command(content, metadata)
         
         # Check for code patterns
         if any(pattern in content for pattern in ["```", "def ", "function ", "class "]):

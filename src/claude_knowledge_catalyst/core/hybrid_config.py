@@ -84,7 +84,8 @@ class HybridStructureConfig(BaseModel):
                 "_templates": "テンプレートファイル集",
                 "_attachments": "メディア・添付ファイル",
                 "_scripts": "自動化スクリプト",
-                "_docs": "システムドキュメント"
+                "_docs": "システムドキュメント",
+                "_commands": "スラッシュコマンド・自動化"
             },
             "core_dirs": {
                 "00_Catalyst_Lab": "実験・プロトタイプ開発",

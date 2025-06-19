@@ -1,0 +1,3 @@
+#!/bin/bash
+# CKC Smart Sync - 基本実行（確認付き）
+uv run ckc smart-sync

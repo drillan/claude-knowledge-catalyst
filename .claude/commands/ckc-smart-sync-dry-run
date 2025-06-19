@@ -1,0 +1,3 @@
+#!/bin/bash
+# CKC Smart Sync - プレビューモード（実行なし）
+uv run ckc smart-sync --dry-run

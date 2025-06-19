@@ -1,0 +1,3 @@
+#!/bin/bash
+# CKC Smart Sync - 自動適用モード（確認なし）
+uv run ckc smart-sync --auto-apply
