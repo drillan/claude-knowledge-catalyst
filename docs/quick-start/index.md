@@ -2,27 +2,45 @@
 
 Claude Knowledge Catalystを5分で始めるためのガイドです。
 
-## Prerequisites
+## 前提条件
 
-- Python 3.11以上
-- uv (Python package manager)
-- Git
+Claude Knowledge Catalystを使い始める前に、以下をインストールしてください：
 
-## Installation
+- **Python 3.11+**: [Pythonをダウンロード](https://www.python.org/downloads/)
+- **uv**: モダンなPythonパッケージマネージャー・プロジェクトマネージャー
+  - **インストール**: [公式uvインストールガイド](https://docs.astral.sh/uv/getting-started/installation/)に従ってください
+  - **クイックインストール**: `curl -LsSf https://astral.sh/uv/install.sh | sh` (Unix/macOS) または `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"` (Windows)
+
+## インストール
+
+### 仮想環境のセットアップ
 
 ```bash
-# PyPIからインストール（推奨）
-uv add claude-knowledge-catalyst
+# 仮想環境を作成
+uv venv
 
-# または uv pip を使用
+# 仮想環境を有効化
+source .venv/bin/activate  # Linux/macOS
+# .venv\Scripts\activate   # Windows
+```
+
+### CKCのインストール
+
+```bash
+# PyPIからuv pipを使用してインストール（推奨）
 uv pip install claude-knowledge-catalyst
 
-# または pip を使用
+# またはuv addを使用（Pythonプロジェクトの場合）
+uv add claude-knowledge-catalyst
+
+# またはpipを使用
 pip install claude-knowledge-catalyst
 
 # または開発版をソースからインストール
 git clone https://github.com/drillan/claude-knowledge-catalyst.git
 cd claude-knowledge-catalyst
+uv venv
+source .venv/bin/activate  # Linux/macOS
 uv sync --dev
 ```
 

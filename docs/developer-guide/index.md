@@ -56,10 +56,25 @@ graph TB
 
 ### 1. 開発環境のセットアップ
 
+#### 前提条件
+
+- **Python 3.11+**: [Pythonをダウンロード](https://www.python.org/downloads/)
+- **uv**: [公式uvインストールガイド](https://docs.astral.sh/uv/getting-started/installation/)
+- **Git**: バージョン管理用
+
+#### セットアップ手順
+
 ```bash
 # リポジトリをクローン
 git clone https://github.com/drillan/claude-knowledge-catalyst.git
 cd claude-knowledge-catalyst
+
+# 仮想環境を作成
+uv venv
+
+# 仮想環境を有効化
+source .venv/bin/activate  # Linux/macOS
+# .venv\Scripts\activate   # Windows
 
 # 開発依存関係をインストール
 uv sync --dev

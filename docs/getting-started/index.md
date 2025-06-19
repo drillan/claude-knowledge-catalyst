@@ -16,26 +16,36 @@ Claude Knowledge Catalyst (CKC) は、Claude Codeとの開発プロセスで生�
 
 ## インストールと初期設定
 
-### 1. 環境準備
+### 1. 前提条件
+
+Claude Knowledge Catalystを使い始める前に、以下をインストールしてください：
+
+- **Python 3.11+**: [Pythonをダウンロード](https://www.python.org/downloads/)
+- **uv**: モダンなPythonパッケージマネージャー・プロジェクトマネージャー
+  - **インストール**: [公式uvインストールガイド](https://docs.astral.sh/uv/getting-started/installation/)に従ってください
+  - **クイックインストール**: `curl -LsSf https://astral.sh/uv/install.sh | sh` (Unix/macOS) または `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"` (Windows)
+
+### 2. 仮想環境のセットアップ
 
 ```bash
-# Python 3.11以上が必要
-python --version
+# 仮想環境を作成
+uv venv
 
-# uvパッケージマネージャーのインストール
-curl -LsSf https://astral.sh/uv/install.sh | sh
+# 仮想環境を有効化
+source .venv/bin/activate  # Linux/macOS
+# .venv\Scripts\activate   # Windows
 ```
 
-### 2. CKCのインストール
+### 3. CKCのインストール
 
 ```bash
-# PyPIからインストール（推奨）
-uv add claude-knowledge-catalyst
-
-# または uv pip を使用
+# PyPIからuv pipを使用してインストール（推奨）
 uv pip install claude-knowledge-catalyst
 
-# または pip を使用
+# またはuv addを使用（Pythonプロジェクトの場合）
+uv add claude-knowledge-catalyst
+
+# またはpipを使用
 pip install claude-knowledge-catalyst
 
 # プロジェクトディレクトリで初期化
@@ -50,7 +60,14 @@ uv run ckc init
 git clone https://github.com/drillan/claude-knowledge-catalyst.git
 cd claude-knowledge-catalyst
 
-# 依存関係をインストール
+# 仮想環境を作成（プロジェクト内）
+uv venv
+
+# 仮想環境を有効化
+source .venv/bin/activate  # Linux/macOS
+# .venv\Scripts\activate   # Windows
+
+# 開発依存関係をインストール
 uv sync --dev
 
 # 初期化
