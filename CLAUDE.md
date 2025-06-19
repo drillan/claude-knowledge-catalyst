@@ -12,11 +12,12 @@ Claude Knowledge Catalyst (CKC) is a comprehensive knowledge management system t
 
 ## Project Architecture
 
-> **詳細アーキテクチャドキュメント**: CKCの包括的な設計思想と実装詳細については、以下のドキュメントを参照してください：
-> - [📋 アーキテクチャ概要](.claude/architecture/overview.md) - システム全体の設計思想とコンポーネント構成
-> - [🏷️ メタデータシステム](.claude/architecture/metadata_system.md) - フロントマター、タグ、プロジェクト管理の詳細仕様
-> - [💬 プロンプト管理システム](.claude/architecture/prompt_management.md) - プロンプト記録・分析・改善の包括システム
-> - [🗂️ 分類・Obsidian統合](.claude/architecture/classification_obsidian.md) - 適応型システム基盤による知識分類とObsidian深層統合
+> **📋 包括的ドキュメント**: CKCの設計思想、使用方法、実装詳細については、以下の公式ドキュメントを参照してください：
+> - [🚀 公式ドキュメント](https://claude-knowledge-catalyst.readthedocs.io/) - 完全なユーザーガイドと開発者リファレンス
+> - [📖 Quick Start](https://claude-knowledge-catalyst.readthedocs.io/en/latest/quick-start/) - 5分で始める導入ガイド
+> - [👥 User Guide](https://claude-knowledge-catalyst.readthedocs.io/en/latest/user-guide/) - 実践的な使用方法
+> - [🔧 Developer Guide](https://claude-knowledge-catalyst.readthedocs.io/en/latest/developer-guide/) - 開発者向けリファレンス
+> - [📋 API Reference](https://claude-knowledge-catalyst.readthedocs.io/en/latest/api-reference/) - 技術仕様
 
 ### Core Components
 - **core/config.py**: Configuration management with Pydantic models

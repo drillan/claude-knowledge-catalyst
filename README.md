@@ -8,8 +8,10 @@ Claude Code との開発プロセスで生まれる知見を自動的に構造�
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Version](https://img.shields.io/badge/version-0.9.0-blue.svg)](RELEASE_NOTES.md)
+[![Documentation](https://img.shields.io/badge/docs-readthedocs-brightgreen.svg)](https://claude-knowledge-catalyst.readthedocs.io/)
+[![Read the Docs](https://readthedocs.org/projects/claude-knowledge-catalyst/badge/?version=latest)](https://claude-knowledge-catalyst.readthedocs.io/en/latest/)
 
-> **📋 詳細アーキテクチャ**: システム設計と実装の詳細については [アーキテクチャドキュメント](.claude/architecture/) を参照してください
+> **📋 詳細ドキュメント**: システム設計と実装の詳細については [包括的ドキュメント](https://claude-knowledge-catalyst.readthedocs.io/) を参照してください
 
 ## ✨ What's New in v0.9.0
 
@@ -119,6 +121,8 @@ uv run ckc sync --target my-vault
 # Sync with project context
 uv run ckc sync --project "My Project Name"
 ```
+
+> **📚 詳細ガイド**: より詳しいセットアップと使用方法については、[公式ドキュメント](https://claude-knowledge-catalyst.readthedocs.io/)の[Quick Start](https://claude-knowledge-catalyst.readthedocs.io/en/latest/quick-start/)と[Getting Started](https://claude-knowledge-catalyst.readthedocs.io/en/latest/getting-started/)をご覧ください。
 
 ## 利用可能なCLIコマンド
 
@@ -357,7 +361,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- 📖 [Documentation](https://github.com/drillan/claude-knowledge-catalyst/wiki)
+- 📖 [Documentation](https://claude-knowledge-catalyst.readthedocs.io/)
 - 🐛 [Issue Tracker](https://github.com/drillan/claude-knowledge-catalyst/issues)
 - 💬 [Discussions](https://github.com/drillan/claude-knowledge-catalyst/discussions)
 

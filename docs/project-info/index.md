@@ -124,6 +124,7 @@ in the Software without restriction...
 ## 連絡先
 
 - **GitHub**: [drillan/claude-knowledge-catalyst](https://github.com/drillan/claude-knowledge-catalyst)
+- **Documentation**: [https://claude-knowledge-catalyst.readthedocs.io/](https://claude-knowledge-catalyst.readthedocs.io/)
 - **Issues**: [GitHub Issues](https://github.com/drillan/claude-knowledge-catalyst/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/drillan/claude-knowledge-catalyst/discussions)
 
