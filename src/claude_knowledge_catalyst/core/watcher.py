@@ -10,6 +10,7 @@ from watchdog.observers import Observer
 
 from .config import WatchConfig
 from .metadata import MetadataManager
+from .claude_md_processor import ClaudeMdProcessor
 
 
 class KnowledgeFileEventHandler(FileSystemEventHandler):
@@ -33,6 +34,10 @@ class KnowledgeFileEventHandler(FileSystemEventHandler):
         self.watch_config = watch_config
         self.metadata_manager = metadata_manager
         self.debounce_cache: dict[str, float] = {}
+        # Initialize CLAUDE.md processor
+        self.claude_md_processor = ClaudeMdProcessor(
+            sections_exclude=watch_config.claude_md_sections_exclude
+        )
 
     def on_modified(self, event: FileSystemEvent) -> None:
         """Handle file modification events."""
@@ -84,6 +89,12 @@ class KnowledgeFileEventHandler(FileSystemEventHandler):
         for pattern in self.watch_config.ignore_patterns:
             if pattern in file_str or file_path.match(pattern):
                 return False
+
+        # Check CLAUDE.md patterns if enabled
+        if self.watch_config.include_claude_md:
+            for pattern in self.watch_config.claude_md_patterns:
+                if file_path.name == "CLAUDE.md" or file_path.match(pattern):
+                    return True
 
         # Check file patterns
         for pattern in self.watch_config.file_patterns:
@@ -207,13 +218,31 @@ class KnowledgeWatcher:
             return
 
         try:
-            # Extract current metadata
-            metadata = self.metadata_manager.extract_metadata_from_file(file_path)
+            # Check if this is a CLAUDE.md file
+            is_claude_md = (file_path.name == "CLAUDE.md" and 
+                          self.watch_config.include_claude_md)
+            
+            if is_claude_md:
+                # Use specialized CLAUDE.md metadata
+                claude_metadata = self.claude_md_processor.get_metadata_for_claude_md(file_path)
+                # Extract standard metadata and merge
+                metadata = self.metadata_manager.extract_metadata_from_file(file_path)
+                
+                # Update timestamp
+                from datetime import datetime
+                metadata.updated = datetime.now()
+                
+                # Add CLAUDE.md specific metadata
+                for key, value in claude_metadata.items():
+                    setattr(metadata, key, value)
+                    
+            else:
+                # Extract current metadata for regular files
+                metadata = self.metadata_manager.extract_metadata_from_file(file_path)
 
-            # Update timestamp
-            from datetime import datetime
-
-            metadata.updated = datetime.now()
+                # Update timestamp
+                from datetime import datetime
+                metadata.updated = datetime.now()
 
             # Update metadata in file
             self.metadata_manager.update_file_metadata(file_path, metadata)

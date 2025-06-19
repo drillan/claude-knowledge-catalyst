@@ -49,6 +49,7 @@ Claude Knowledge Catalyst は、以下の主要機能を提供します：
 - **自動メタデータ抽出**: プロジェクト検出、タグ推論、文脈解析
 - **構造化組織**: 成熟度による段階的分類
 - **双方向同期**: .claude ディレクトリと Obsidian ボルトの seamless 連携
+- **🔒 CLAUDE.md同期**: セキュアなセクションフィルタリングで機密情報を保護
 
 ### 🎯 Obsidian深層統合
 - 構造化ボルト、双方向リンク、グラフビューの活用
@@ -71,6 +72,7 @@ getting-started/index
 
 user-guide/index
 user-guide/core-concepts
+user-guide/claude-md-sync
 user-guide/tutorials/index
 ```
 
@@ -90,6 +92,12 @@ project-info/index
 ```
 
 ## Latest Updates
+
+### v0.9.1 - CLAUDE.md同期機能
+- 🔒 **セキュアなCLAUDE.md同期**: セクション単位での除外機能
+- 🛡️ **プライバシー保護**: 機密情報の自動フィルタリング
+- 🎯 **柔軟な設定**: プロジェクトに応じたカスタマイズ
+- 📊 **メタデータ強化**: CLAUDE.md専用の詳細情報生成
 
 ### v0.9.0 - 適応型システム基盤
 - 10-step numbering による知識成熟度管理

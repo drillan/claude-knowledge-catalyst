@@ -12,13 +12,16 @@ Claude Knowledge Catalystの包括的なAPIリファレンスです。
 :maxdepth: 2
 :hidden:
 
+configuration
 ```
 
 ## Core Modules
 
 ### Configuration Management
+- [Configuration Reference](configuration.md) - 完全な設定リファレンス
 - `core.config` - 設定管理とPydanticモデル
 - `core.hybrid_config` - ハイブリッド設定システム
+- `core.claude_md_processor` - CLAUDE.md処理システム
 
 ### Metadata Processing
 - `core.metadata` - メタデータ抽出と強化

@@ -33,6 +33,7 @@ graph TB
     Core --> Config[Configuration]
     Core --> Metadata[Metadata Processing]
     Core --> Watcher[File Watcher]
+    Core --> ClaudeMD[CLAUDE.md Processor]
     
     Core --> Sync[Sync System]
     Sync --> Obsidian[Obsidian Integration]
@@ -41,10 +42,14 @@ graph TB
     Core --> Analytics[Analytics]
     Analytics --> AI[AI Assistant]
     
+    Watcher --> ClaudeMD
+    ClaudeMD --> Metadata
+    
     style CLI fill:#e1f5fe
     style Core fill:#f3e5f5
     style Sync fill:#e8f5e8
     style Analytics fill:#fff3e0
+    style ClaudeMD fill:#ffecb3
 ```
 
 ## Quick Start for Developers
@@ -194,6 +199,215 @@ tags: [test, example]
         assert result["title"] == "Test Document"
         assert "test" in result["tags"]
         assert "example" in result["tags"]
+```
+
+## CLAUDE.md処理システムの実装
+
+### 設計方針
+
+CLAUDE.md同期機能は以下の設計方針に基づいて実装されています：
+
+1. **セキュリティファースト**: デフォルトで無効化、明示的な有効化が必要
+2. **柔軟なフィルタリング**: セクション単位での除外機能
+3. **メタデータ強化**: CLAUDE.md専用の詳細メタデータ生成
+4. **非破壊的処理**: 元ファイルは変更せず、フィルタリング後の内容を同期
+
+### 実装アーキテクチャ
+
+```{mermaid}
+graph TD
+    Config[WatchConfig] --> Watcher[KnowledgeWatcher]
+    Watcher --> Handler[KnowledgeFileEventHandler]
+    Handler --> Processor[ClaudeMdProcessor]
+    
+    Processor --> Filter[Section Filtering]
+    Processor --> Meta[Metadata Generation]
+    
+    Filter --> Content[Filtered Content]
+    Meta --> Enhanced[Enhanced Metadata]
+    
+    Content --> Sync[Obsidian Sync]
+    Enhanced --> Sync
+    
+    style Config fill:#e3f2fd
+    style Processor fill:#ffecb3
+    style Filter fill:#f3e5f5
+    style Meta fill:#e8f5e8
+```
+
+### 主要コンポーネント
+
+#### 1. ClaudeMdProcessor
+
+```python
+class ClaudeMdProcessor:
+    """CLAUDE.md専用プロセッサー"""
+    
+    def __init__(self, sections_exclude: list[str] | None = None):
+        """除外セクションを指定して初期化"""
+        self.sections_exclude = sections_exclude or []
+        self.exclude_patterns = [
+            re.compile(rf"^{re.escape(section.strip())}$", re.IGNORECASE)
+            for section in self.sections_exclude
+        ]
+    
+    def process_claude_md(self, file_path: Path) -> str:
+        """CLAUDE.mdを処理してフィルタリング済み内容を返す"""
+        # セクションフィルタリングロジック
+        
+    def get_metadata_for_claude_md(self, file_path: Path) -> dict[str, Any]:
+        """CLAUDE.md専用メタデータを生成"""
+        # メタデータ生成ロジック
+```
+
+#### 2. WatchConfig拡張
+
+```python
+class WatchConfig(BaseModel):
+    """ファイル監視設定"""
+    
+    # 既存設定...
+    
+    # CLAUDE.md関連設定
+    include_claude_md: bool = Field(
+        default=False, 
+        description="CLAUDE.md同期の有効/無効"
+    )
+    claude_md_patterns: list[str] = Field(
+        default=["CLAUDE.md", ".claude/CLAUDE.md"],
+        description="同期対象ファイルパターン"
+    )
+    claude_md_sections_exclude: list[str] = Field(
+        default=[],
+        description="除外するセクションヘッダー"
+    )
+```
+
+#### 3. ファイル監視統合
+
+```python
+class KnowledgeFileEventHandler(FileSystemEventHandler):
+    """ファイルイベントハンドラー"""
+    
+    def __init__(self, watch_config: WatchConfig, ...):
+        # CLAUDE.mdプロセッサーを初期化
+        self.claude_md_processor = ClaudeMdProcessor(
+            sections_exclude=watch_config.claude_md_sections_exclude
+        )
+    
+    def _should_process_file(self, file_path: Path) -> bool:
+        """ファイル処理対象判定"""
+        # CLAUDE.mdパターンチェック
+        if self.watch_config.include_claude_md:
+            for pattern in self.watch_config.claude_md_patterns:
+                if file_path.name == "CLAUDE.md" or file_path.match(pattern):
+                    return True
+        # 通常のファイルパターンチェック
+        ...
+```
+
+### セキュリティ実装
+
+#### 1. デフォルト無効化
+
+```python
+# 設定のデフォルト値で安全性を確保
+include_claude_md: bool = Field(default=False)  # 明示的にFalse
+```
+
+#### 2. セクションフィルタリング
+
+```python
+def _filter_sections(self, content: str) -> str:
+    """セクション単位でコンテンツをフィルタリング"""
+    lines = content.split('\n')
+    filtered_lines = []
+    skip_section = False
+    
+    for line in lines:
+        if line.strip().startswith('#'):
+            # セクションヘッダー検出
+            skip_section = self._should_exclude_section(line.strip())
+            if not skip_section:
+                filtered_lines.append(line)
+        else:
+            # セクション内容の処理
+            if not skip_section:
+                filtered_lines.append(line)
+    
+    return '\n'.join(filtered_lines)
+```
+
+#### 3. 大文字小文字非依存マッチング
+
+```python
+# 除外パターンの生成（大文字小文字無視）
+self.exclude_patterns = [
+    re.compile(rf"^{re.escape(section.strip())}$", re.IGNORECASE)
+    for section in self.sections_exclude
+]
+```
+
+### テスト戦略
+
+#### 1. 単体テスト
+
+```python
+class TestClaudeMdProcessor:
+    """CLAUDE.mdプロセッサーのテスト"""
+    
+    def test_section_filtering_case_insensitive(self):
+        """大文字小文字を区別しないセクション除外"""
+        processor = ClaudeMdProcessor(["# Secrets", "# Private"])
+        # 大文字小文字の異なるセクションでテスト
+        
+    def test_empty_file_handling(self):
+        """空ファイルの処理"""
+        # 空のCLAUDE.mdファイルは同期されないことを確認
+        
+    def test_metadata_generation(self):
+        """メタデータ生成のテスト"""
+        # プロジェクト情報、セクション解析のテスト
+```
+
+#### 2. 統合テスト
+
+```python
+class TestCLAUDEMDIntegration:
+    """CLAUDE.md機能の統合テスト"""
+    
+    def test_watch_integration(self):
+        """ファイル監視との統合テスト"""
+        # 実際のファイル変更をシミュレート
+        
+    def test_obsidian_sync_integration(self):
+        """Obsidian同期との統合テスト"""
+        # フィルタリングされたコンテンツが正しく同期されることを確認
+```
+
+### パフォーマンス考慮事項
+
+#### 1. 遅延初期化
+
+```python
+# プロセッサーはファイル監視初期化時のみ作成
+self.claude_md_processor = ClaudeMdProcessor(...)
+```
+
+#### 2. パターンマッチングの最適化
+
+```python
+# 事前コンパイルされた正規表現を使用
+self.exclude_patterns = [re.compile(...) for ...]
+```
+
+#### 3. ファイルサイズ制限
+
+```python
+def should_sync_claude_md(self, file_path: Path) -> bool:
+    """大きなファイルの同期を避ける"""
+    if file_path.stat().st_size > MAX_FILE_SIZE:
+        return False
 ```
 
 ## Next Steps

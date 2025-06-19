@@ -9,6 +9,7 @@ Claude Knowledge Catalystの実践的な使用方法とベストプラクティ�
 :caption: User Guide
 
 core-concepts
+claude-md-sync
 tutorials/index
 ```
 
@@ -18,6 +19,9 @@ tutorials/index
 
 ### [Core Concepts](core-concepts.md)
 CKCの中核となる概念と設計思想について詳しく説明します。
+
+### [CLAUDE.md同期](claude-md-sync.md)
+CLAUDE.mdファイルをObsidianに同期する機能の詳細な使用方法とセキュリティ設定。
 
 ### [Tutorials](tutorials/index.md)
 段階的なチュートリアルで、具体的な使用方法を学習できます。
@@ -39,6 +43,13 @@ CKCの中核となる概念と設計思想について詳しく説明します�
 :link-type: doc
 
 CKCの基本的な概念と仕組みを理解
+:::
+
+:::{grid-item-card} 🔒 CLAUDE.md同期
+:link: claude-md-sync
+:link-type: doc
+
+CLAUDE.mdファイルをセキュアに同期する方法
 :::
 
 :::{grid-item-card} 📚 Tutorials

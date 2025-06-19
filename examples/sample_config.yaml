@@ -83,6 +83,17 @@ watch:
     - "node_modules"
   
   debounce_seconds: 1.0
+  
+  # CLAUDE.md synchronization settings
+  include_claude_md: false  # Set to true to sync CLAUDE.md files to Obsidian
+  claude_md_patterns:
+    - "CLAUDE.md"
+    - ".claude/CLAUDE.md"
+  claude_md_sections_exclude:
+    - "# secrets"
+    - "# private"
+    - "# confidential"
+    # Add section headers you want to exclude from sync
 
 # Template configuration
 template_path: "templates"

@@ -26,11 +26,33 @@ uv sync --dev
 uv run ckc init
 
 # 設定ファイルを確認
-cat .ckc/config.yaml
+cat ckc_config.yaml
 
 # 同期を開始
 uv run ckc sync
 ```
+
+## CLAUDE.md同期の設定（オプション）
+
+CLAUDE.mdファイルもObsidianに同期したい場合：
+
+```bash
+# 設定ファイルを編集
+vim ckc_config.yaml
+```
+
+設定例：
+```yaml
+watch:
+  include_claude_md: true
+  claude_md_sections_exclude:
+    - "# secrets"
+    - "# private"
+```
+
+:::{warning}
+**セキュリティ注意**: CLAUDE.mdには機密情報が含まれる場合があります。同期を有効にする前に、除外設定を適切に行ってください。
+:::
 
 ## 期待される結果
 

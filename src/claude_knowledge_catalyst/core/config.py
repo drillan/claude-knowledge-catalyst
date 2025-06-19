@@ -73,6 +73,18 @@ class WatchConfig(BaseModel):
     debounce_seconds: float = Field(
         default=1.0, description="Debounce time for file change events"
     )
+    # CLAUDE.md sync configuration
+    include_claude_md: bool = Field(
+        default=False, description="Include CLAUDE.md files in synchronization"
+    )
+    claude_md_patterns: list[str] = Field(
+        default=["CLAUDE.md", ".claude/CLAUDE.md"], 
+        description="Patterns to match CLAUDE.md files"
+    )
+    claude_md_sections_exclude: list[str] = Field(
+        default=[], 
+        description="Section headers to exclude from CLAUDE.md sync (e.g., '# secrets', '# private')"
+    )
 
 
 class CKCConfig(BaseModel):

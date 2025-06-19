@@ -1,4 +1,4 @@
-# Claude Knowledge Catalyst (CKC) v0.9.0
+# Claude Knowledge Catalyst (CKC) v0.9.1
 
 **知識の触媒作用を実現する統合的な知識管理システム**
 
@@ -7,29 +7,45 @@ Claude Code との開発プロセスで生まれる知見を自動的に構造�
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![Version](https://img.shields.io/badge/version-0.9.0-blue.svg)](RELEASE_NOTES.md)
+[![Version](https://img.shields.io/badge/version-0.9.1-blue.svg)](CHANGELOG.md)
 [![Documentation](https://img.shields.io/badge/docs-readthedocs-brightgreen.svg)](https://claude-knowledge-catalyst.readthedocs.io/)
 [![Read the Docs](https://readthedocs.org/projects/claude-knowledge-catalyst/badge/?version=latest)](https://claude-knowledge-catalyst.readthedocs.io/en/latest/)
 
 > **📋 詳細ドキュメント**: システム設計と実装の詳細については [包括的ドキュメント](https://claude-knowledge-catalyst.readthedocs.io/) を参照してください
 
-## ✨ What's New in v0.9.0
+## ✨ What's New in v0.9.1
 
-### 🏗️ 適応型システム基盤
+### 🔒 CLAUDE.md Secure Sync
+- **セキュアな同期**: CLAUDE.mdファイルをObsidianに安全に同期
+- **セクション除外**: 機密情報を含むセクションを自動的にフィルタリング
+- **柔軟な設定**: プロジェクトに応じたカスタマイズが可能
+- **プライバシー保護**: デフォルトで無効化、明示的な有効化が必要
+
+### 🛡️ Security Features
+- **大文字小文字非依存**: `# secrets`, `# SECRETS`, `# Secrets` すべてに対応
+- **非破壊的処理**: 元ファイルは変更せず、フィルタリング後の内容を同期
+- **豊富な除外パターン**: API キー、認証情報、個人情報を保護
+- **詳細メタデータ**: CLAUDE.md専用の情報抽出と分析
+
+## 🏗️ Core Features (v0.9.0+)
+
+### 適応型システム基盤
 - **10-step numbering** (00→10→20→30) による知識成熟度の視覚化
 - **段階的構造化**: カオス(00) → プロジェクト(10) → 知識ベース(20) → 知恵資産(30)
 - **インテリジェント分類**: 成功率・実行履歴・コンテンツ解析による自動配置
 - **Obsidian深層統合**: 双方向リンク、グラフビュー、階層タグの活用
 
-### 🧠 インテリジェント知識管理
+### インテリジェント知識管理
 - **自動メタデータ抽出**: プロジェクト検出、タグ推論、文脈解析
 - **構造化組織**: 成熟度による段階的分類（00→10→20→30）
 - **双方向同期**: .claude ディレクトリと Obsidian ボルトの seamless 連携
+- **🔒 CLAUDE.md同期**: セキュアなセクションフィルタリングで機密情報を保護
 - **プロジェクト横断**: 関連知識の自動発見・相互参照
 
 ## コア機能
 
 - **🔄 自動同期システム**: `.claude/` ディレクトリの変更をリアルタイム監視・同期
+- **🔒 CLAUDE.md同期**: セキュアなセクションフィルタリングで機密情報を保護
 - **🏷️ インテリジェントメタデータ**: プロジェクト検出、タグ推論、文脈解析による自動抽出
 - **📝 テンプレートシステム**: プロンプト、コード、概念、ログの知識タイプ別テンプレート
 - **🔍 適応型システム基盤組織化**: 10-step numbering による知識成熟度管理
@@ -99,11 +115,30 @@ uv run ckc add my-vault /path/to/your/obsidian/vault
 uv run ckc watch
 ```
 
+### Enable CLAUDE.md Sync (Optional)
+
+```bash
+# Edit configuration file
+vim ckc_config.yaml
+```
+
+Add to your configuration:
+```yaml
+watch:
+  include_claude_md: true
+  claude_md_sections_exclude:
+    - "# secrets"
+    - "# private"
+    - "# confidential"
+```
+
+> **🔒 Security Note**: CLAUDE.md sync is disabled by default. Only enable it after configuring appropriate section exclusions for your sensitive information.
+
 ### Upgrade from Previous Versions
 
 ```bash
-# Update to v0.9.0 (latest pre-release)
-uv add claude-knowledge-catalyst@0.9.0
+# Update to v0.9.1 (latest)
+uv add claude-knowledge-catalyst@0.9.1
 
 # Verify everything works
 uv run ckc status
