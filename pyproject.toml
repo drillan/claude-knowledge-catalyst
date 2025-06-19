@@ -48,16 +48,21 @@ dev = [
     "pre-commit>=3.0.0",
 ]
 docs = [
-    "mkdocs>=1.4.0",
-    "mkdocs-material>=9.0.0",
-    "mkdocstrings[python]>=0.20.0",
+    "furo>=2024.8.6",
+    "linkify-it-py>=2.0.3",
+    "myst-parser>=4.0.1",
+    "sphinx>=8.2.3",
+    "sphinx-design>=0.6.1",
+    "sphinxcontrib-mermaid>=1.0.0",
 ]
 
 [project.urls]
-Homepage = "https://github.com/driller/claude-knowledge-catalyst"
-Documentation = "https://github.com/driller/claude-knowledge-catalyst#readme"
-Repository = "https://github.com/driller/claude-knowledge-catalyst.git"
-Issues = "https://github.com/driller/claude-knowledge-catalyst/issues"
+Homepage = "https://github.com/drillan/claude-knowledge-catalyst"
+Documentation = "https://claude-knowledge-catalyst.readthedocs.io/"
+Repository = "https://github.com/drillan/claude-knowledge-catalyst.git"
+Issues = "https://github.com/drillan/claude-knowledge-catalyst/issues"
+"Read the Docs" = "https://claude-knowledge-catalyst.readthedocs.io/"
+"Source Code" = "https://github.com/drillan/claude-knowledge-catalyst"
 
 [project.scripts]
 ckc = "claude_knowledge_catalyst.cli.main:main"
@@ -154,12 +159,3 @@ dev-dependencies = [
     "hatch>=1.14.1",
 ]
 
-[dependency-groups]
-docs = [
-    "furo>=2024.8.6",
-    "linkify-it-py>=2.0.3",
-    "myst-parser>=4.0.1",
-    "sphinx>=8.2.3",
-    "sphinx-design>=0.6.1",
-    "sphinxcontrib-mermaid>=1.0.0",
-]

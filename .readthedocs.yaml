@@ -1,0 +1,50 @@
+# .readthedocs.yaml
+# Read the Docs configuration file for Claude Knowledge Catalyst
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
+# Required
+version: 2
+
+# Build environment
+build:
+  os: ubuntu-24.04
+  tools:
+    python: "3.11"
+  jobs:
+    post_build:
+      # Generate sitemap for SEO
+      - echo "Documentation built successfully for Claude Knowledge Catalyst"
+
+# Build documentation with Sphinx
+sphinx:
+  configuration: docs/conf.py
+  fail_on_warning: false
+
+# Generate additional formats
+formats:
+  - pdf
+  - htmlzip
+
+# Python environment and dependencies
+python:
+  install:
+    # Install the package itself with docs dependencies
+    - method: pip
+      path: .
+      extra_requirements:
+        - docs
+    # Also install specific RTD requirements if needed
+    - requirements: docs/requirements.txt
+
+# Search configuration
+search:
+  ranking:
+    # Boost ranking for important pages
+    "quick-start/*": 2
+    "getting-started/*": 2
+    "user-guide/core-concepts*": 3
+  ignore:
+    # Ignore build artifacts
+    - "_build/*"
+    - "_static/*"
+    - "_templates/*"

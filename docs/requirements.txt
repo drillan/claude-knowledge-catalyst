@@ -1,0 +1,20 @@
+# Read the Docs requirements for Claude Knowledge Catalyst documentation
+# This file ensures reliable dependency resolution on RTD platform
+
+# Core Sphinx and MyST Parser
+sphinx>=8.2.3
+myst-parser>=4.0.1
+
+# Theme and Design
+furo>=2024.8.6
+sphinx-design>=0.6.1
+
+# Extensions
+sphinxcontrib-mermaid>=1.0.0
+linkify-it-py>=2.0.3
+
+# Sphinx extensions for Python documentation
+sphinx-autodoc-typehints>=1.12.0
+
+# Additional RTD compatibility packages
+readthedocs-sphinx-search>=0.3.0
