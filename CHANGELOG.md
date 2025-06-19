@@ -18,6 +18,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Content-aware categorization based on file purpose and structure
   - Batch processing capabilities for large file sets
   - Quality and complexity assessment for knowledge items
+- **⚡ CKC Commands System**: Dedicated `_commands` directory structure for system automation
+  - System-level `_commands` directory with organized subcategories (Slash_Commands, CLI_Tools, Automation, Scripts)
+  - `command` category added to classification system with intelligent detection
+  - Separation of commands from knowledge content for cleaner vault organization
+- **🚀 Smart-Sync CLI Integration**: Complete CLI integration with interactive batch processing
+  - `/ckc-smart-sync`: Interactive batch classification and synchronization
+  - `/ckc-smart-sync-dry-run`: Preview mode without making changes
+  - `/ckc-smart-sync-auto`: Automatic execution without user prompts
+  - Rich CLI interface with Typer framework and comprehensive help documentation
 
 ### Changed
 - **🔧 Enhanced Metadata Model**: Extended `KnowledgeMetadata` with subcategory field for hierarchical classification
