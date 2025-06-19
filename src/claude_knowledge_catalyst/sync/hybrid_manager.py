@@ -153,7 +153,19 @@ class KnowledgeClassifier:
         """Classify prompt content with improved logic."""
         base_path = "20_Knowledge_Base/Prompts"
         
-        # Best practices (high success rate or production status)
+        # Priority 1: Check for explicit subcategory in metadata
+        subcategory = getattr(metadata, 'subcategory', None)
+        if subcategory:
+            subcategory_mapping = {
+                'templates': 'Templates',
+                'best_practices': 'Best_Practices',
+                'improvement_log': 'Improvement_Log',
+                'domain_specific': 'Domain_Specific'
+            }
+            mapped_subcategory = subcategory_mapping.get(subcategory.lower(), subcategory)
+            return f"{base_path}/{mapped_subcategory}"
+        
+        # Priority 2: Best practices (high success rate or production status)
         if ((metadata.success_rate and metadata.success_rate >= 80) or 
             metadata.status == "production"):
             return f"{base_path}/Best_Practices"
@@ -206,7 +218,21 @@ class KnowledgeClassifier:
         """Classify code content."""
         base_path = "20_Knowledge_Base/Code_Snippets"
         
-        # Use enhanced language detection
+        # Priority 1: Check for explicit subcategory (language) in metadata
+        subcategory = getattr(metadata, 'subcategory', None)
+        if subcategory:
+            language_mapping = {
+                'python': 'Python',
+                'javascript': 'JavaScript', 
+                'typescript': 'TypeScript',
+                'shell': 'Shell',
+                'bash': 'Shell',
+                'other': 'Other_Languages'
+            }
+            mapped_language = language_mapping.get(subcategory.lower(), subcategory)
+            return f"{base_path}/{mapped_language}"
+        
+        # Priority 2: Use enhanced language detection
         language = self._detect_language_from_content(content, metadata)
         return f"{base_path}/{language}"
     
@@ -214,7 +240,20 @@ class KnowledgeClassifier:
         """Classify concept content."""
         base_path = "20_Knowledge_Base/Concepts"
         
-        # First check tags for domain-specific classification
+        # Priority 1: Check for explicit subcategory in metadata
+        subcategory = getattr(metadata, 'subcategory', None)
+        if subcategory:
+            # Map subcategory to proper directory name
+            subcategory_mapping = {
+                'development_patterns': 'Development_Patterns',
+                'ai_fundamentals': 'AI_Fundamentals', 
+                'best_practices': 'Best_Practices',
+                'llm_architecture': 'LLM_Architecture'
+            }
+            mapped_subcategory = subcategory_mapping.get(subcategory.lower(), subcategory)
+            return f"{base_path}/{mapped_subcategory}"
+        
+        # Priority 2: Check tags for domain-specific classification
         domain = self._extract_domain_from_tags(metadata.tags)
         if domain:
             return f"{base_path}/{domain}"
@@ -254,6 +293,18 @@ class KnowledgeClassifier:
     def _classify_resource(self, content: str, metadata: KnowledgeMetadata) -> str:
         """Classify resource content."""
         base_path = "20_Knowledge_Base/Resources"
+        
+        # Priority 1: Check for explicit subcategory in metadata
+        subcategory = getattr(metadata, 'subcategory', None)
+        if subcategory:
+            subcategory_mapping = {
+                'documentation': 'Documentation',
+                'tutorials': 'Tutorials',
+                'research_papers': 'Research_Papers',
+                'tools_and_services': 'Tools_And_Services'
+            }
+            mapped_subcategory = subcategory_mapping.get(subcategory.lower(), subcategory)
+            return f"{base_path}/{mapped_subcategory}"
         
         content_lower = content.lower()
         

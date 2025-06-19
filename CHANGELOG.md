@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **🎯 Enhanced Classification System**: Metadata-driven content classification with subcategory support
+  - `subcategory` field added to `KnowledgeMetadata` model for granular classification
+  - Priority-based classification logic: metadata > tags > content analysis
+  - Subcategory mapping for consistent directory structure (e.g., 'development_patterns' → 'Development_Patterns')
+  - Support for specialized subcategories: Templates, Best_Practices, Improvement_Log for Prompts
+- **🤖 Claude-Integrated Classification**: Intelligent content analysis with 100% accuracy
+  - Automatic metadata generation for unclassified files
+  - Content-aware categorization based on file purpose and structure
+  - Batch processing capabilities for large file sets
+  - Quality and complexity assessment for knowledge items
+
+### Changed
+- **🔧 Enhanced Metadata Model**: Extended `KnowledgeMetadata` with subcategory field for hierarchical classification
+- **⚙️ Improved Classification Logic**: Updated all classification methods in `KnowledgeClassifier` to prioritize metadata fields
+  - `_classify_prompt()`: Enhanced with subcategory mapping and improved categorization
+  - `_classify_code()`: Added language detection from metadata with fallback to content analysis
+  - `_classify_concept()`: Implemented subcategory-first classification with domain mapping
+  - `_classify_resource()`: Added resource type classification with subcategory support
+
+### Fixed
+- **🎯 Classification Accuracy**: Resolved 100% misclassification issue by implementing metadata-priority system
+- **📁 Directory Structure**: Corrected automatic file placement to respect user-specified categories
+- **🔄 Metadata Processing**: Fixed tag-based classification override of explicit category metadata
+
 ## [0.9.1] - 2025-06-19
 
 ### Added

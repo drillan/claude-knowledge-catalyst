@@ -23,6 +23,7 @@ class KnowledgeMetadata(BaseModel):
 
     # Content classification
     category: str | None = Field(None, description="Primary category")
+    subcategory: str | None = Field(None, description="Specific subcategory within category")
     tags: list[str] = Field(default_factory=list, description="Tags for classification")
 
     # Claude-specific metadata

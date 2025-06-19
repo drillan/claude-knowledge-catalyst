@@ -172,4 +172,4 @@ test_vault/
 .claude/test-*
 .claude/debug/
 .claude/temp/
-.claude/*_vault/
+.claude/*_vault/ckc_config.yaml
