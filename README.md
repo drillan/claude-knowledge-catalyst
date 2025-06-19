@@ -70,7 +70,7 @@ uv sync --dev
 
 ```bash
 # Install from source using uv (recommended)
-git clone https://github.com/driller/claude-knowledge-catalyst.git
+git clone https://github.com/drillan/claude-knowledge-catalyst.git
 cd claude-knowledge-catalyst
 
 # Initialize with uv
@@ -292,7 +292,7 @@ Track the effectiveness of your prompts and techniques:
 
 ```bash
 # Clone the repository
-git clone https://github.com/driller/claude-knowledge-catalyst.git
+git clone https://github.com/drillan/claude-knowledge-catalyst.git
 cd claude-knowledge-catalyst
 
 # Install development dependencies with uv
@@ -357,9 +357,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- 📖 [Documentation](https://github.com/driller/claude-knowledge-catalyst/wiki)
-- 🐛 [Issue Tracker](https://github.com/driller/claude-knowledge-catalyst/issues)
-- 💬 [Discussions](https://github.com/driller/claude-knowledge-catalyst/discussions)
+- 📖 [Documentation](https://github.com/drillan/claude-knowledge-catalyst/wiki)
+- 🐛 [Issue Tracker](https://github.com/drillan/claude-knowledge-catalyst/issues)
+- 💬 [Discussions](https://github.com/drillan/claude-knowledge-catalyst/discussions)
 
 ## 今後の展開
 
