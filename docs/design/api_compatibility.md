@@ -3,7 +3,7 @@
 ## 📋 API互換性戦略概要
 
 ### 目的
-ハイブリッドアプローチ統合において、既存CKCのAPI・CLI・設定インターフェースとの完全な互換性を保証し、既存ユーザーの学習コストをゼロに抑える。
+適応型システム基盤統合において、既存CKCのAPI・CLI・設定インターフェースとの完全な互換性を保証し、既存ユーザーの学習コストをゼロに抑える。
 
 ### 互換性原則
 1. **完全後方互換**: 既存のすべてのインターフェースが動作継続
@@ -19,7 +19,7 @@
 ```bash
 # 既存コマンド - 100%互換性保証
 uv run ckc init                    # ✅ 動作継続（構造推薦機能追加）
-uv run ckc sync add vault obsidian # ✅ 動作継続（ハイブリッド対応）
+uv run ckc sync add vault obsidian # ✅ 動作継続（適応型システム基盤対応）
 uv run ckc watch                   # ✅ 動作継続（拡張監視機能）
 uv run ckc status                  # ✅ 動作継続（詳細情報追加）
 
@@ -36,7 +36,7 @@ class CompatibilityPreservingCLI:
     
     def __init__(self):
         self.legacy_handler = LegacyCLIHandler()
-        self.hybrid_handler = HybridCLIHandler()
+        self.adaptive_handler = AdaptiveCLIHandler()
         self.structure_detector = StructureDetector()
     
     def handle_command(self, command: str, args: dict) -> CommandResult:
@@ -50,16 +50,16 @@ class CompatibilityPreservingCLI:
             # 既存コマンド：互換性レイヤー経由で処理
             return self._handle_legacy_command(command, args, structure_type)
         else:
-            # 新規コマンド：直接ハイブリッドハンドラー
-            return self.hybrid_handler.handle(command, args)
+            # 新規コマンド：直接適応型システム基盤ハンドラー
+            return self.adaptive_handler.handle(command, args)
     
     def _handle_legacy_command(self, command: str, args: dict, 
                               structure_type: StructureType) -> CommandResult:
         """既存コマンドの互換処理"""
         
-        if structure_type == StructureType.HYBRID:
-            # ハイブリッド構造での既存コマンド実行
-            result = self.hybrid_handler.handle_legacy(command, args)
+        if structure_type == StructureType.ADAPTIVE:
+            # 適応型システム基盤での既存コマンド実行
+            result = self.adaptive_handler.handle_legacy(command, args)
             
             # 必要に応じて新機能の推薦表示
             if self.should_suggest_new_features(command):
@@ -69,7 +69,7 @@ class CompatibilityPreservingCLI:
             # レガシー構造での従来通り実行
             result = self.legacy_handler.handle(command, args)
             
-            # ハイブリッド移行の推薦表示
+            # 適応型システム基盤移行の推薦表示
             if self.should_suggest_migration(command, args):
                 result.add_migration_suggestion()
         
@@ -157,7 +157,7 @@ class ConfigCompatibilityManager:
             "watch": v1_config.get("watch", {}),
             
             # 新機能のデフォルト設定
-            "hybrid_structure": {
+            "adaptive_structure": {
                 "enabled": False,  # デフォルトは無効（明示的有効化）
                 "numbering_system": "sequential",  # 既存方式を維持
                 "auto_classification": False,
@@ -199,7 +199,7 @@ COMPATIBILITY_MATRIX = {
             "template_path", "git_integration", "auto_commit"
         ],
         "new_fields": [
-            "hybrid_structure", "config_version", "structure_migration_log"
+            "adaptive_structure", "config_version", "structure_migration_log"
         ],
         "transformed_fields": {
             # v1のフィールド名 → v2のフィールド名
@@ -228,7 +228,7 @@ class CKCConfig(BaseModel):  # ✅ 既存クラス名・継承関係維持
     watch: WatchConfig = WatchConfig()
     
     # 新機能は追加フィールドとして実装
-    hybrid_structure: HybridStructureConfig = HybridStructureConfig()
+    adaptive_structure: AdaptiveSystemConfig = AdaptiveSystemConfig()
     
     # 既存メソッドの完全保持
     @classmethod
@@ -370,7 +370,7 @@ class CoexistencePhase:
     def show_gentle_migration_reminder(self):
         """控えめな移行推薦"""
         print("""
-💡 ヒント: 新しいハイブリッド構造で知識管理がより効率的になります
+💡 ヒント: 新しい適応型システム基盤で知識管理がより効率的になります
    詳細: uv run ckc structure --info
    
    （この通知は月1回表示されます。無効にする: --no-migration-hints）
@@ -396,7 +396,7 @@ class RecommendationPhase:
     def show_enhanced_migration_benefits(self):
         """移行メリットの積極的紹介"""
         print("""
-🚀 ハイブリッド構造の利用者から高評価をいただいています！
+🚀 適応型システム基盤の利用者から高評価をいただいています！
    
    ✅ 平均15%の効率向上を実現
    ✅ ファイル発見時間の短縮  
@@ -468,8 +468,8 @@ class CompatibilityTestSuite:
             result = self._execute_command_in_legacy_env(command)
             self.assertTrue(result.success, f"Legacy command failed: {command}")
             
-            result = self._execute_command_in_hybrid_env(command)
-            self.assertTrue(result.success, f"Command failed in hybrid: {command}")
+            result = self._execute_command_in_adaptive_env(command)
+            self.assertTrue(result.success, f"Command failed in adaptive: {command}")
     
     def test_config_file_compatibility(self):
         """設定ファイル互換性テスト"""
@@ -511,7 +511,7 @@ class UserBehaviorSimulation:
         
         for workflow in workflows:
             self._execute_workflow_in_legacy_mode(workflow)
-            self._execute_workflow_in_hybrid_mode(workflow)
+            self._execute_workflow_in_adaptive_mode(workflow)
             self._compare_workflow_results(workflow)
 ```
 

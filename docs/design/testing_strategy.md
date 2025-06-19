@@ -3,7 +3,7 @@
 ## 📋 テスト戦略概要
 
 ### 目的
-ハイブリッドアプローチ統合における包括的品質保証を実現し、既存機能の完全保護と新機能の信頼性確保を両立する。
+適応型システム基盤統合における包括的品質保証を実現し、既存機能の完全保護と新機能の信頼性確保を両立する。
 
 ### テスト哲学
 1. **既存機能の完全保護**: 一切の機能劣化を許容しない
@@ -45,7 +45,7 @@ class TestCategory(Enum):
     
     # 環境別テスト
     LEGACY_ENV = "legacy_env"          # レガシー環境
-    HYBRID_ENV = "hybrid_env"          # ハイブリッド環境
+    HYBRID_ENV = "hybrid_env"          # 適応型システム基盤環境
     MIXED_ENV = "mixed_env"            # 混在環境
 ```
 
@@ -55,8 +55,8 @@ class TestCategory(Enum):
 
 #### クラス別テストスイート
 ```python
-class HybridStructureConfigTest(unittest.TestCase):
-    """ハイブリッド構造設定テスト"""
+class AdaptiveSystemConfigTest(unittest.TestCase):
+    """適応型システム基盤設定テスト"""
     
     def test_numbering_system_validation(self):
         """番号システム検証テスト"""
@@ -67,12 +67,12 @@ class HybridStructureConfigTest(unittest.TestCase):
         ]
         
         for config_data in valid_configs:
-            config = HybridStructureConfig(**config_data)
+            config = AdaptiveSystemConfig(**config_data)
             self.assertIn(config.numbering_system, ["sequential", "ten_step"])
         
         # 無効な番号システム
         with self.assertRaises(ValidationError):
-            HybridStructureConfig(numbering_system="invalid")
+            AdaptiveSystemConfig(numbering_system="invalid")
     
     def test_custom_structure_validation(self):
         """カスタム構造検証テスト"""
@@ -82,7 +82,7 @@ class HybridStructureConfigTest(unittest.TestCase):
             "auxiliary_dirs": {"Test": "テスト"}
         }
         
-        config = HybridStructureConfig(custom_structure=custom_structure)
+        config = AdaptiveSystemConfig(custom_structure=custom_structure)
         self.assertIsNotNone(config.custom_structure)
         self.assertEqual(len(config.custom_structure["system_dirs"]), 1)
 
@@ -198,21 +198,21 @@ class MetadataCompatibilityTest(unittest.TestCase):
 
 #### システム間連携テスト
 ```python
-class HybridIntegrationTest(unittest.TestCase):
-    """ハイブリッド統合テスト"""
+class AdaptiveSystemIntegrationTest(unittest.TestCase):
+    """適応型システム基盤統合テスト"""
     
     def setUp(self):
         self.test_vault = self._create_test_vault()
         self.config = self._create_test_config()
-        self.manager = HybridObsidianVaultManager(
+        self.manager = AdaptiveObsidianVaultManager(
             self.test_vault, 
             MetadataManager(),
-            self.config.hybrid_structure
+            self.config.adaptive_structure
         )
     
     def test_vault_initialization_integration(self):
         """バルト初期化統合テスト"""
-        # ハイブリッド構造での初期化
+        # 適応型システム基盤での初期化
         success = self.manager.initialize_vault()
         self.assertTrue(success)
         
@@ -254,8 +254,8 @@ class HybridIntegrationTest(unittest.TestCase):
             synced_files = list(expected_full_path.glob("*.md"))
             self.assertGreater(len(synced_files), 0, f"No file synced to {expected_path}")
     
-    def test_legacy_to_hybrid_migration_integration(self):
-        """レガシー→ハイブリッド移行統合テスト"""
+    def test_legacy_to_adaptive_migration_integration(self):
+        """レガシー→適応型システム基盤移行統合テスト"""
         # レガシー構造作成
         legacy_structure = {
             "00_Inbox": ["test1.md", "test2.md"],
@@ -267,7 +267,7 @@ class HybridIntegrationTest(unittest.TestCase):
         
         # 移行実行
         migration_manager = StructureMigrationManager(self.test_vault, self.config)
-        plan = migration_manager.plan_migration(StructureType.HYBRID)
+        plan = migration_manager.plan_migration(StructureType.ADAPTIVE)
         result = migration_manager.execute_migration(plan)
         
         # 移行結果確認
@@ -292,7 +292,7 @@ class CLIIntegrationTest(unittest.TestCase):
             
             # 初期化コマンドテスト
             result = subprocess.run(
-                ["uv", "run", "ckc", "init", "--structure", "hybrid"],
+                ["uv", "run", "ckc", "init", "--structure", "adaptive"],
                 capture_output=True, text=True
             )
             self.assertEqual(result.returncode, 0)
@@ -307,11 +307,11 @@ class CLIIntegrationTest(unittest.TestCase):
                 capture_output=True, text=True
             )
             self.assertEqual(result.returncode, 0)
-            self.assertIn("hybrid", result.stdout.lower())
+            self.assertIn("adaptive", result.stdout.lower())
     
     def test_backward_compatibility_commands(self):
         """後方互換性コマンドテスト"""
-        # 既存コマンドがハイブリッド環境でも動作することを確認
+        # 既存コマンドが適応型システム基盤環境でも動作することを確認
         legacy_commands = [
             ["ckc", "status"],
             ["ckc", "sync", "--dry-run"]
@@ -341,7 +341,7 @@ class PerformanceTest(unittest.TestCase):
         
         # 初期化時間測定
         start_time = time.time()
-        manager = HybridObsidianVaultManager(large_vault, MetadataManager(), HybridStructureConfig())
+        manager = AdaptiveObsidianVaultManager(large_vault, MetadataManager(), AdaptiveSystemConfig())
         init_success = manager.initialize_vault()
         init_time = time.time() - start_time
         
@@ -369,10 +369,10 @@ class PerformanceTest(unittest.TestCase):
         initial_memory = process.memory_info().rss / 1024 / 1024  # MB
         
         # 大量操作実行
-        manager = HybridObsidianVaultManager(
+        manager = AdaptiveObsidianVaultManager(
             self._create_test_vault(), 
             MetadataManager(),
-            HybridStructureConfig()
+            AdaptiveSystemConfig()
         )
         
         for i in range(1000):
@@ -391,7 +391,7 @@ class PerformanceTest(unittest.TestCase):
         import queue
         
         vault = self._create_test_vault()
-        manager = HybridObsidianVaultManager(vault, MetadataManager(), HybridStructureConfig())
+        manager = AdaptiveObsidianVaultManager(vault, MetadataManager(), AdaptiveSystemConfig())
         manager.initialize_vault()
         
         # 並行同期テスト
@@ -464,18 +464,18 @@ class RegressionTestSuite(unittest.TestCase):
                 # レガシー環境でのテスト
                 legacy_result = self._execute_in_legacy_env(test_case)
                 
-                # ハイブリッド環境でのテスト
-                hybrid_result = self._execute_in_hybrid_env(test_case)
+                # 適応型システム基盤環境でのテスト
+                adaptive_result = self._execute_in_adaptive_env(test_case)
                 
                 # 結果比較
                 self.assertEqual(
                     legacy_result.success, 
-                    hybrid_result.success,
+                    adaptive_result.success,
                     f"動作が変化: {test_case.name}"
                 )
                 
                 # ファイル内容比較
-                self._compare_sync_results(legacy_result, hybrid_result)
+                self._compare_sync_results(legacy_result, adaptive_result)
     
     def test_metadata_extraction_consistency(self):
         """メタデータ抽出一貫性回帰テスト"""
@@ -500,12 +500,12 @@ class RegressionTestSuite(unittest.TestCase):
 
 #### GitHub Actions ワークフロー
 ```yaml
-# .github/workflows/hybrid_integration_tests.yml
-name: Hybrid Integration Tests
+# .github/workflows/adaptive_integration_tests.yml
+name: Adaptive Integration Tests
 
 on:
   push:
-    branches: [ main, feature/hybrid-integration ]
+    branches: [ main, feature/adaptive-integration ]
   pull_request:
     branches: [ main ]
 
@@ -515,7 +515,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.11, 3.12]
-        test-env: [legacy, hybrid, mixed]
+        test-env: [legacy, adaptive, mixed]
     
     steps:
     - uses: actions/checkout@v3
@@ -624,13 +624,13 @@ class TestDataFactory:
     """テストデータファクトリー"""
     
     @staticmethod
-    def create_test_config(structure_type: str = "hybrid") -> EnhancedCKCConfig:
+    def create_test_config(structure_type: str = "adaptive") -> EnhancedCKCConfig:
         """テスト用設定作成"""
         return EnhancedCKCConfig(
             project_name="test-project",
-            hybrid_structure=HybridStructureConfig(
-                enabled=(structure_type == "hybrid"),
-                numbering_system="ten_step" if structure_type == "hybrid" else "sequential"
+            adaptive_structure=AdaptiveSystemConfig(
+                enabled=(structure_type == "adaptive"),
+                numbering_system="ten_step" if structure_type == "adaptive" else "sequential"
             )
         )
     
@@ -645,13 +645,13 @@ class TestDataFactory:
         )
     
     @staticmethod
-    def create_test_vault(structure_type: str = "hybrid") -> Path:
+    def create_test_vault(structure_type: str = "adaptive") -> Path:
         """テスト用バルト作成"""
         temp_dir = tempfile.mkdtemp()
         vault_path = Path(temp_dir)
         
-        if structure_type == "hybrid":
-            TestDataFactory._create_hybrid_structure(vault_path)
+        if structure_type == "adaptive":
+            TestDataFactory._create_adaptive_structure(vault_path)
         else:
             TestDataFactory._create_legacy_structure(vault_path)
         
@@ -708,7 +708,7 @@ class CoverageValidator:
 #### 機能カバレッジ目標
 ```python
 FEATURE_COVERAGE_MATRIX = {
-    "hybrid_structure": {
+    "adaptive_structure": {
         "initialization": ["create_dirs", "validate_structure", "setup_config"],
         "classification": ["auto_classify", "manual_classify", "reclassify"],
         "migration": ["plan", "execute", "rollback", "validate"]

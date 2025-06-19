@@ -1,9 +1,9 @@
-# ハイブリッドアプローチ統合設計
+# 適応型システム基盤統合設計
 
 ## 📋 統合設計概要
 
 ### 目的
-test-obsidian-vaultで実証された改良型ハイブリッドアプローチを、既存Claude Knowledge Catalyst (CKC) システムに統合するための詳細設計。
+test-obsidian-vaultで実証された改良型適応型システム基盤を、既存Claude Knowledge Catalyst (CKC) システムに統合するための詳細設計。
 
 ### 統合原則
 1. **完全後方互換性**: 既存ユーザーへの影響ゼロ
@@ -11,7 +11,7 @@ test-obsidian-vaultで実証された改良型ハイブリッドアプローチ�
 3. **設定駆動**: 柔軟な構成と拡張性
 4. **自動化重視**: 手動作業の最小化
 
-## 🏗️ ハイブリッドアプローチの中核要素
+## 🏗️ 適応型システム基盤の中核要素
 
 ### 1. 三層分類システム
 
@@ -182,11 +182,11 @@ class KnowledgeClassifier:
 
 #### 新設定構造
 ```python
-class HybridStructureConfig(BaseModel):
-    """ハイブリッド構造設定"""
+class AdaptiveSystemConfig(BaseModel):
+    """適応型システム基盤設定"""
     enabled: bool = False
     numbering_system: Literal["sequential", "ten_step"] = "ten_step"
-    structure_version: str = "hybrid_v1"
+    structure_version: str = "adaptive_v1"
     
     # 自動機能設定
     auto_classification: bool = True
@@ -203,7 +203,7 @@ class HybridStructureConfig(BaseModel):
 
 class EnhancedCKCConfig(CKCConfig):
     """拡張CKC設定"""
-    hybrid_structure: HybridStructureConfig = HybridStructureConfig()
+    adaptive_structure: AdaptiveSystemConfig = AdaptiveSystemConfig()
     
     # バージョン管理
     config_version: str = "2.0"
@@ -214,26 +214,26 @@ class EnhancedCKCConfig(CKCConfig):
 
 #### 拡張マネージャー設計
 ```python
-class HybridObsidianVaultManager(ObsidianVaultManager):
-    """ハイブリッドアプローチ対応バルトマネージャー"""
+class AdaptiveObsidianVaultManager(ObsidianVaultManager):
+    """適応型システム基盤対応バルトマネージャー"""
     
     def __init__(self, vault_path: Path, metadata_manager: MetadataManager,
-                 hybrid_config: HybridStructureConfig):
+                 adaptive_config: AdaptiveSystemConfig):
         super().__init__(vault_path, metadata_manager)
-        self.hybrid_config = hybrid_config
-        self.structure_manager = StructureManager(hybrid_config)
+        self.adaptive_config = adaptive_config
+        self.structure_manager = StructureManager(adaptive_config)
         self.classifier = KnowledgeClassifier()
-        self.number_manager = NumberManager(hybrid_config.numbering_system)
+        self.number_manager = NumberManager(adaptive_config.numbering_system)
     
     def initialize_vault(self) -> bool:
-        """ハイブリッド構造でのバルト初期化"""
-        if self.hybrid_config.enabled:
-            return self._initialize_hybrid_vault()
+        """適応型システム基盤でのバルト初期化"""
+        if self.adaptive_config.enabled:
+            return self._initialize_adaptive_vault()
         else:
             return super().initialize_vault()
     
-    def _initialize_hybrid_vault(self) -> bool:
-        """ハイブリッド構造の初期化"""
+    def _initialize_adaptive_vault(self) -> bool:
+        """適応型システム基盤の初期化"""
         try:
             # 1. 基本構造作成
             self._create_tier_structure()
@@ -245,19 +245,19 @@ class HybridObsidianVaultManager(ObsidianVaultManager):
             self._deploy_automation_assets()
             
             # 4. 構造検証
-            if self.hybrid_config.structure_validation:
+            if self.adaptive_config.structure_validation:
                 return self._validate_structure()
                 
             return True
             
         except Exception as e:
-            print(f"ハイブリッド構造初期化エラー: {e}")
+            print(f"適応型システム基盤初期化エラー: {e}")
             return False
     
     def _determine_target_path(self, metadata: KnowledgeMetadata, 
                               source_path: Path, project_name: str | None) -> Path:
-        """ハイブリッド対応配置ロジック"""
-        if self.hybrid_config.enabled and self.hybrid_config.auto_classification:
+        """適応型システム基盤対応配置ロジック"""
+        if self.adaptive_config.enabled and self.adaptive_config.auto_classification:
             # 自動分類による配置
             return self._classify_and_place(metadata, source_path, project_name)
         else:
@@ -307,7 +307,7 @@ class StructureMigrationManager:
         system_dirs = any(d.startswith('_') for d in existing_dirs)
         
         if ten_step_pattern and system_dirs:
-            return StructureType.HYBRID
+            return StructureType.ADAPTIVE
         elif any(d.startswith(('00_', '01_', '02_')) for d in existing_dirs):
             return StructureType.SEQUENTIAL
         else:
@@ -317,13 +317,13 @@ class StructureMigrationManager:
         """マイグレーション計画生成"""
         current = self.detect_current_structure()
         
-        if current == StructureType.SEQUENTIAL and target_structure == StructureType.HYBRID:
-            return self._plan_sequential_to_hybrid()
+        if current == StructureType.SEQUENTIAL and target_structure == StructureType.ADAPTIVE:
+            return self._plan_sequential_to_adaptive()
         else:
             raise ValueError(f"サポートされていないマイグレーション: {current} → {target_structure}")
     
-    def _plan_sequential_to_hybrid(self) -> MigrationPlan:
-        """連番→ハイブリッド マイグレーション計画"""
+    def _plan_sequential_to_adaptive(self) -> MigrationPlan:
+        """連番→適応型システム基盤 マイグレーション計画"""
         plan = MigrationPlan()
         
         # 既存ディレクトリのマッピング
@@ -418,14 +418,14 @@ uv run ckc structure validate        # 構造整合性チェック
 uv run ckc structure optimize        # 構造最適化提案
 
 # 既存コマンド拡張
-uv run ckc init --structure hybrid   # ハイブリッド構造で初期化
+uv run ckc init --structure adaptive   # 適応型システム基盤で初期化
 uv run ckc sync --auto-classify      # 自動分類有効でsync
 ```
 
 #### テンプレート統合
 ```python
-class HybridTemplateManager(TemplateManager):
-    """ハイブリッド対応テンプレート管理"""
+class AdaptiveTemplateManager(TemplateManager):
+    """適応型システム基盤対応テンプレート管理"""
     
     def get_templates_for_structure(self, structure_type: StructureType) -> dict:
         """構造タイプ別テンプレート提供"""
@@ -440,14 +440,14 @@ class HybridTemplateManager(TemplateManager):
 
 #### 統合テスト実装
 ```python
-class HybridIntegrationTest:
-    """ハイブリッド機能統合テスト"""
+class AdaptiveIntegrationTest:
+    """適応型システム基盤機能統合テスト"""
     
     def test_legacy_compatibility(self):
         """既存機能の完全互換性テスト"""
         
-    def test_hybrid_structure_creation(self):
-        """ハイブリッド構造作成テスト"""
+    def test_adaptive_structure_creation(self):
+        """適応型システム基盤作成テスト"""
         
     def test_auto_classification(self):
         """自動分類機能テスト"""
@@ -507,8 +507,8 @@ class PluginManager:
 
 #### API設計
 ```python
-class HybridStructureAPI:
-    """ハイブリッド構造API"""
+class AdaptiveStructureAPI:
+    """適応型システム基盤API"""
     
     def get_structure_info(self) -> StructureInfo:
         """構造情報の取得"""

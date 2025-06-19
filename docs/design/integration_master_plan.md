@@ -1,9 +1,9 @@
-# 改良型ハイブリッドアプローチ統合マスタープラン
+# 改良型適応型システム基盤統合マスタープラン
 
 ## 📋 プロジェクト概要
 
 ### 目的
-test-obsidian-vaultで実証された「改良型ハイブリッドアプローチ」をClaude Knowledge Catalyst (CKC) のコアシステムに統合し、本格的な知識管理システムとして提供する。
+test-obsidian-vaultで実証された「改良型適応型システム基盤」をClaude Knowledge Catalyst (CKC) のコアシステムに統合し、本格的な知識管理システムとして提供する。
 
 ### スコープ
 - **統合対象**: 10刻み番号システム、三層分類、包括的ドキュメント、自動化機能
@@ -16,7 +16,7 @@ test-obsidian-vaultで実証された「改良型ハイブリッドアプロー�
 ```
 Week 1: アーキテクチャ分析と設計
 ├── 既存CKCコードベース詳細分析
-├── ハイブリッドアプローチ統合設計
+├── 適応型システム基盤統合設計
 └── API互換性戦略設計
 
 Week 2: マイグレーション・テスト計画
@@ -110,7 +110,7 @@ uv run ckc migrate --rollback # 問題時の復元
 docs/design/
 ├── integration_master_plan.md         # このファイル（統合マスタープラン）
 ├── architecture_analysis.md           # 既存アーキテクチャ詳細分析
-├── hybrid_approach_integration.md     # ハイブリッドアプローチ統合設計
+├── adaptive_system_integration.md     # 適応型システム基盤統合設計
 ├── migration_strategy.md              # マイグレーション戦略詳細
 ├── api_compatibility.md               # API互換性戦略
 ├── testing_strategy.md                # テスト戦略詳細
@@ -163,7 +163,7 @@ docs/design/
 #### Week 1 (12/1-12/7)
 - **月**: 既存CKCアーキテクチャ分析開始
 - **火**: コア機能とのインターフェース分析
-- **水**: ハイブリッドアプローチ統合設計
+- **水**: 適応型システム基盤統合設計
 - **木**: API互換性戦略設計
 - **金**: 設計レビューと調整
 
