@@ -14,7 +14,7 @@ authors = [
     {name = "CKC Contributors"},
 ]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -151,4 +151,5 @@ dev-dependencies = [
     "ruff>=0.1.0",
     "mypy>=1.0.0",
     "pre-commit>=3.0.0",
+    "hatch>=1.14.1",
 ]

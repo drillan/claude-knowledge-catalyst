@@ -1,4 +1,4 @@
-# Claude Knowledge Catalyst (CKC) v2.0
+# Claude Knowledge Catalyst (CKC) v0.9.0
 
 **知識の触媒作用を実現する統合的な知識管理システム**
 
@@ -7,11 +7,11 @@ Claude Code との開発プロセスで生まれる知見を自動的に構造�
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](RELEASE_NOTES.md)
+[![Version](https://img.shields.io/badge/version-0.9.0-blue.svg)](RELEASE_NOTES.md)
 
 > **📋 詳細アーキテクチャ**: システム設計と実装の詳細については [アーキテクチャドキュメント](.claude/architecture/) を参照してください
 
-## ✨ What's New in v2.0
+## ✨ What's New in v0.9.0
 
 ### 🏗️ ハイブリッド構造システム
 - **10-step numbering** (00→10→20→30) による知識成熟度の視覚化
@@ -42,7 +42,7 @@ Claude Code との開発プロセスで生まれる知見を自動的に構造�
 
 ```bash
 # Clone and run the demo
-git clone https://github.com/driller/claude-knowledge-catalyst.git
+git clone https://github.com/drillan/claude-knowledge-catalyst.git
 cd claude-knowledge-catalyst
 uv sync --dev
 
@@ -87,7 +87,7 @@ pip install -e .
 # Navigate to your project directory
 cd your-project
 
-# Initialize CKC with hybrid structure (v2.0)
+# Initialize CKC with hybrid structure (v0.9.0)
 uv run ckc init
 
 # Add Obsidian vault as sync target
@@ -97,11 +97,11 @@ uv run ckc add my-vault /path/to/your/obsidian/vault
 uv run ckc watch
 ```
 
-### Upgrade from CKC v1.0
+### Upgrade from Previous Versions
 
 ```bash
-# Update to v2.0
-uv add claude-knowledge-catalyst@2.0.0
+# Update to v0.9.0 (latest pre-release)
+uv add claude-knowledge-catalyst@0.9.0
 
 # Verify everything works
 uv run ckc status
@@ -195,7 +195,7 @@ watch:
 
 ## 知識組織化システム
 
-CKC v2.0 は **ハイブリッド構造システム** により、知識の自然進化をサポートします：
+CKC v0.9.0 は **ハイブリッド構造システム** により、知識の自然進化をサポートします：
 
 ```
 Obsidian_Vault/
@@ -366,9 +366,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 CKC の将来計画と実装予定機能については、詳細な[開発ロードマップ](.claude/architecture/roadmap.md)をご参照ください。
 
 ### 次期リリース予定
-- **v2.1**: AI支援機能拡張（コンテンツ改善提案、高度アナリティクス）
-- **v2.2**: 構造管理機能（自動最適化、詳細検証）
-- **v3.0**: エンタープライズ機能（Web インターフェース、チーム協働）
+- **v1.0.0**: 初回パブリックリリース（機能安定化、ドキュメント完備）
+- **v1.1.0**: AI支援機能拡張（コンテンツ改善提案、高度アナリティクス）
+- **v1.2.0**: 構造管理機能（自動最適化、詳細検証）
+- **v2.0.0**: エンタープライズ機能（Web インターフェース、チーム協働）
 
 ---
 
