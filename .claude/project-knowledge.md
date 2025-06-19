@@ -233,3 +233,122 @@ def validate_path(path: Path, base_path: Path) -> bool:
 - エラーメッセージの改善
 - 設定ウィザードの提供
 - 詳細なログ出力オプション
+
+## テスト戦略とパターン (2025-01-19更新)
+
+### テスト環境分離のベストプラクティス
+
+**問題**: Pydanticモデルのdefault_factoryでPath.cwd()を使用すると、テスト中にFileNotFoundErrorが発生
+
+**解決パターン**:
+```python
+# テスト用のヘルパークラス
+class TestEnvironmentHelper:
+    def __init__(self, workspace_path: Path):
+        self.workspace = workspace_path
+        self.projects: Dict[str, Path] = {}
+        
+    def create_config(self, project_name: str) -> CKCConfig:
+        """Path.cwd()問題を回避する安全な設定作成"""
+        project_root = self.projects.get(project_name, self.workspace)
+        
+        with patch('pathlib.Path.cwd', return_value=project_root):
+            config = CKCConfig()
+        
+        config.project_root = project_root
+        return config
+```
+
+**適用範囲**:
+- `test_demo_integration.py`: DemoTestEnvironment
+- `test_hybrid_integration.py`: hybrid_config, legacy_config fixtures
+- `test_integration_comprehensive.py`: full_config fixture  
+- `test_performance.py`: performance_setup fixture
+
+### デモテスト設計原則
+
+**1. 実際のユーザーワークフローの再現**
+```python
+def test_complete_user_demo_workflow(self, demo_env):
+    # Step 1: プロジェクト初期化
+    project_path = demo_env.create_project("my_project")
+    
+    # Step 2: ボルト追加
+    vault_path = demo_env.create_vault("my_obsidian")
+    
+    # Step 3: コンテンツ作成と同期
+    created_files = demo_env.create_claude_content("my_project", demo_content)
+    
+    # Step 4: 検証
+    assert all(sync_results), "All demo files should sync successfully"
+```
+
+**2. テストクラス分離の原則**
+- `TestDemoBasicWorkflow`: 基本的なワークフロー（demo.sh）
+- `TestDemoQuickWorkflow`: 高速デモ（quick_demo.sh）
+- `TestDemoMultiProject`: 複数プロジェクト（multi_project_demo.sh）
+- `TestDemoManagement`: 管理機能（run_demo.sh, cleanup.sh）
+- `TestDemoErrorHandling`: エラー処理とレジリエンス
+
+**3. テンポラリ環境の管理**
+```python
+@pytest.fixture
+def demo_env(self):
+    temp_dir = tempfile.mkdtemp()
+    workspace = Path(temp_dir)
+    
+    env = DemoTestEnvironment(workspace)
+    yield env
+    
+    shutil.rmtree(temp_dir)  # 確実なクリーンアップ
+```
+
+### MockとPatchの効果的活用
+
+**Path.cwd()モックパターン**:
+```python
+# 個別使用
+with patch('pathlib.Path.cwd', return_value=safe_path):
+    config = CKCConfig()
+
+# フィクスチャ統合
+@pytest.fixture 
+def safe_config(self, temp_path):
+    with patch('pathlib.Path.cwd', return_value=temp_path):
+        config = CKCConfig()
+    config.project_root = temp_path
+    return config
+```
+
+**外部依存関係の分離**:
+- ファイルシステム操作のモック化
+- 時間依存処理の制御
+- 外部サービスとの分離
+
+### テスト組織化の学習
+
+**階層的テスト構造**:
+```
+tests/
+├── test_demo_integration.py     # ユーザーシナリオテスト
+├── test_hybrid_integration.py   # 機能統合テスト
+├── test_integration_comprehensive.py  # 包括的統合テスト
+├── test_performance.py          # パフォーマンステスト
+├── test_config.py              # 単体テスト
+├── test_metadata.py            # 単体テスト
+└── test_templates.py           # 単体テスト
+```
+
+**テスト命名規則**:
+- `test_*_workflow`: エンドツーエンドワークフロー
+- `test_*_functionality`: 特定機能のテスト
+- `test_*_integration`: 複数コンポーネントの統合
+- `test_*_error_handling`: エラーケーステスト
+
+### 学習した重要原則
+
+**1. テスト分離**: 各テストは独立して実行可能
+**2. 現実的シナリオ**: 実際のユーザー使用パターンを反映
+**3. 段階的デバッグ**: 問題を一つずつ特定・修正
+**4. 一貫した修正**: 同じ問題は同じ方法で解決
+**5. ドキュメント化**: テストコード自体が仕様書として機能

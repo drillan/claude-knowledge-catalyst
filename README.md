@@ -1,48 +1,40 @@
 # Claude Knowledge Catalyst (CKC) v2.0
 
-A comprehensive knowledge management system that automatically synchronizes your Claude Code development insights with advanced analytics, AI assistance, and intelligent organization.
+**知識の触媒作用を実現する統合的な知識管理システム**
+
+Claude Code との開発プロセスで生まれる知見を自動的に構造化し、Obsidian との深層統合により長期的な知識資産として蓄積・活用するための包括的なプラットフォームです。
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](RELEASE_NOTES.md)
 
+> **📋 詳細アーキテクチャ**: システム設計と実装の詳細については [アーキテクチャドキュメント](.claude/architecture/) を参照してください
+
 ## ✨ What's New in v2.0
 
-### 🏗️ Hybrid Structure System
-- **10-step numbering** (00, 10, 20, 30) for flexible directory organization
-- **Three-tier classification**: System directories (_), Core workflow (numbered), Auxiliary (unnumbered)
-- **Backward compatibility** with existing CKC v1.0 vaults
-- **Intelligent content classification** and auto-placement
+### 🏗️ ハイブリッド構造システム
+- **10-step numbering** (00→10→20→30) による知識成熟度の視覚化
+- **段階的構造化**: カオス(00) → プロジェクト(10) → 知識ベース(20) → 知恵資産(30)
+- **インテリジェント分類**: 成功率・実行履歴・コンテンツ解析による自動配置
+- **Obsidian深層統合**: 双方向リンク、グラフビュー、階層タグの活用
 
-### 📊 Advanced Analytics & Insights
-- **Comprehensive knowledge analytics** with visualization support
-- **Usage statistics and productivity metrics**
-- **Knowledge evolution tracking** and trend analysis
-- **Performance monitoring** and optimization recommendations
+### 🧠 インテリジェント知識管理
+- **自動メタデータ抽出**: プロジェクト検出、タグ推論、文脈解析
+- **構造化組織**: 成熟度による段階的分類（00→10→20→30）
+- **双方向同期**: .claude ディレクトリと Obsidian ボルトの seamless 連携
+- **プロジェクト横断**: 関連知識の自動発見・相互参照
 
-### 🤖 AI-Powered Assistance
-- **Content improvement suggestions** with priority-based recommendations
-- **Intelligent template generation** for 6 content types
-- **Enhanced metadata analysis** with complexity and quality assessment
-- **Smart tagging and categorization** recommendations
+## コア機能
 
-### ⚙️ Automation & Maintenance
-- **Automated structure maintenance** with issue detection and auto-fixing
-- **Metadata consistency checking** and enhancement
-- **Health monitoring** with trend analysis
-- **Scheduled maintenance** tasks
-
-## Core Features
-
-- **🔄 Automatic Synchronization**: Watch `.claude/` directories and sync changes in real-time
-- **🏷️ Intelligent Metadata Management**: Auto-extract and enhance metadata with advanced AI analysis
-- **📝 Rich Template System**: AI-generated templates for prompts, code snippets, concepts, and project logs
-- **🔍 Advanced Organization**: Multi-dimensional tagging and hybrid structure for optimal discovery
-- **⚡ Enhanced CLI Interface**: Comprehensive command-line tools with analytics, AI, and automation features
-- **🎯 Obsidian Integration**: Deep integration with structured vault organization and intelligent linking
-- **📊 Success Tracking**: Advanced analytics for prompt effectiveness and knowledge evolution
-- **🔗 Project Correlation**: Cross-project knowledge linking with relationship mapping
+- **🔄 自動同期システム**: `.claude/` ディレクトリの変更をリアルタイム監視・同期
+- **🏷️ インテリジェントメタデータ**: プロジェクト検出、タグ推論、文脈解析による自動抽出
+- **📝 テンプレートシステム**: プロンプト、コード、概念、ログの知識タイプ別テンプレート
+- **🔍 ハイブリッド構造組織化**: 10-step numbering による知識成熟度管理
+- **⚡ 包括CLI**: 初期化、同期、監視、分析の統合コマンドライン
+- **🎯 Obsidian深層統合**: 構造化ボルト、双方向リンク、グラフビュー活用
+- **📊 プロジェクト分析**: ファイル統計、カテゴリ分布、ステータス管理
+- **🔗 知識関連付け**: プロジェクト横断での関連知識発見・相互参照
 
 ## 🎯 Try CKC in 3 Minutes
 
@@ -96,22 +88,13 @@ pip install -e .
 cd your-project
 
 # Initialize CKC with hybrid structure (v2.0)
-uv run ckc init --structure hybrid
+uv run ckc init
 
 # Add Obsidian vault as sync target
-uv run ckc sync add my-vault obsidian /path/to/your/obsidian/vault
+uv run ckc add my-vault /path/to/your/obsidian/vault
 
 # Start watching for changes
 uv run ckc watch
-
-# Generate analytics report
-uv run ckc analytics report --days 30
-
-# Get AI suggestions for a file
-uv run ckc ai suggest myfile.md
-
-# Run automated maintenance
-uv run ckc maintenance
 ```
 
 ### Upgrade from CKC v1.0
@@ -120,103 +103,60 @@ uv run ckc maintenance
 # Update to v2.0
 uv add claude-knowledge-catalyst@2.0.0
 
-# Migrate to hybrid structure
-uv run ckc migrate --to hybrid
-
 # Verify everything works
 uv run ckc status
-uv run ckc structure validate
 ```
 
 ### Sync Existing Knowledge
 
 ```bash
 # Sync all files in .claude directory
-uv run ckc sync run
+uv run ckc sync
 
 # Sync to specific target
-uv run ckc sync run --target my-vault
+uv run ckc sync --target my-vault
 
 # Sync with project context
-uv run ckc sync run --project "My Project Name"
+uv run ckc sync --project "My Project Name"
 ```
 
-## New CLI Commands (v2.0)
+## 利用可能なCLIコマンド
 
-### Analytics & Insights
+### 📁 基本操作
 
 ```bash
-# Generate comprehensive analytics report
-uv run ckc analytics report --days 30 --output report.json
+# ワークスペース初期化
+uv run ckc init
 
-# Show usage statistics
-uv run ckc analytics usage --days 7
+# 同期ターゲット追加
+uv run ckc add main-vault ~/Documents/ObsidianVault
 
-# View productivity metrics
-uv run ckc analytics report | grep productivity
+# ファイル同期実行
+uv run ckc sync
+uv run ckc sync --target main-vault
+uv run ckc sync --project "My Project"
+
+# リアルタイム監視
+uv run ckc watch
+
+# 現在状況確認
+uv run ckc status
 ```
 
-### AI Assistance
+### 📊 分析・プロジェクト管理
 
 ```bash
-# Get content improvement suggestions
-uv run ckc ai suggest .claude/prompt-optimization.md
-
-# Generate intelligent templates
-uv run ckc ai template prompt --title "API Integration"
-uv run ckc ai template code --language python
-uv run ckc ai template concept --title "Design Patterns"
-
-# Get AI insights about content
-uv run ckc ai insights .claude/my-prompt.md
-
-# Get knowledge organization suggestions
-uv run ckc ai organize
-```
-
-### Structure Management
-
-```bash
-# Check structure status
-uv run ckc structure status
-
-# Validate structure integrity
-uv run ckc structure validate
-
-# Configure structure settings
-uv run ckc structure configure
-```
-
-### Migration & Maintenance
-
-```bash
-# Migrate to hybrid structure
-uv run ckc migrate --to hybrid
-
-# Show migration plan
-uv run ckc migrate plan
-
-# Run automated maintenance
-uv run ckc maintenance
-
-# Force maintenance regardless of schedule
-uv run ckc maintenance --force
-```
-
-### Traditional Commands
-
-```bash
-# Analyze metadata and content
+# ファイル詳細分析
 uv run ckc analyze .claude/prompt-optimization.md
 
-# List all sync targets
-uv run ckc sync list
+# プロジェクト一覧表示
+uv run ckc project list
 
-# Add a new target
-uv run ckc sync add notes-vault obsidian ~/Documents/Notes
+# プロジェクト内ファイル一覧
+uv run ckc project files claude-knowledge-catalyst
 
-# View current status
-uv run ckc status
+# プロジェクト統計
+uv run ckc project stats claude-knowledge-catalyst
 ```
 
 ## Configuration
@@ -253,30 +193,55 @@ watch:
   debounce_seconds: 1.0
 ```
 
-## Knowledge Organization
+## 知識組織化システム
 
-CKC automatically organizes your knowledge into a structured system inspired by the PARA method:
+CKC v2.0 は **ハイブリッド構造システム** により、知識の自然進化をサポートします：
 
 ```
 Obsidian_Vault/
-├── 00_Inbox/                    # Unprocessed items
-├── 01_Projects/                 # Project-specific knowledge
-│   ├── ProjectA/learnings/
-│   └── ProjectB/learnings/
-├── 02_Knowledge_Base/           # Shared knowledge
-│   ├── Prompts/
-│   │   ├── Templates/           # Reusable prompt templates
-│   │   ├── Best_Practices/      # High-success prompts
-│   │   └── Improvement_Log/     # Prompt evolution tracking
-│   ├── Code_Snippets/
-│   │   ├── Python/
-│   │   ├── JavaScript/
-│   │   └── Other_Languages/
-│   ├── Concepts/                # AI/LLM concepts and learnings
-│   └── Resources/               # External references
-├── 03_Templates/                # Note templates
-├── 04_Analytics/                # Usage and effectiveness metrics
-└── 05_Archive/                  # Deprecated knowledge
+├── 00_Catalyst_Lab/             # 🧪 実験・アイデア孵化の場
+│   ├── brainstorming/           # 未加工アイデア
+│   ├── experiments/             # 実験的取り組み
+│   └── rapid_prototypes/        # 迅速プロトタイピング
+│
+├── 10_Projects/                 # 🚀 アクティブプロジェクト管理
+│   ├── active/                  # 進行中プロジェクト
+│   ├── planning/                # 計画段階
+│   └── review/                  # レビュー・評価段階
+│
+├── 20_Knowledge_Base/           # 📚 体系化された知見
+│   ├── Prompts/                 # プロンプト関連
+│   │   ├── Templates/           # 汎用プロンプトテンプレート
+│   │   ├── Best_Practices/      # 成功事例・ベストプラクティス
+│   │   └── Improvement_Log/     # プロンプト改善の記録
+│   ├── Code_Snippets/           # 再利用可能なコードスニペット
+│   │   ├── Python/              # Python関連
+│   │   ├── JavaScript/          # JavaScript関連
+│   │   ├── Bash/                # Bash/Shell関連
+│   │   └── Other_Languages/     # その他言語
+│   ├── Concepts/                # AI・LLM関連の概念整理
+│   │   ├── API_Design/          # API設計原則
+│   │   ├── Software_Architecture/ # ソフトウェア設計
+│   │   └── Development_Practices/ # 開発手法
+│   └── Resources/               # 学習リソースと外部参考資料
+│
+├── 30_Wisdom_Archive/           # 💎 高品質な知識資産
+│   ├── Best_Practices/          # ベストプラクティス集
+│   ├── Lessons_Learned/         # 教訓と反省
+│   └── Strategic_Insights/      # 戦略的知見
+│
+├── _templates/                  # 🏗️ システムテンプレート
+├── Analytics/                   # 📊 知見の活用状況分析
+└── Archive/                     # 📦 古い・非推奨の知見
+```
+
+### 知識進化プロセス
+
+```
+Raw Ideas → Structured Insights → Validated Knowledge → Wisdom Assets
+   (00)         (10-20)              (20-30)            (30+)
+
+🧪 実験段階 → 🚀 プロジェクト → 📚 知識ベース → 💎 知恵資産
 ```
 
 ## Advanced Features
@@ -345,20 +310,35 @@ uv run ruff format src/ tests/    # Format
 uv run mypy src/                  # Type checking
 ```
 
-### Project Structure
+### プロジェクト構造
 
 ```
 src/claude_knowledge_catalyst/
-├── core/                   # Core functionality
-│   ├── config.py          # Configuration management
-│   ├── metadata.py        # Metadata extraction and management
-│   └── watcher.py         # File system monitoring
-├── sync/                  # Synchronization modules
-│   └── obsidian.py        # Obsidian integration
-├── templates/             # Template system
-│   └── manager.py         # Template management
-└── cli/                   # Command-line interface
-    └── main.py            # CLI implementation
+├── core/                          # コア機能
+│   ├── config.py                  # 設定管理（CKCConfig, SyncTarget）
+│   ├── metadata.py                # メタデータ抽出・管理（KnowledgeMetadata）
+│   ├── watcher.py                 # ファイルシステム監視
+│   ├── hybrid_config.py           # ハイブリッド構造設定
+│   └── structure_validator.py     # 構造整合性検証
+├── sync/                          # 同期システム
+│   ├── obsidian.py                # Obsidian統合（ObsidianVaultManager）
+│   ├── hybrid_manager.py          # ハイブリッド同期管理
+│   └── compatibility.py           # 後方互換性
+├── templates/                     # テンプレートシステム
+│   ├── manager.py                 # テンプレート管理（TemplateManager）
+│   └── hybrid_templates.py        # ハイブリッド専用テンプレート
+├── ai/                           # AI支援機能
+│   └── ai_assistant.py           # AI分析・提案システム
+├── analytics/                    # アナリティクス
+│   ├── knowledge_analytics.py    # 知識分析エンジン
+│   └── usage_statistics.py      # 使用統計
+├── automation/                   # 自動化
+│   ├── metadata_enhancer.py     # メタデータ自動強化
+│   └── structure_automation.py  # 構造自動最適化
+└── cli/                          # CLI インターフェース
+    ├── main.py                   # メインCLI
+    ├── migrate_commands.py       # 移行コマンド
+    └── structure_commands.py     # 構造管理コマンド
 ```
 
 ## Contributing
@@ -381,15 +361,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 🐛 [Issue Tracker](https://github.com/driller/claude-knowledge-catalyst/issues)
 - 💬 [Discussions](https://github.com/driller/claude-knowledge-catalyst/discussions)
 
-## Roadmap
+## 今後の展開
 
-- [ ] **Web Interface**: Browser-based management dashboard
-- [ ] **Notion Integration**: Support for Notion as sync target
-- [ ] **AI-Powered Insights**: Automated knowledge analysis and suggestions
-- [ ] **Team Collaboration**: Multi-user knowledge sharing features
-- [ ] **Advanced Analytics**: Detailed effectiveness metrics and reporting
-- [ ] **Plugin System**: Extensible architecture for custom integrations
+CKC の将来計画と実装予定機能については、詳細な[開発ロードマップ](.claude/architecture/roadmap.md)をご参照ください。
+
+### 次期リリース予定
+- **v2.1**: AI支援機能拡張（コンテンツ改善提案、高度アナリティクス）
+- **v2.2**: 構造管理機能（自動最適化、詳細検証）
+- **v3.0**: エンタープライズ機能（Web インターフェース、チーム協働）
 
 ---
 
-**Claude Knowledge Catalyst** - Transform your AI development insights into organized, searchable, and reusable knowledge assets.
+**Claude Knowledge Catalyst** - AI開発プロセスで得られる知見を組織化・検索可能・再利用可能な知識資産に変換し、継続的な学習とイノベーションを加速する統合プラットフォーム。
+
+> 🎯 **ビジョン**: 開発者の経験と洞察を蓄積し、知識の触媒作用により新しい発見と効率的な問題解決を実現する。

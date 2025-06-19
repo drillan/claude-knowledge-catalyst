@@ -144,6 +144,79 @@ class DebounceHandler(FileSystemEventHandler):
 
 **結果**: CPU使用率の大幅削減とレスポンシブ性向上
 
+### 重要な学習: テストスイートERROR対応 (2025-01-19)
+
+**問題**: Path.cwd()に関する大量のテストエラーが発生
+- 22個のERRORと1個のFAILED
+- `CKCConfig()`初期化時の`Path.cwd()`呼び出しでFileNotFoundError
+
+**根本原因の分析**:
+- テスト中にディレクトリが削除された後でPath.cwd()にアクセス
+- Pydanticモデルのdefault_factoryでPath.cwd()を使用
+- テスト分離が不完全
+
+**解決策の実装**:
+```python
+# 問題のあるパターン
+class CKCConfig(BaseModel):
+    project_root: Path = Field(default_factory=lambda: Path.cwd())
+
+# 解決策: テストでのモック化
+from unittest.mock import patch
+
+@pytest.fixture
+def safe_config(self, temp_path):
+    with patch('pathlib.Path.cwd', return_value=temp_path):
+        config = CKCConfig()
+    config.project_root = temp_path
+    return config
+```
+
+**学んだベストプラクティス**:
+1. **テスト分離の重要性**: 各テストが独立して動作する環境を作る
+2. **外部依存関係のモック**: ファイルシステムアクセスはモック化する
+3. **段階的テスト実行**: 一つずつ修正して影響範囲を特定
+4. **統一的な修正パターン**: 同じ問題は同じ方法で修正する
+
+**修正の波及効果**:
+- 全24個のテストが安定してPASS
+- CI/CDの信頼性向上
+- 開発者の作業効率改善
+
+### 包括的デモテストの価値 (2025-01-19)
+
+**実装内容**: demo/*.shスクリプトの全機能をテストコードで再現
+
+**作成したテストクラス**:
+- `TestDemoBasicWorkflow`: 基本ワークフロー（demo.sh）
+- `TestDemoQuickWorkflow`: クイックデモ（quick_demo.sh）
+- `TestDemoMultiProject`: マルチプロジェクト（multi_project_demo.sh）
+- `TestDemoManagement`: デモ管理機能（run_demo.sh, cleanup.sh）
+- `TestDemoErrorHandling`: エラー処理とレジリエンス
+
+**設計パターンの発見**:
+```python
+class DemoTestEnvironment:
+    """テスト環境管理のヘルパークラス"""
+    def create_config(self, project_name: str) -> CKCConfig:
+        # Path.cwd()問題を解決するクリーンな設定作成
+        with patch('pathlib.Path.cwd', return_value=project_path):
+            config = CKCConfig()
+        config.project_root = project_path
+        return config
+```
+
+**価値ある学習**:
+1. **実際のユーザーシナリオの重要性**: デモが実際の使用パターンを反映
+2. **テストの読みやすさ**: テストコードがドキュメントとしても機能
+3. **リグレッション防止**: 将来の変更でデモが壊れることを防ぐ
+4. **開発者体験**: 新しい開発者がシステムを理解しやすくなる
+
+**継続的な価値**:
+- デモ機能の品質保証
+- 新機能追加時の影響範囲確認
+- ユーザーエクスペリエンスの回帰テスト
+
 ## 今後の改善計画
 
 ### 短期目標 (1-2ヶ月)
