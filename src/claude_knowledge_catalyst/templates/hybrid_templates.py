@@ -634,13 +634,13 @@ impact_scope: "{context.get('impact_scope', 'high')}"
 - **自動整理**: {context.get('auto_organization', '有効')}
 
 ## 📝 使用方法
-{context.get('usage_guide', f'このディレクトリは{tier}層に分類されており、{context.get("purpose", "知識管理")}\u3000に使用されます。')}
+{context.get('usage_guide', f'このディレクトリは{tier}層に分類されており、{context.get("purpose", "知識管理")}に使用されます。')}
 
 ## 📁 構造
-{context.get('structure_info', '```\n(ディレクトリ構造をここに記述)\n```')}
+{context.get('structure_info', '```' + chr(10) + '(ディレクトリ構造をここに記述)' + chr(10) + '```')}
 
 ## 🔗 関連リンク
-{context.get('related_links', '- [[関連ディレクトリ1]]\n- [[関連ディレクトリ2]]')}
+{context.get('related_links', '- [[関連ディレクトリ1]]' + chr(10) + '- [[関連ディレクトリ2]]')}
 
 ---
 *このREADMEは自動生成されました - {context.get('main_directory', directory_name)}*  
