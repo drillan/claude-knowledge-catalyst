@@ -1,10 +1,10 @@
 # Claude Knowledge Catalyst (CKC) v0.9.1
 
-**Claude Code ⇄ Obsidian シームレス統合システム**
+**Claude Code ⇄ Obsidian Seamless Integration System**
 
-Claude Code開発プロセスで生まれる知見を自動的にObsidianボルトと同期し、構造化された知識管理を実現。AI搭載分析により、手動分類の負荷を軽減します。
+Automatically synchronize insights from Claude Code development processes with Obsidian vaults for structured knowledge management. AI-powered analysis reduces manual classification overhead.
 
-> **[📋 日本語版](README-ja.md)** | **[🌐 Documentation](https://claude-knowledge-catalyst.readthedocs.io/)**
+> **[📋 Japanese Version](README-ja.md)** | **[🌐 Documentation](https://claude-knowledge-catalyst.readthedocs.io/)**
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![PyPI version](https://img.shields.io/pypi/v/claude-knowledge-catalyst.svg)](https://pypi.org/project/claude-knowledge-catalyst/)
@@ -13,38 +13,38 @@ Claude Code開発プロセスで生まれる知見を自動的にObsidianボル�
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Documentation](https://img.shields.io/badge/docs-readthedocs-brightgreen.svg)](https://claude-knowledge-catalyst.readthedocs.io/)
 
-## 🎯 Claude Code ⇄ Obsidian シームレス統合
+## 🎯 Claude Code ⇄ Obsidian Seamless Integration
 
-### 🔄 自動同期システム
-- **リアルタイム同期**: `.claude/`ディレクトリの変更を即座にObsidianボルトに反映
-- **双方向連携**: Claude Code開発とObsidian知識管理の完全統合
-- **構造化組織**: Obsidianの強力な機能を活用した知識体系化
+### 🔄 Automatic Synchronization System
+- **Real-time Sync**: Instantly reflect changes in `.claude/` directory to Obsidian vault
+- **Bidirectional Integration**: Complete integration between Claude Code development and Obsidian knowledge management
+- **Structured Organization**: Systematize knowledge using Obsidian's powerful features
 
-### 🤖 AI搭載メタデータ強化
-- **自動分析**: コンテンツを解析してObsidian用メタデータを生成
-- **インテリジェントタグ付け**: 手動分類負荷を軽減する多次元タグシステム
-- **証拠ベース分類**: AI判定の根拠を明示した信頼性の高い組織化
+### 🤖 AI-Powered Metadata Enhancement
+- **Automatic Analysis**: Analyze content and generate metadata for Obsidian
+- **Intelligent Tagging**: Multi-dimensional tag system that reduces manual classification overhead
+- **Evidence-Based Classification**: Reliable organization with clear rationale for AI decisions
 
 ```yaml
-# AI強化メタデータ例（副次的効果）
-type: [prompt, code, concept, resource]           # コンテンツ性質
-tech: [python, react, fastapi, kubernetes, ...]   # 技術スタック
-domain: [web-dev, ml, devops, mobile, ...]        # アプリケーション領域
-team: [backend, frontend, ml-research, devops]    # チーム所有権
-status: [draft, tested, production, deprecated]   # ライフサイクル状態
-complexity: [beginner, intermediate, advanced]    # スキルレベル
-confidence: [low, medium, high]                   # コンテンツ信頼性
+# AI-Enhanced Metadata Example (Secondary Effect)
+type: [prompt, code, concept, resource]           # Content nature
+tech: [python, react, fastapi, kubernetes, ...]   # Technology stack
+domain: [web-dev, ml, devops, mobile, ...]        # Application domain
+team: [backend, frontend, ml-research, devops]    # Team ownership
+status: [draft, tested, production, deprecated]   # Lifecycle state
+complexity: [beginner, intermediate, advanced]    # Skill level
+confidence: [low, medium, high]                   # Content reliability
 ```
 
-### 🏛️ Obsidian最適化ボルト構造
+### 🏛️ Obsidian-Optimized Vault Structure
 ```
 obsidian-vault/
-├── _system/          # テンプレートと設定
-├── _attachments/     # メディアファイル
-├── inbox/            # 未処理コンテンツ
-├── active/           # 作業中コンテンツ
-├── archive/          # 完了・非推奨コンテンツ
-└── knowledge/        # 成熟した知識（メイン領域）
+├── _system/          # Templates and configuration
+├── _attachments/     # Media files
+├── inbox/            # Unprocessed content
+├── active/           # Work-in-progress content
+├── archive/          # Completed/deprecated content
+└── knowledge/        # Mature knowledge (main area)
 ```
 
 ## Prerequisites
@@ -54,54 +54,54 @@ obsidian-vault/
   - **Installation**: Follow the [official uv installation guide](https://docs.astral.sh/uv/getting-started/installation/)
   - **Quick install**: `curl -LsSf https://astral.sh/uv/install.sh | sh` (Unix/macOS) or `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"` (Windows)
 
-## 🎯 3分でClaude Code ⇄ Obsidian連携体験
+## 🎯 3-Minute Claude Code ⇄ Obsidian Integration Experience
 
-**シームレス統合を体験:**
+**Experience seamless integration:**
 
 ```bash
-# CKCをインストール
+# Install CKC
 uv pip install claude-knowledge-catalyst
 
-# Claude Codeプロジェクトで初期化
+# Initialize in Claude Code project
 cd your-claude-project
 uv run ckc init
 
-# Obsidianボルトに接続
+# Connect to Obsidian vault
 uv run ckc add my-vault /path/to/obsidian/vault
 
-# .claude/ファイルをObsidianと同期
+# Sync .claude/ files with Obsidian
 uv run ckc sync
 ```
 
-**何が起こるか:**
-- ✅ **シームレス統合**: Claude Code開発とObsidian知識管理の完全連携
-- ✅ **自動構造化**: `.claude/`コンテンツをObsidian最適化構造で組織化
-- ✅ **AI強化メタデータ**: 手動分類を軽減する自動タグ付け
-- ✅ **リアルタイム同期**: 開発プロセスでの知識蓄積を即座に反映
+**What happens:**
+- ✅ **Seamless Integration**: Complete integration between Claude Code development and Obsidian knowledge management
+- ✅ **Automatic Structuring**: Organize `.claude/` content with Obsidian-optimized structure
+- ✅ **AI-Enhanced Metadata**: Automatic tagging that reduces manual classification
+- ✅ **Real-time Sync**: Instantly reflect knowledge accumulation during development process
 
 ## Core Features
 
-### 🔄 Claude Code ⇄ Obsidian 完全統合
-- **シームレス同期**: `.claude/`ディレクトリとObsidianボルトの自動双方向同期
-- **構造化移行**: 既存Obsidianボルトの最適化と構造強化
-- **動的クエリ生成**: Obsidian dataviewクエリの自動生成
-- **知識発見**: Claude Code開発知見のObsidian内横断検索
+### 🔄 Claude Code ⇄ Obsidian Complete Integration
+- **Seamless Sync**: Automatic bidirectional sync between `.claude/` directory and Obsidian vault
+- **Structured Migration**: Optimization and structural enhancement of existing Obsidian vaults
+- **Dynamic Query Generation**: Automatic generation of Obsidian dataview queries
+- **Knowledge Discovery**: Cross-project search of Claude Code development insights within Obsidian
 
 ### 🔒 Secure CLAUDE.md Sync
 - **Privacy-First**: Section-level filtering for sensitive information
 - **Configurable Exclusion**: Protect API keys, credentials, personal data
 - **Safe by Default**: CLAUDE.md sync disabled unless explicitly enabled
 
-### 📊 Obsidian統合アナリティクス
-- **知識活用追跡**: Claude Code開発での知識利用パターン分析
-- **プロンプト効果測定**: Obsidian内での成功率と改善提案
-- **プロジェクト横断洞察**: 開発知見の関連性発見
-- **チーム知識共有**: Obsidianを通じた協働知識管理
+### 📊 Obsidian Integrated Analytics
+- **Knowledge Usage Tracking**: Analyze knowledge utilization patterns in Claude Code development
+- **Prompt Effectiveness Measurement**: Success rates and improvement suggestions within Obsidian
+- **Cross-Project Insights**: Discover relationships between development insights
+- **Team Knowledge Sharing**: Collaborative knowledge management through Obsidian
 
-### 🎨 Obsidian最適化テンプレート
-- **Claude Code特化**: プロンプト、コード、概念、リソース用Obsidianテンプレート
-- **AI強化提案**: 開発コンテキストに基づく自動テンプレート選択
-- **進化する構造**: プロジェクトの成長に応じたObsidianボルト最適化
+### 🎨 Obsidian-Optimized Templates
+- **Claude Code Specialized**: Obsidian templates for prompts, code, concepts, and resources
+- **AI-Enhanced Suggestions**: Automatic template selection based on development context
+- **Evolving Structure**: Obsidian vault optimization according to project growth
 
 ## Quick Start
 
@@ -120,38 +120,38 @@ cd claude-knowledge-catalyst
 uv sync --dev
 ```
 
-### Claude Code プロジェクト統合
+### Claude Code Project Integration
 
 ```bash
-# Claude Codeプロジェクトに移動
+# Navigate to Claude Code project
 cd your-claude-project
 
-# CKCを初期化（.claude/ディレクトリを検出）
+# Initialize CKC (detects .claude/ directory)
 uv run ckc init
 
-# Obsidianボルトに接続
+# Connect to Obsidian vault
 uv run ckc add main-vault /path/to/your/obsidian/vault
 
-# .claude/コンテンツの自動分析を体験
-echo "# Git便利コマンド集
+# Experience automatic analysis of .claude/ content
+echo "# Git Useful Commands
 
-## ブランチ状態確認
+## Branch Status Check
 \`\`\`bash
 git branch -vv
 git status --porcelain
 \`\`\`" > .claude/git_tips.md
 
-# AI分析とObsidian用メタデータ生成を確認
+# Verify AI analysis and Obsidian metadata generation
 uv run ckc classify .claude/git_tips.md --show-evidence
 ```
 
-### 既存Obsidianボルト強化
+### Existing Obsidian Vault Enhancement
 
 ```bash
-# 既存ObsidianボルトをClaude Code統合用に強化
+# Enhance existing Obsidian vault for Claude Code integration
 uv run ckc migrate --source /existing/obsidian --target /enhanced/vault
 
-# 変更内容をプレビュー
+# Preview changes
 uv run ckc migrate --source /existing/obsidian --target /enhanced/vault --dry-run
 ```
 
