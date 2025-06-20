@@ -1,3 +1,18 @@
+---
+title: "Context.md - プロジェクト背景と制約"
+created: "2025-06-19"
+updated: "2025-06-19"
+version: "1.0"
+category: "concept"
+subcategory: "Development_Patterns"
+tags: ["context", "background", "constraints", "architecture", "python"]
+complexity: "intermediate"
+quality: "high"
+purpose: "CKCプロジェクトの技術背景と開発制約の詳細"
+project: "claude-knowledge-catalyst"
+status: "production"
+---
+
 # Context.md - プロジェクト背景と制約
 
 ## プロジェクト概要

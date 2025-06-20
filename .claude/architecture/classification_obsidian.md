@@ -1,3 +1,22 @@
+---
+category: concept
+complexity: advanced
+created: '2025-06-19'
+project: claude-knowledge-catalyst
+purpose: Auto-generated metadata for classification_obsidian
+quality: high
+status: draft
+subcategory: Development_Patterns
+tags:
+- architecture
+- design
+- system
+- structure
+title: Classification Obsidian
+updated: '2025-06-19'
+version: '1.0'
+---
+
 # 分類システムとObsidian統合
 
 ## 概要

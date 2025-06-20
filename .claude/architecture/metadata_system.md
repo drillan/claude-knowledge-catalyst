@@ -1,3 +1,22 @@
+---
+category: concept
+complexity: advanced
+created: '2025-06-19'
+project: claude-knowledge-catalyst
+purpose: Auto-generated metadata for metadata_system
+quality: high
+status: draft
+subcategory: Development_Patterns
+tags:
+- architecture
+- design
+- system
+- structure
+title: Metadata System
+updated: '2025-06-19'
+version: '1.0'
+---
+
 # メタデータシステム詳細仕様
 
 ## 概要

@@ -5,6 +5,8 @@ from typing import Any
 
 from ..core.config import SyncTarget
 from ..core.metadata import KnowledgeMetadata, MetadataManager
+from ..templates.tag_centered_templates import TagCenteredTemplateManager
+from ..obsidian.query_builder import generate_obsidian_queries_file
 
 
 class ObsidianVaultManager:
@@ -19,34 +21,20 @@ class ObsidianVaultManager:
         """
         self.vault_path = Path(vault_path)
         self.metadata_manager = metadata_manager
+        self.template_manager = TagCenteredTemplateManager()
 
-        # Hybrid vault structure with 10-step numbering system
+        # Pure tag-centered minimal directory structure
         self.vault_structure = {
-            "00_Catalyst_Lab": "実験・アイデア孵化の場",
-            "10_Projects": "アクティブプロジェクト管理",
-            "20_Knowledge_Base": "体系化された知見",
-            "20_Knowledge_Base/Prompts": "プロンプト関連",
-            "20_Knowledge_Base/Prompts/Templates": "汎用プロンプトテンプレート",
-            "20_Knowledge_Base/Prompts/Best_Practices": "成功事例とベストプラクティス",
-            "20_Knowledge_Base/Prompts/Improvement_Log": "プロンプト改善の記録",
-            "20_Knowledge_Base/Code_Snippets": "再利用可能なコードスニペット",
-            "20_Knowledge_Base/Code_Snippets/Python": "Python関連",
-            "20_Knowledge_Base/Code_Snippets/JavaScript": "JavaScript関連",
-            "20_Knowledge_Base/Code_Snippets/Bash": "Bash/Shell関連",
-            "20_Knowledge_Base/Code_Snippets/Other_Languages": "その他言語",
-            "20_Knowledge_Base/Concepts": "AI・LLM関連の概念整理",
-            "20_Knowledge_Base/Concepts/API_Design": "API設計原則",
-            "20_Knowledge_Base/Concepts/Software_Architecture": "ソフトウェア設計",
-            "20_Knowledge_Base/Concepts/Development_Practices": "開発手法",
-            "20_Knowledge_Base/Resources": "学習リソースと外部参考資料",
-            "30_Wisdom_Archive": "高品質な知識資産",
-            "_templates": "システムテンプレート",
-            "Analytics": "知見の活用状況分析",
-            "Archive": "古い・非推奨の知見",
+            "_system": "システムファイル（テンプレート、設定）",
+            "_attachments": "添付ファイル",
+            "inbox": "未整理・一時的なファイル",
+            "active": "アクティブに使用中のファイル",
+            "archive": "非推奨・古いファイル",
+            "knowledge": "主要な知識ファイル（90%のコンテンツ）",
         }
 
     def initialize_vault(self) -> bool:
-        """Initialize Obsidian vault with proper structure.
+        """Initialize Obsidian vault with pure tag-centered structure.
 
         Returns:
             True if initialization successful, False otherwise
@@ -55,22 +43,23 @@ class ObsidianVaultManager:
             # Create vault directory if it doesn't exist
             self.vault_path.mkdir(parents=True, exist_ok=True)
 
-            # Create directory structure
-            for dir_path, description in self.vault_structure.items():
-                full_path = self.vault_path / dir_path
-                full_path.mkdir(parents=True, exist_ok=True)
-
-                # Create a README.md in each directory to explain its purpose
-                readme_path = full_path / "README.md"
-                if not readme_path.exists():
-                    readme_content = f"# {dir_path.split('/')[-1]}\n\n{description}"
-                    readme_path.write_text(readme_content, encoding="utf-8")
+            # Use template manager to create complete structure
+            results = self.template_manager.create_vault_structure(
+                self.vault_path, 
+                include_examples=True
+            )
 
             # Create vault configuration
             self._create_obsidian_config()
 
-            print(f"Initialized Obsidian vault at: {self.vault_path}")
-            return True
+            # Check results
+            success_count = sum(1 for success in results.values() if success)
+            total_count = len(results)
+            
+            print(f"Initialized pure tag-centered vault at: {self.vault_path}")
+            print(f"Created {success_count}/{total_count} components successfully")
+            
+            return success_count == total_count
 
         except Exception as e:
             print(f"Error initializing vault: {e}")
@@ -143,7 +132,7 @@ class ObsidianVaultManager:
     def _determine_target_path(
         self, metadata: KnowledgeMetadata, source_path: Path, project_name: str | None
     ) -> Path:
-        """Determine target path in vault based on metadata.
+        """Determine target path in vault based on pure tag-centered status.
 
         Args:
             metadata: File metadata
@@ -153,61 +142,20 @@ class ObsidianVaultManager:
         Returns:
             Target path in the vault
         """
-        # Shared Knowledge First (共有知識最優先): category-based classification
-        # Always place categorized content in Knowledge_Base regardless of project_name
-
-        # Determine if this is shared knowledge content
-        is_shared_knowledge = metadata.category in ["prompt", "code", "concept"] or any(
-            tag in ["prompt", "code", "concept"] for tag in metadata.tags
-        )
-
-        if is_shared_knowledge:
-            # Force shared knowledge placement
-            if metadata.category == "prompt" or "prompt" in metadata.tags:
-                if (
-                    metadata.status == "production"
-                    and metadata.success_rate
-                    and metadata.success_rate > 80
-                ):
-                    base_path = "20_Knowledge_Base/Prompts/Best_Practices"
-                elif (
-                    "improvement" in str(source_path).lower()
-                    or "version" in metadata.model_dump()
-                ):
-                    base_path = "20_Knowledge_Base/Prompts/Improvement_Log"
-                else:
-                    base_path = "20_Knowledge_Base/Prompts/Templates"
-            elif metadata.category == "code" or "code" in metadata.tags:
-                # Determine language from tags or content
-                if "python" in metadata.tags:
-                    base_path = "20_Knowledge_Base/Code_Snippets/Python"
-                elif "javascript" in metadata.tags:
-                    base_path = "20_Knowledge_Base/Code_Snippets/JavaScript"
-                elif any(tag in ["bash", "shell", "git"] for tag in metadata.tags):
-                    base_path = "20_Knowledge_Base/Code_Snippets/Bash"
-                else:
-                    base_path = "20_Knowledge_Base/Code_Snippets/Other_Languages"
-            elif metadata.category == "concept" or "concept" in metadata.tags:
-                # Enhanced concept categorization
-                if any(tag in ["api", "design"] for tag in metadata.tags):
-                    base_path = "20_Knowledge_Base/Concepts/API_Design"
-                elif any(tag in ["architecture", "system"] for tag in metadata.tags):
-                    base_path = "20_Knowledge_Base/Concepts/Software_Architecture"
-                elif any(
-                    tag in ["development", "practices", "methodology"]
-                    for tag in metadata.tags
-                ):
-                    base_path = "20_Knowledge_Base/Concepts/Development_Practices"
-                else:
-                    base_path = "20_Knowledge_Base/Concepts"
-        elif "resource" in metadata.tags:
-            base_path = "20_Knowledge_Base/Resources"
-        elif project_name:
-            # Project-specific content (only for truly uncategorized content)
-            base_path = f"10_Projects/{project_name}/learnings"
+        # Pure tag-centered: State-based classification (not content-based)
+        # Uses minimal 6-directory structure based on workflow state
+        
+        # State-based directory placement
+        if metadata.status == "draft":
+            base_path = "inbox"
+        elif metadata.status in ["tested", "production"]:
+            # Active content goes to knowledge (90% of content)
+            base_path = "knowledge"
+        elif metadata.status == "deprecated":
+            base_path = "archive"
         else:
-            # Default to catalyst lab for uncategorized content
-            base_path = "00_Catalyst_Lab"
+            # Default to inbox for unknown states
+            base_path = "inbox"
 
         # Generate filename with metadata prefix
         filename = self._generate_filename(metadata, source_path)
@@ -275,21 +223,23 @@ class ObsidianVaultManager:
             tag_line = " ".join(f"#{tag}" for tag in metadata.tags)
             enhancements.append(f"\n**Tags:** {tag_line}\n")
 
-        # Add related links section
-        if metadata.related_projects:
+        # Add related projects section (using pure tag system)
+        if metadata.projects:
             links = " | ".join(
-                f"[[{project}]]" for project in metadata.related_projects
+                f"[[{project}]]" for project in metadata.projects
             )
             enhancements.append(f"\n**Related Projects:** {links}\n")
 
-        # Add metadata summary
+        # Add metadata summary (pure tag system)
         summary_parts = []
-        if metadata.model:
-            summary_parts.append(f"**Model:** {metadata.model}")
+        if metadata.claude_model:
+            summary_parts.append(f"**Models:** {', '.join(metadata.claude_model)}")
         if metadata.success_rate:
             summary_parts.append(f"**Success Rate:** {metadata.success_rate}%")
         if metadata.confidence:
             summary_parts.append(f"**Confidence:** {metadata.confidence}")
+        if metadata.complexity:
+            summary_parts.append(f"**Complexity:** {metadata.complexity}")
 
         if summary_parts:
             enhancements.append(f"\n**Metadata:** {' | '.join(summary_parts)}\n")
@@ -327,36 +277,44 @@ class ObsidianVaultManager:
         Returns:
             YAML frontmatter string
         """
+        # Pure tag-centered frontmatter (no legacy fields)
         frontmatter_data = {
             "title": metadata.title,
             "created": metadata.created.isoformat(),
             "updated": metadata.updated.isoformat(),
-            "tags": metadata.tags,
-            "category": metadata.category,
+            "version": metadata.version,
+            # === Pure Multi-layered Tag Architecture ===
+            "type": metadata.type,
             "status": metadata.status,
+            "tech": metadata.tech,
+            "domain": metadata.domain,
+            "team": metadata.team,
+            "tags": metadata.tags,
         }
 
-        # Add optional fields
-        if metadata.version:
-            frontmatter_data["version"] = metadata.version
-        if metadata.model:
-            frontmatter_data["claude_model"] = metadata.model
+        # Add optional quality indicators
+        if metadata.success_rate is not None:
+            frontmatter_data["success_rate"] = metadata.success_rate
+        if metadata.complexity:
+            frontmatter_data["complexity"] = metadata.complexity
         if metadata.confidence:
             frontmatter_data["confidence"] = metadata.confidence
-        if metadata.success_rate:
-            frontmatter_data["success_rate"] = metadata.success_rate
+
+        # Add Claude-specific metadata
+        if metadata.claude_model:
+            frontmatter_data["claude_model"] = metadata.claude_model
+        if metadata.claude_feature:
+            frontmatter_data["claude_feature"] = metadata.claude_feature
+
+        # Add project relationships
+        if metadata.projects:
+            frontmatter_data["projects"] = metadata.projects
+        elif project_name:
+            frontmatter_data["projects"] = [project_name]
+
+        # Add system metadata
         if metadata.purpose:
             frontmatter_data["purpose"] = metadata.purpose
-
-        # Ensure project field is always included when available
-        project_to_use = metadata.project or project_name
-        if project_to_use:
-            frontmatter_data["project"] = project_to_use
-
-        if metadata.related_projects:
-            frontmatter_data["related_projects"] = metadata.related_projects
-        if metadata.quality:
-            frontmatter_data["quality"] = metadata.quality
         if metadata.author:
             frontmatter_data["author"] = metadata.author
 
@@ -374,15 +332,23 @@ class ObsidianVaultManager:
         obsidian_dir = self.vault_path / ".obsidian"
         obsidian_dir.mkdir(exist_ok=True)
 
-        # Create app.json with basic settings
+        # Create app.json with tag-centered settings
         app_config = {
-            "attachmentFolderPath": "attachments",
+            "attachmentFolderPath": "_attachments",
             "promptDelete": False,
             "alwaysUpdateLinks": True,
             "newFileLocation": "folder",
-            "newFileFolderPath": "00_Inbox",
+            "newFileFolderPath": "inbox",
             "useMarkdownLinks": True,
             "showLineNumber": True,
+            "showFrontmatter": True,
+            "defaultViewMode": "preview",
+            "enabledPlugins": [
+                "tag-wrangler",
+                "dataview", 
+                "templater-obsidian",
+                "obsidian-git"
+            ]
         }
 
         import json
@@ -411,6 +377,12 @@ class ObsidianVaultManager:
 
         (obsidian_dir / "core-plugins.json").write_text(
             json.dumps(core_plugins, indent=2), encoding="utf-8"
+        )
+        
+        # Create optimized query reference for tag-centered system
+        queries_content = generate_obsidian_queries_file()
+        (self.vault_path / "_system" / "Obsidian_Queries_Reference.md").write_text(
+            queries_content, encoding="utf-8"
         )
 
     def get_vault_stats(self) -> dict[str, int]:

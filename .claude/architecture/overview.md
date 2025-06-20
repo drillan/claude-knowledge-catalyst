@@ -1,3 +1,17 @@
+---
+title: "CKC アーキテクチャ概要"
+created: "2025-06-19"
+updated: "2025-06-19"
+version: "1.0"
+category: "Development_Patterns"
+tags: ["architecture", "system-design", "ckc", "software-engineering", "design-patterns"]
+complexity: "expert"
+quality: "high"
+purpose: "CKCシステムの包括的アーキテクチャ設計と技術仕様書"
+project: "claude-knowledge-catalyst"
+status: "production"
+---
+
 # CKC アーキテクチャ概要
 
 ## プロジェクトの設計思想

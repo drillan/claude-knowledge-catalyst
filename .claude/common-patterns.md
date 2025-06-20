@@ -1,3 +1,18 @@
+---
+title: "Common Patterns - よく使用するコマンドパターン"
+created: "2025-06-19"
+updated: "2025-06-19"
+version: "1.0"
+category: "concept"
+subcategory: "Development_Patterns"
+tags: ["patterns", "commands", "development", "best-practices", "workflow"]
+complexity: "intermediate"
+quality: "high"
+purpose: "CKC開発でよく使用するコマンドパターンの集約"
+project: "claude-knowledge-catalyst"
+status: "production"
+---
+
 # Common Patterns - よく使用するコマンドパターン
 
 > **関連情報**: 現在の優先課題とアクションアイテムについては `.claude/next_action.md` を参照

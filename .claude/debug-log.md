@@ -1,3 +1,21 @@
+---
+category: project_log
+complexity: intermediate
+created: '2025-06-19'
+project: claude-knowledge-catalyst
+purpose: Auto-generated metadata for debug-log
+quality: medium
+status: draft
+tags:
+- debug
+- issue
+- troubleshooting
+- problem-solving
+title: Debug Log
+updated: '2025-06-19'
+version: '1.0'
+---
+
 # Debug Log - 重要なデバッグ記録
 
 ## 2024-06-17: ナレッジマネジメントシステム導入

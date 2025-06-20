@@ -358,5 +358,3 @@ ckc config migrate
 # マイグレーション確認
 ckc config migrate --dry-run
 ```
-
-設定の互換性については[Migration Guide](../developer-guide/migration.md)を参照してください。

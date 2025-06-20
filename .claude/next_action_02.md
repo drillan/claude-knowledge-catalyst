@@ -1,3 +1,18 @@
+---
+title: "現在の自動分類システムの評価：根本的改善が必要"
+created: "2025-06-19"
+updated: "2025-06-19"
+version: "1.0"
+category: "concept"
+subcategory: "AI_Fundamentals"
+tags: ["classification", "analysis", "improvement", "system-design", "evaluation"]
+complexity: "advanced"
+quality: "high"
+purpose: "CKC自動分類システムの問題分析と改善戦略"
+project: "claude-knowledge-catalyst"
+status: "production"
+---
+
 # 現在の自動分類システムの評価：根本的改善が必要
 
 ## **結論：現在の分類は適切ではない**

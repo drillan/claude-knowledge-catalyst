@@ -1,3 +1,18 @@
+---
+title: "開発環境ガイド"
+created: "2025-06-19"
+updated: "2025-06-19" 
+version: "1.0"
+category: "concept"
+subcategory: "Development_Patterns"
+tags: ["development", "environment", "uv", "python", "guide", "best-practices"]
+complexity: "intermediate"
+quality: "high"
+purpose: "CKCプロジェクトの開発環境設定とベストプラクティスの包括的ガイド"
+project: "claude-knowledge-catalyst"
+status: "production"
+---
+
 # 開発環境ガイド
 
 Claude Knowledge Catalyst (CKC) の開発環境設定、コマンド、ベストプラクティスについて説明します。

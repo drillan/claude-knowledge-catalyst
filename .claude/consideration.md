@@ -1,3 +1,18 @@
+---
+title: "ディレクトリ番号接頭辞システムの包括的考察"
+created: "2025-06-19"
+updated: "2025-06-19"
+version: "1.0"
+category: "concept"
+subcategory: "Best_Practices"
+tags: ["directory", "structure", "design", "obsidian", "organization"]
+complexity: "advanced"
+quality: "high"
+purpose: "ディレクトリ構造設計の戦略的考察と推奨解決策"
+project: "claude-knowledge-catalyst"
+status: "production"
+---
+
 # ディレクトリ番号接頭辞システムの包括的考察
 
 ## **問題の本質と戦略的重要性**

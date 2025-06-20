@@ -1,5 +1,6 @@
 """Command-line interface for Claude Knowledge Catalyst."""
 
-from .main import app, main
+# Remove direct imports to avoid circular import warnings
+# Apps and main can be imported directly from their modules when needed
 
-__all__ = ["app", "main"]
+__all__ = []

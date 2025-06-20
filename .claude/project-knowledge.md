@@ -1,3 +1,17 @@
+---
+title: "Project Knowledge - 技術的洞察とパターン"
+created: "2025-06-19"
+updated: "2025-06-19"
+version: "1.0"
+category: "Development_Patterns"
+tags: ["project-knowledge", "architecture", "python", "pydantic", "uv", "design-patterns", "best-practices"]
+complexity: "intermediate"
+quality: "high"
+purpose: "CKCプロジェクトの技術的決定事項と設計パターンの記録"
+project: "claude-knowledge-catalyst"
+status: "production"
+---
+
 # Project Knowledge - 技術的洞察とパターン
 
 ## アーキテクチャの決定事項

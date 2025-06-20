@@ -224,14 +224,17 @@ watch:
 
 **解決方法**:
 ```bash
-# 設定確認
-ckc config show
+# Claude統合設定確認
+ckc config show --claude-integration
 
-# ファイル監視状況確認
-ckc watch status
+# CLAUDE.md同期状況確認
+ckc watch status --claude-md
 
-# 手動同期テスト
-ckc sync --force
+# 手動Claude統合同期
+ckc sync --claude-md --force
+
+# Claude統合診断
+ckc diagnose --claude-integration
 ```
 
 ### セクション除外が効かない
@@ -254,23 +257,29 @@ claude_md_sections_exclude:
 
 **確認方法**:
 ```bash
-# メタデータ確認
-ckc metadata show path/to/CLAUDE.md
+# Claude統合メタデータ確認
+ckc metadata show path/to/CLAUDE.md --claude-analysis
 
-# 再処理実行
-ckc metadata refresh path/to/CLAUDE.md
+# Claude特化メタデータ再生成
+ckc metadata refresh path/to/CLAUDE.md --claude-enhanced
+
+# Claude統合状態診断
+ckc analyze claude-integration --project .
 ```
 
-## 関連機能
+## Claude Code統合エコシステム
 
-### ファイル監視
-CLAUDE.md同期は[ファイル監視機能](core-concepts.md#file-watching)と連携して動作します。
+### 🔄 Claude Code開発ワークフロー統合
+CLAUDE.md同期は[シームレス統合システム](core-concepts.md#シームレス統合システム)の中核として動作し、開発プロセス全体をObsidianと統合します。
 
-### メタデータ管理
-[メタデータ機能](core-concepts.md#metadata-management)により豊富な情報が自動付与されます。
+### 🤖 AI強化メタデータシステム
+[AI搭載メタデータ強化](core-concepts.md#ai搭載メタデータ強化)により、Claude開発コンテキストに特化した豊富な情報が自動付与されます。
 
-### Obsidian統合
-[Obsidian同期機能](core-concepts.md#obsidian-integration)の一部として動作します。
+### 🏛️ Obsidian最適化統合
+[Obsidian最適化ボルト構造](core-concepts.md#obsidian最適化ボルト構造)の一部として、ボルト構造とdataviewクエリを最適化します。
+
+### 📊 Claude開発分析
+[Claude Code統合設定](core-concepts.md#claude-code統合設定)と連携し、CLAUDE.md利用パターンから開発効率を測定・改善します。
 
 ## まとめ
 

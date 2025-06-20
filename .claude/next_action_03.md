@@ -1,3 +1,18 @@
+---
+title: "Claude Knowledge Catalyst Sphinx移行戦略（Markdown前提）"
+created: "2025-06-19"
+updated: "2025-06-19"
+version: "1.0"
+category: "concept"
+subcategory: "Development_Patterns"
+tags: ["sphinx", "markdown", "documentation", "migration", "strategy"]
+complexity: "advanced"
+quality: "high"
+purpose: "MarkdownベースのSphinx移行戦略の包括的プラン"
+project: "claude-knowledge-catalyst"
+status: "production"
+---
+
 # Claude Knowledge Catalyst Sphinx移行戦略（Markdown前提）
 
 ## **戦略概要:**

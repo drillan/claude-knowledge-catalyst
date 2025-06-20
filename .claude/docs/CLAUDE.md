@@ -1,3 +1,18 @@
+---
+title: "ドキュメントガイド"
+created: "2025-06-19"
+updated: "2025-06-19"
+version: "1.0"
+category: "concept"
+subcategory: "Development_Patterns"
+tags: ["documentation", "sphinx", "guide", "architecture", "workflow"]
+complexity: "intermediate"
+quality: "high"
+purpose: "Sphinxドキュメントシステムの包括的ガイド"
+project: "claude-knowledge-catalyst"
+status: "production"
+---
+
 # ドキュメントガイド
 
 このドキュメントはSphinxドキュメントに関する包括的なガイドです。

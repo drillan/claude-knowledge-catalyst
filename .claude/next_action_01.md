@@ -1,3 +1,22 @@
+---
+category: resource
+complexity: intermediate
+created: '2025-06-19'
+project: claude-knowledge-catalyst
+purpose: Auto-generated metadata for next_action_01
+quality: high
+status: draft
+subcategory: Documentation
+tags:
+- documentation
+- guide
+- reference
+- manual
+title: Next Action 01
+updated: '2025-06-19'
+version: '1.0'
+---
+
 # Current Design Issues and Priority Actions - 現在の設計課題と優先アクション
 
 ## 🔍 現在の重要課題

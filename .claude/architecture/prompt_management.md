@@ -1,3 +1,22 @@
+---
+category: concept
+complexity: advanced
+created: '2025-06-19'
+project: claude-knowledge-catalyst
+purpose: Auto-generated metadata for prompt_management
+quality: high
+status: draft
+subcategory: Development_Patterns
+tags:
+- architecture
+- design
+- system
+- structure
+title: Prompt Management
+updated: '2025-06-19'
+version: '1.0'
+---
+
 # プロンプト記録・管理システム
 
 ## 概要

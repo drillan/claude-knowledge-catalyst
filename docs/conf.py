@@ -44,7 +44,7 @@ on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
 # Theme configuration
 html_theme = 'furo'
-html_static_path = ['_static']
+# html_static_path = ['_static']
 
 # RTD-specific configuration
 if on_rtd:

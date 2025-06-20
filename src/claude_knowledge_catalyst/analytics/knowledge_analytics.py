@@ -150,12 +150,12 @@ class KnowledgeAnalytics:
         directory_files = defaultdict(int)
         
         for file_path, metadata in knowledge_items:
-            # Category analysis
-            if metadata.category:
-                analysis["category_distribution"][metadata.category] += 1
+            # Content type analysis (pure tag system)
+            if metadata.type:
+                analysis["category_distribution"][metadata.type] += 1
             
             # Complexity analysis (if available)
-            if hasattr(metadata, 'complexity'):
+            if metadata.complexity:
                 analysis["complexity_distribution"][metadata.complexity] += 1
             
             # Success rate analysis
@@ -229,8 +229,8 @@ class KnowledgeAnalytics:
             if metadata.tags:
                 completeness["has_tags"] += 1
             
-            if metadata.category:
-                completeness["has_category"] += 1
+            if metadata.type:
+                completeness["has_type"] += 1
             
             if metadata.purpose:
                 completeness["has_purpose"] += 1
@@ -242,9 +242,9 @@ class KnowledgeAnalytics:
             complete_count = sum([
                 bool(metadata.title and metadata.title != "Untitled"),
                 bool(metadata.tags),
-                bool(metadata.category),
+                bool(metadata.type),
                 bool(metadata.purpose),
-                bool(metadata.quality)
+                bool(metadata.tech or metadata.domain)
             ])
             
             if complete_count >= 4:
@@ -407,8 +407,8 @@ class KnowledgeAnalytics:
             month = metadata.created.strftime("%Y-%m")
             evolution["knowledge_growth"]["monthly_growth"][month] += 1
             
-            if metadata.category:
-                evolution["knowledge_growth"]["category_growth"][metadata.category][month] += 1
+            if metadata.type:
+                evolution["knowledge_growth"]["type_growth"][metadata.type][month] += 1
         
         # Knowledge connections and relationships
         for file_path, metadata in knowledge_items:
@@ -422,8 +422,10 @@ class KnowledgeAnalytics:
             for project in metadata.related_projects:
                 evolution["knowledge_connections"]["project_knowledge_map"][project].append({
                     "file": str(file_path),
-                    "category": metadata.category,
-                    "tags": metadata.tags
+                    "type": metadata.type,
+                    "tags": metadata.tags,
+                    "tech": metadata.tech,
+                    "domain": metadata.domain
                 })
             
             # Most connected topics (by tag frequency)

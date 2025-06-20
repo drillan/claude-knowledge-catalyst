@@ -1,14 +1,29 @@
+---
+title: "CKC 開発ロードマップ"
+created: "2025-06-19"
+updated: "2025-06-20"
+version: "2.0"
+category: "resource"
+subcategory: "Documentation"
+tags: ["roadmap", "development", "planning", "claude-integration", "obsidian"]
+complexity: "intermediate"
+quality: "high"
+purpose: "Claude Code ⇄ Obsidian統合システムの開発ロードマップ"
+project: "claude-knowledge-catalyst"
+status: "production"
+---
+
 # CKC 開発ロードマップ
 
-## 実装済み機能 (v2.0)
+## 実装済み機能 (v0.9.1)
 
 ### ✅ コア機能
-- ハイブリッド構造システム（10-step numbering）
-- 自動メタデータ抽出・管理
-- Obsidian深層統合
+- Claude Code ⇄ Obsidian シームレス統合
+- AI搭載メタデータ自動生成・強化
+- 状態ベースワークフロー組織化
 - リアルタイムファイル監視・同期
-- プロジェクト管理・分析
-- テンプレートシステム
+- 多次元タグシステム（副次的効果）
+- Claude Code特化テンプレートシステム
 
 ### ✅ CLI インターフェース
 - `ckc init` - ワークスペース初期化
@@ -21,149 +36,149 @@
 
 ## 実装予定機能
 
-### v2.1 - AI支援機能拡張 (2024 Q2)
+### v2.1 - Claude Code統合強化 (2025 Q3)
 
-#### 🧠 AI アシスタント CLI
+#### 🧠 Claude Code統合強化 CLI
 ```bash
-# コンテンツ改善提案
-uv run ckc ai suggest .claude/my-prompt.md
+# Claude開発プロセス特化分析
+uv run ckc claude analyze-project --insights
 
-# 知識タイプ別テンプレート生成
-uv run ckc ai template prompt --title "API統合パターン"
-uv run ckc ai template code --language python --domain "非同期処理"
-uv run ckc ai template concept --title "設計パターン"
+# Claude Code特化テンプレート生成
+uv run ckc claude template prompt --type system --domain "API開発"
+uv run ckc claude template workflow --project-type "Claude App"
+uv run ckc claude template handoff --with-context
 
-# ファイル内容の知的分析
-uv run ckc ai insights .claude/my-prompt.md
+# Claude開発知見の深層分析
+uv run ckc claude insights .claude/ --success-patterns
 
-# 知識組織化の提案
-uv run ckc ai organize --target obsidian-vault
+# Obsidian最適化構造提案
+uv run ckc claude optimize-vault --claude-integration
 ```
 
-#### 📊 高度アナリティクス CLI
+#### 📊 Claude開発分析 CLI
 ```bash
-# 包括的分析レポート生成
-uv run ckc analytics report --days 30 --format json --output report.json
+# Claude Code開発効率レポート
+uv run ckc analytics claude-efficiency --project current --days 30
 
-# 使用統計とトレンド分析
-uv run ckc analytics usage --days 7 --category prompts
-uv run ckc analytics trends --project claude-knowledge-catalyst
+# プロンプト成功率分析
+uv run ckc analytics prompt-performance --success-threshold 80
+uv run ckc analytics claude-usage-patterns --model-comparison
 
-# ROI測定とパフォーマンス指標
-uv run ckc analytics performance --metric success_rate
-uv run ckc analytics roi --timeframe monthly
+# Obsidian知識活用度測定
+uv run ckc analytics knowledge-utilization --vault main-vault
+uv run ckc analytics integration-roi --claude-projects
 ```
 
-#### 🔄 自動化・メンテナンス CLI
+#### 🔄 統合メンテナンス CLI
 ```bash
-# 構造自動最適化
-uv run ckc maintenance optimize --target structure
-uv run ckc maintenance optimize --target metadata
+# Claude-Obsidian統合最適化
+uv run ckc maintenance optimize-integration --target claude-sync
+uv run ckc maintenance optimize-integration --target obsidian-structure
 
-# 健全性監視・修復
-uv run ckc maintenance health --check-all
-uv run ckc maintenance repair --auto-fix
+# 統合健全性監視・修復
+uv run ckc maintenance health --claude-integration
+uv run ckc maintenance repair --sync-conflicts
 
-# スケジュール実行
-uv run ckc maintenance schedule --task cleanup --frequency weekly
-uv run ckc maintenance schedule --task backup --frequency daily
+# 自動メンテナンススケジュール
+uv run ckc maintenance schedule --task vault-optimization --frequency weekly
+uv run ckc maintenance schedule --task metadata-enhancement --frequency daily
 ```
 
-### v2.2 - 構造管理機能 (2024 Q3)
+### v2.2 - チーム統合機能 (2025 Q4)
 
-#### 🏗️ 構造管理 CLI
+#### 🏗️ チーム統合管理 CLI
 ```bash
-# ハイブリッド構造管理
-uv run ckc structure status --verbose
-uv run ckc structure validate --fix-issues
-uv run ckc structure configure --optimize
+# チーム統合構造管理
+uv run ckc team vault-status --shared --verbose
+uv run ckc team validate-integration --multi-project
+uv run ckc team configure-sharing --claude-projects
 
-# ファイル分類管理
-uv run ckc structure classify --dry-run
-uv run ckc structure classify --apply-suggestions
+# 分散プロジェクト統合
+uv run ckc team sync-projects --preview
+uv run ckc team sync-projects --execute
 
-# 移行機能
-uv run ckc migrate --from v1.0 --to v2.0 --backup
-uv run ckc migrate plan --show-changes
+# レガシーObsidian統合移行
+uv run ckc migrate legacy-vault --to claude-integrated --backup
+uv run ckc migrate plan --team-sharing
 ```
 
-#### 📈 高度分析機能
-- 知識グラフ可視化
-- セマンティック関連性分析
-- 使用パターン機械学習
-- 予測的メンテナンス推奨
+#### 📈 チーム知識分析機能
+- Claude Code開発知識グラフ可視化
+- プロジェクト横断関連性分析
+- チーム学習パターン機械学習
+- プロンプト効果性予測システム
 
-### v3.0 - エンタープライズ機能 (2024 Q4)
+### v3.0 - エンタープライズ統合 (2026 Q1)
 
-#### 🌐 Web インターフェース
-- ブラウザベース管理ダッシュボード
-- リアルタイム分析ビュー
-- 協働編集機能
-- REST API エンドポイント
+#### 🌐 Claude-Obsidian統合 Web インターフェース
+- Claude Code プロジェクト管理ダッシュボード
+- リアルタイム統合状況ビュー
+- チーム知識共有インターフェース
+- Claude Code統合 API エンドポイント
 
-#### 👥 チーム協働機能
-- 多人数知識共有
-- 権限管理システム
-- ワークフロー自動化
-- 通知・アラートシステム
+#### 👥 Claude Code チーム協働機能
+- Claude開発知見の多人数共有
+- プロジェクトベース権限管理
+- Claude開発ワークフロー自動化
+- Obsidian統合通知システム
 
-#### 🔌 統合拡張機能
-- Notion ワークスペース統合
-- Slack/Discord 通知連携
-- GitHub Issues/PR 連携
-- カスタムプラグインシステム
+#### 🔌 Claude Code エコシステム統合
+- Claude Desktop 連携
+- GitHub Claude Code プロジェクト自動検出
+- VS Code Claude 拡張機能統合
+- Claude API 使用統計連携
 
 ## 技術的実装計画
 
 ### v2.1 実装詳細
 
-#### AI アシスタント統合
+#### Claude Code統合強化
 ```python
-# src/claude_knowledge_catalyst/ai/
-├── ai_assistant.py          # AI分析・提案システム（実装済み）
-├── content_analyzer.py      # コンテンツ詳細解析
-├── suggestion_engine.py     # 改善提案エンジン
-└── template_generator.py    # AIテンプレート生成
+# src/claude_knowledge_catalyst/claude/
+├── claude_integration.py    # Claude Code統合エンジン（実装済み）
+├── project_analyzer.py      # Claudeプロジェクト解析
+├── workflow_engine.py       # 開発ワークフロー統合
+└── template_generator.py    # Claude特化テンプレート生成
 ```
 
-#### アナリティクス拡張
+#### Claude開発分析拡張
 ```python
 # src/claude_knowledge_catalyst/analytics/
 ├── knowledge_analytics.py   # 知識分析エンジン（実装済み）
-├── usage_statistics.py      # 使用統計（実装済み）
-├── trend_analyzer.py        # トレンド分析
-├── roi_calculator.py        # ROI測定
+├── claude_efficiency.py     # Claude開発効率分析
+├── prompt_performance.py    # プロンプト性能分析
+├── integration_roi.py       # 統合ROI測定
 └── report_generator.py      # レポート生成
 ```
 
-#### 自動化システム
+#### 統合自動化システム
 ```python
 # src/claude_knowledge_catalyst/automation/
-├── metadata_enhancer.py     # メタデータ自動強化（実装済み）
-├── structure_automation.py  # 構造自動最適化（実装済み）
-├── maintenance_scheduler.py # メンテナンススケジューラ
-└── health_monitor.py        # 健全性監視
+├── metadata_enhancer.py     # AI強化メタデータ（実装済み）
+├── integration_optimizer.py # Claude-Obsidian統合最適化（実装済み）
+├── sync_scheduler.py        # 同期スケジューラ
+└── integration_monitor.py   # 統合健全性監視
 ```
 
 ### v2.2 実装詳細
 
-#### 構造管理拡張
+#### チーム統合拡張
 ```python
-# src/claude_knowledge_catalyst/structure/
-├── structure_manager.py     # 構造管理統合
-├── classification_engine.py # 高度分類エンジン
-├── migration_tools.py       # 移行ツール
-└── validation_engine.py     # 検証エンジン
+# src/claude_knowledge_catalyst/team/
+├── team_integration.py      # チーム統合管理
+├── project_sharing.py       # プロジェクト共有エンジン
+├── migration_tools.py       # 移行ツール（実装済み）
+└── conflict_resolution.py   # 競合解決エンジン
 ```
 
 #### CLI 拡張
 ```python
 # src/claude_knowledge_catalyst/cli/
 ├── main.py                  # メインCLI（実装済み）
-├── ai_commands.py           # AI関連コマンド
-├── analytics_commands.py    # アナリティクスコマンド
+├── claude_commands.py       # Claude統合コマンド
+├── analytics_commands.py    # 分析コマンド
 ├── maintenance_commands.py  # メンテナンスコマンド
-└── structure_commands.py    # 構造管理コマンド（一部実装済み）
+└── team_commands.py         # チーム統合コマンド
 ```
 
 ## 技術的課題と解決方針
@@ -186,33 +201,33 @@ uv run ckc migrate plan --show-changes
 ## 開発優先順位
 
 ### 高優先度 (v2.1)
-1. AI アシスタント CLI コマンド実装
-2. アナリティクス CLI コマンド実装
-3. 自動メンテナンス機能
+1. Claude Code統合強化 CLI コマンド実装
+2. Claude開発分析 CLI コマンド実装
+3. 統合自動メンテナンス機能
 
 ### 中優先度 (v2.2)
-1. 構造管理 CLI コマンド実装
-2. 移行ツール完成
-3. Web API 基盤構築
+1. チーム統合 CLI コマンド実装
+2. マルチプロジェクト統合機能
+3. Claude-Obsidian統合 API 基盤構築
 
 ### 低優先度 (v3.0)
-1. Web インターフェース開発
-2. チーム協働機能
-3. サードパーティ統合拡張
+1. Claude統合 Web インターフェース開発
+2. エンタープライズチーム協働機能
+3. Claude エコシステム拡張統合
 
 ## 貢献機会
 
 ### 開発者向け
-- **CLI コマンド実装**: 新機能のコマンドライン実装
-- **API 設計**: RESTful API エンドポイント設計
-- **テスト拡充**: 自動テストカバレッジ向上
+- **Claude統合 CLI 実装**: Claude Code特化コマンド開発
+- **統合 API 設計**: Claude-Obsidian統合エンドポイント設計
+- **統合テスト拡充**: Claude Code統合の自動テストカバレッジ向上
 
 ### ドキュメント
-- **ユーザーガイド**: 実践的な使用例追加
-- **API ドキュメント**: 開発者向けドキュメント
-- **チュートリアル**: ステップバイステップガイド
+- **Claude統合ガイド**: 実践的なClaude Code統合例
+- **統合 API ドキュメント**: 開発者向け統合リファレンス
+- **チュートリアル**: Claude Code → Obsidian統合ステップガイド
 
 ### フィードバック
-- **機能要望**: 実際の使用における改善提案
-- **バグレポート**: 問題発見と再現手順
-- **パフォーマンス**: 大規模環境での性能評価
+- **統合機能要望**: Claude Code開発での実用改善提案
+- **統合バグレポート**: Claude-Obsidian統合問題の発見と再現
+- **統合パフォーマンス**: 大規模Claude開発での統合性能評価
