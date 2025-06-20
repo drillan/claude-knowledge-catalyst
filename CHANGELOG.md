@@ -50,6 +50,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Backup Control**: `--backup/--no-backup` options for backup behavior control
   - **Data Loss Prevention**: Eliminates risk of unintentional loss of sync targets and custom settings
 
+### Enhanced
+- **🔄 Migration UX System**: Comprehensive migration experience improvements for transparent frontmatter updates
+  - **Intelligent Migration Detection**: Automatic detection of legacy vs. modern frontmatter formats in `ckc status`
+  - **Migration Preview Command**: New `ckc migrate --preview` command showing detailed migration changes
+  - **Interactive Migration Options**: `--interactive`, `--auto-apply`, and `--backup` flags for flexible migration control
+  - **Configurable Notification Levels**: Four-level notification system (silent, minimal, recommended, verbose)
+  - **Smart-Sync Integration**: Migration opportunities displayed during smart-sync operations
+  - **Rich Migration Preview**: Detailed table showing legacy→modern field mappings and estimated improvements
+  - **Automatic Backup System**: Timestamped backups before migration with configurable backup behavior
+
 ## [0.9.1] - 2025-06-19
 
 ### Added

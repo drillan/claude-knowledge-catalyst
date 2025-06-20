@@ -12,21 +12,16 @@ hybrid_structure:
   structure_version: hybrid_v1
 project_name: Claude Knowledge Catalyst
 project_root: /home/driller/repo/claude-knowledge-catalyst
+migration:
+  auto_detect: true
+  notify_level: recommended
+  backup_before: true
+  mixed_format_warning: true
 sync_targets:
 - enabled: true
   metadata: {}
-  name: knowledge-hub
-  path: /home/driller/Documents/Obsidian/Knowledge-Hub
-  type: obsidian
-- enabled: true
-  metadata: {}
-  name: test-empty
-  path: /tmp/test-empty-vault
-  type: obsidian
-- enabled: true
-  metadata: {}
-  name: test-clean
-  path: /tmp/test-empty-vault
+  name: claude-dev-vault
+  path: /home/driller/Documents/Obsidian/claude-dev-knowledge
   type: obsidian
 tags:
   category_tags:

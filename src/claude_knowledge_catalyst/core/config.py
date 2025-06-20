@@ -87,6 +87,36 @@ class WatchConfig(BaseModel):
     )
 
 
+class MigrationConfig(BaseModel):
+    """Configuration for migration features."""
+    
+    auto_detect: bool = Field(
+        default=True, 
+        description="Automatically detect migration opportunities"
+    )
+    notify_level: str = Field(
+        default="recommended", 
+        description="Notification level: 'silent', 'minimal', 'recommended', 'verbose'"
+    )
+    backup_before: bool = Field(
+        default=True, 
+        description="Create backup before migration"
+    )
+    mixed_format_warning: bool = Field(
+        default=True, 
+        description="Show warnings when using mixed formats"
+    )
+    
+    @field_validator("notify_level")
+    @classmethod
+    def validate_notify_level(cls, v: str) -> str:
+        """Validate notification level."""
+        valid_levels = ["silent", "minimal", "recommended", "verbose"]
+        if v.lower() not in valid_levels:
+            raise ValueError(f"Invalid notify_level: {v}. Valid options: {valid_levels}")
+        return v.lower()
+
+
 class CKCConfig(BaseModel):
     """Main configuration for Claude Knowledge Catalyst."""
 
@@ -125,6 +155,12 @@ class CKCConfig(BaseModel):
     hybrid_structure: HybridStructureConfig = Field(
         default_factory=HybridStructureConfig, 
         description="Hybrid structure configuration"
+    )
+    
+    # Migration configuration
+    migration: MigrationConfig = Field(
+        default_factory=MigrationConfig,
+        description="Migration and notification configuration"
     )
     
 

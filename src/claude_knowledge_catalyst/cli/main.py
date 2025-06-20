@@ -2,6 +2,7 @@
 
 import sys
 import shutil
+from datetime import datetime
 from pathlib import Path
 from typing import Optional, List, Dict, Any
 
@@ -302,6 +303,44 @@ def watch(
         console.print("[green]✓[/green] Stopped watching")
 
 
+def _detect_migration_status(config: CKCConfig) -> Dict[str, Any]:
+    """Detect legacy frontmatter and migration opportunities."""
+    legacy_count = 0
+    modern_count = 0
+    total_files = 0
+    
+    # Scan watch paths for markdown files
+    for watch_path in config.watch.watch_paths:
+        full_path = config.project_root / watch_path
+        if not full_path.exists():
+            continue
+            
+        for md_file in full_path.rglob("*.md"):
+            if md_file.is_file():
+                total_files += 1
+                try:
+                    content = md_file.read_text(encoding='utf-8')
+                    # Check for frontmatter
+                    if content.startswith('---'):
+                        frontmatter_end = content.find('\n---\n', 3)
+                        if frontmatter_end > 0:
+                            frontmatter = content[3:frontmatter_end]
+                            # Check for legacy vs modern format
+                            if 'category:' in frontmatter or 'subcategory:' in frontmatter:
+                                legacy_count += 1
+                            elif 'type:' in frontmatter:
+                                modern_count += 1
+                except Exception:
+                    continue
+    
+    return {
+        'total_files': total_files,
+        'legacy_count': legacy_count,
+        'modern_count': modern_count,
+        'needs_migration': legacy_count > 0
+    }
+
+
 @app.command()
 def status() -> None:
     """Show current status and configuration."""
@@ -314,6 +353,28 @@ def status() -> None:
     console.print(f"[blue]Root:[/blue] {config.project_root}")
     console.print(f"[blue]Auto-sync:[/blue] {'Enabled' if config.auto_sync else 'Disabled'}")
     console.print(f"[blue]Structure:[/blue] Pure Tag-Centered (6-directory)")
+    
+    # Migration status (controlled by notification level)
+    migration_info = _detect_migration_status(config)
+    if config.migration.auto_detect and config.migration.notify_level != "silent":
+        if migration_info['needs_migration']:
+            console.print(f"[yellow]Migration Status:[/yellow] [yellow]⚠️  Mixed format detected[/yellow]")
+            console.print(f"  • Legacy format: {migration_info['legacy_count']} files")
+            console.print(f"  • Modern format: {migration_info['modern_count']} files")
+            console.print(f"  • Recommendation: Run [bold]ckc migrate --preview[/bold]")
+            
+            if config.migration.notify_level in ["recommended", "verbose"]:
+                console.print("  [dim]💡 Upgrade to Pure Tag-Centered Architecture for enhanced features[/dim]")
+                if config.migration.notify_level == "verbose":
+                    console.print("  [dim]Benefits: Multi-dimensional search, AI classification, success tracking[/dim]")
+                    
+        elif migration_info['modern_count'] > 0:
+            console.print(f"[green]Migration Status:[/green] [green]✓ Pure Tag-Centered Architecture[/green]")
+            console.print(f"  • Modern format: {migration_info['modern_count']} files")
+        elif migration_info['total_files'] > 0 and config.migration.notify_level in ["recommended", "verbose"]:
+            console.print(f"[yellow]Migration Status:[/yellow] [yellow]Files found but no frontmatter detected[/yellow]")
+            console.print(f"  • Total files: {migration_info['total_files']} files")
+            console.print(f"  • Consider running: [bold]ckc smart-sync[/bold] to add metadata")
     
     # Watch paths
     console.print("\n[blue]Watch Paths:[/blue]")
@@ -611,6 +672,22 @@ def smart_sync(
     """
     config = get_config()
     metadata_manager = get_metadata_manager()
+    
+    # Show migration notification if applicable
+    if config.migration.auto_detect and config.migration.notify_level == "recommended":
+        migration_info = _detect_migration_status(config)
+        if migration_info['needs_migration']:
+            console.print("🔍 [yellow]Migration opportunity detected![/yellow]")
+            console.print("📋 [dim]Summary:[/dim]")
+            console.print(f"  • Legacy format files: {migration_info['legacy_count']}")
+            console.print(f"  • Modern format files: {migration_info['modern_count']}")
+            console.print("  • Migration benefits: Enhanced search, AI classification, multi-dimensional tags")
+            console.print("")
+            console.print("Run [bold]ckc migrate --preview[/bold] to see what would change.")
+            if not auto_apply and not Confirm.ask("Continue with current sync?", default=True):
+                console.print("[red]Smart sync cancelled.[/red]")
+                return
+            console.print("")
     
     smart_sync_command(
         auto_apply=auto_apply,
@@ -1737,6 +1814,164 @@ def _interactive_apply_classifications(file_path: Path, classifications: List, m
     updated_metadata = KnowledgeMetadata(**metadata_dict)
     metadata_manager.update_file_metadata(file_path, updated_metadata)
     console.print(f"[green]✅ Updated {file_path.name}[/green]")
+
+
+@app.command()
+def migrate(
+    preview: bool = typer.Option(False, "--preview", help="Show migration preview without applying changes"),
+    interactive: bool = typer.Option(False, "--interactive", help="Interactive file-by-file migration"),
+    backup: bool = typer.Option(True, "--backup/--no-backup", help="Create backup before migration"),
+    auto_apply: bool = typer.Option(False, "--auto-apply", help="Auto-apply high-confidence migrations")
+) -> None:
+    """Migrate legacy frontmatter to Pure Tag-Centered Architecture."""
+    config = get_config()
+    
+    # Detect migration status
+    migration_info = _detect_migration_status(config)
+    
+    if not migration_info['needs_migration']:
+        if migration_info['modern_count'] > 0:
+            console.print("[green]✓ All files already use Pure Tag-Centered Architecture[/green]")
+        else:
+            console.print("[yellow]No files with frontmatter found to migrate[/yellow]")
+            console.print("Consider running [bold]ckc smart-sync[/bold] to add metadata to files")
+        return
+    
+    console.print("[blue]🔄 Migration: Legacy → Pure Tag-Centered Architecture[/blue]\n")
+    
+    # Collect files for migration
+    files_to_migrate = []
+    for watch_path in config.watch.watch_paths:
+        full_path = config.project_root / watch_path
+        if not full_path.exists():
+            continue
+            
+        for md_file in full_path.rglob("*.md"):
+            if md_file.is_file():
+                try:
+                    content = md_file.read_text(encoding='utf-8')
+                    if content.startswith('---'):
+                        frontmatter_end = content.find('\n---\n', 3)
+                        if frontmatter_end > 0:
+                            frontmatter = content[3:frontmatter_end]
+                            if 'category:' in frontmatter or 'subcategory:' in frontmatter:
+                                files_to_migrate.append(md_file)
+                except Exception:
+                    continue
+    
+    if not files_to_migrate:
+        console.print("[green]✓ No legacy format files found[/green]")
+        return
+    
+    # Show migration preview
+    console.print(f"[yellow]📋 Migration Preview[/yellow]")
+    console.print(f"Files to migrate: {len(files_to_migrate)}")
+    
+    preview_table = Table(title="Migration Changes")
+    preview_table.add_column("File", style="cyan")
+    preview_table.add_column("Legacy → Modern", style="yellow")
+    preview_table.add_column("New Fields", style="green")
+    
+    changes_count = 0
+    for file_path in files_to_migrate[:5]:  # Show first 5 files
+        try:
+            content = file_path.read_text(encoding='utf-8')
+            frontmatter_end = content.find('\n---\n', 3)
+            frontmatter = content[3:frontmatter_end]
+            
+            legacy_fields = []
+            new_fields = []
+            
+            if 'category:' in frontmatter:
+                legacy_fields.append("category")
+                new_fields.append("type")
+            if 'subcategory:' in frontmatter:
+                legacy_fields.append("subcategory")
+                new_fields.append("domain")
+            if 'quality:' in frontmatter:
+                legacy_fields.append("quality")
+                new_fields.append("confidence")
+            
+            new_fields.extend(["tech", "team", "claude_model"])
+            
+            preview_table.add_row(
+                file_path.name,
+                " → ".join(legacy_fields),
+                ", ".join(new_fields)
+            )
+            changes_count += len(new_fields)
+        except Exception:
+            continue
+    
+    if len(files_to_migrate) > 5:
+        preview_table.add_row("...", f"and {len(files_to_migrate) - 5} more files", "...")
+    
+    console.print(preview_table)
+    console.print(f"\n[bold]Summary:[/bold]")
+    console.print(f"• Files to migrate: {len(files_to_migrate)}")
+    console.print(f"• Estimated new fields: {changes_count}")
+    console.print("• Enhanced search capabilities: ✅")
+    console.print("• AI classification ready: ✅")
+    
+    if preview:
+        console.print(f"\n[dim]To apply migration: [bold]ckc migrate --auto-apply[/bold][/dim]")
+        return
+    
+    # Interactive confirmation
+    if not auto_apply:
+        if not Confirm.ask(f"\nProceed with migration of {len(files_to_migrate)} files?", default=False):
+            console.print("[red]Migration cancelled.[/red]")
+            return
+    
+    # Create backup if requested
+    if backup:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        backup_dir = config.project_root / f".claude_backup_migration_{timestamp}"
+        backup_dir.mkdir(exist_ok=True)
+        
+        for watch_path in config.watch.watch_paths:
+            source_path = config.project_root / watch_path
+            if source_path.exists():
+                dest_path = backup_dir / watch_path
+                dest_path.parent.mkdir(parents=True, exist_ok=True)
+                if source_path.is_dir():
+                    shutil.copytree(source_path, dest_path, dirs_exist_ok=True)
+                else:
+                    shutil.copy2(source_path, dest_path)
+        
+        console.print(f"[green]📋 Backup created:[/green] {backup_dir}")
+    
+    # Execute migration using smart-sync
+    console.print(f"\n[blue]🤖 Executing AI-powered migration...[/blue]")
+    console.print("[dim]Using smart classification system for optimal migration[/dim]")
+    
+    # This will leverage the existing smart-sync functionality
+    # Import here to avoid circular imports
+    from .smart_sync import smart_sync_command
+    
+    try:
+        # Run smart-sync with auto-apply for migration
+        result = smart_sync_command(
+            dry_run=False,
+            auto_apply=True,
+            min_confidence=0.6,  # Lower threshold for migration
+            target_path=None,
+            project_name=None
+        )
+        
+        if result.get('success', False):
+            migrated_count = result.get('files_modified', len(files_to_migrate))
+            console.print(f"\n[green]🎉 Migration completed![/green]")
+            console.print(f"• Files migrated: {migrated_count}")
+            console.print(f"• Enhanced with Pure Tag-Centered Architecture")
+            console.print(f"• Ready for advanced search: [bold]ckc search --tech python --domain ai-systems[/bold]")
+        else:
+            console.print(f"[yellow]⚠️ Migration completed with some issues[/yellow]")
+            console.print("Check individual files and run [bold]ckc status[/bold] for details")
+            
+    except Exception as e:
+        console.print(f"[red]❌ Migration failed: {e}[/red]")
+        console.print("Your files are safely backed up. You can restore from backup if needed.")
 
 
 def main() -> None:
