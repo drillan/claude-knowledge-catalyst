@@ -1,6 +1,7 @@
 """Modern CLI interface for Claude Knowledge Catalyst using Typer."""
 
 import sys
+import shutil
 from pathlib import Path
 from typing import Optional, List, Dict, Any
 
@@ -81,9 +82,45 @@ def get_metadata_manager() -> MetadataManager:
 
 
 @app.command()
-def init() -> None:
+def init(
+    force: bool = typer.Option(False, "--force", help="Force overwrite existing configuration"),
+    backup: bool = typer.Option(True, "--backup/--no-backup", help="Create backup of existing config")
+) -> None:
     """Initialize CKC workspace with modern hybrid structure."""
     console.print("[blue]Initializing Claude Knowledge Catalyst...[/blue]")
+    
+    # Check for existing configuration
+    config_path = Path.cwd() / "ckc_config.yaml"
+    
+    if config_path.exists() and not force:
+        console.print(f"[yellow]⚠️  Configuration file already exists:[/yellow] {config_path}")
+        
+        # Show existing config summary
+        try:
+            existing_config = load_config(config_path)
+            if existing_config.sync_targets:
+                console.print(f"[dim]   Current sync targets: {len(existing_config.sync_targets)} configured[/dim]")
+                for target in existing_config.sync_targets:
+                    status = "[green]enabled[/green]" if target.enabled else "[red]disabled[/red]"
+                    console.print(f"[dim]   • {target.name} → {target.path} ({status})[/dim]")
+        except Exception:
+            console.print("[dim]   (Unable to read existing configuration)[/dim]")
+        
+        console.print("\n[yellow]Options:[/yellow]")
+        console.print("• Continue and overwrite: Use [bold]--force[/bold] flag")
+        console.print("• Keep existing config: Run [bold]ckc status[/bold] to check current setup")
+        console.print("• Manual backup: Copy ckc_config.yaml before re-running")
+        
+        if not Confirm.ask("\nDo you want to overwrite the existing configuration?", default=False):
+            console.print("[red]Initialization cancelled.[/red]")
+            console.print("Your existing configuration has been preserved.")
+            return
+    
+    # Create backup if requested and file exists
+    if config_path.exists() and backup:
+        backup_path = config_path.with_suffix('.yaml.backup')
+        shutil.copy2(config_path, backup_path)
+        console.print(f"[green]📋 Backup created:[/green] {backup_path}")
     
     # Load or create config
     config = get_config()
@@ -99,7 +136,6 @@ def init() -> None:
     claude_dir.mkdir(exist_ok=True)
     
     # Save configuration
-    config_path = Path.cwd() / "ckc_config.yaml"
     config.save_to_file(config_path)
     
     console.print(f"[green]✓[/green] Configuration saved: {config_path}")

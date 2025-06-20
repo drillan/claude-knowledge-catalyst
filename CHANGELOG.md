@@ -41,6 +41,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **📁 Directory Structure**: Corrected automatic file placement to respect user-specified categories
 - **🔄 Metadata Processing**: Fixed tag-based classification override of explicit category metadata
 
+### Security
+- **🛡️ Safe Init Command**: Enhanced `ckc init` command to prevent accidental configuration overwrites
+  - **Existing Configuration Detection**: Automatic detection and detailed display of current sync targets
+  - **Interactive Confirmation**: User consent required before overwriting existing configurations
+  - **Automatic Backup**: Creates `.yaml.backup` files before making changes (enabled by default)
+  - **Force Override Option**: `--force` flag for explicit configuration replacement
+  - **Backup Control**: `--backup/--no-backup` options for backup behavior control
+  - **Data Loss Prevention**: Eliminates risk of unintentional loss of sync targets and custom settings
+
 ## [0.9.1] - 2025-06-19
 
 ### Added
