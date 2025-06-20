@@ -1,6 +1,33 @@
 ---
-name: sphinx-create
+author: null
+claude_feature: []
+claude_model: []
+complexity: intermediate
+confidence: medium
+created: 2025-06-21 00:04:32.056685
 description: Initialize new Sphinx project with MyST Markdown support
+domain:
+- ai-ml
+- automation
+- data-science
+- security
+- web-dev
+name: sphinx-create
+projects:
+- claude-knowledge-catalyst
+purpose: null
+status: draft
+success_rate: null
+tags: []
+team: []
+tech:
+- docker
+- git
+- typescript
+title: Sphinx プロジェクト初期化
+type: prompt
+updated: 2025-06-21 00:04:32.056819
+version: '1.0'
 ---
 
 # Sphinx プロジェクト初期化

@@ -1,18 +1,35 @@
 ---
+author: null
 category: project_log
-complexity: intermediate
-created: '2025-06-19'
+claude_feature: []
+claude_model: []
+complexity: advanced
+confidence: medium
+created: 2025-06-19 00:00:00
+domain:
+- ai-ml
+- data-science
+- testing
 project: claude-knowledge-catalyst
+projects:
+- claude-knowledge-catalyst
 purpose: Auto-generated metadata for debug-log
 quality: medium
 status: draft
+success_rate: null
 tags:
 - debug
 - issue
-- troubleshooting
 - problem-solving
+- troubleshooting
+team: []
+tech:
+- api
+- python
+- typescript
 title: Debug Log
-updated: '2025-06-19'
+type: prompt
+updated: 2025-06-21 00:04:32.034919
 version: '1.0'
 ---
 

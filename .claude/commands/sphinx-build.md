@@ -1,6 +1,28 @@
 ---
-name: sphinx-build
+author: null
+claude_feature: []
+claude_model: []
+complexity: intermediate
+confidence: medium
+created: 2025-06-21 00:04:32.059683
 description: Build Sphinx documentation in various formats
+domain:
+- ai-ml
+- data-science
+- web-dev
+name: sphinx-build
+projects:
+- claude-knowledge-catalyst
+purpose: null
+status: draft
+success_rate: null
+tags: []
+team: []
+tech: []
+title: Sphinx ドキュメントビルド
+type: code
+updated: 2025-06-21 00:04:32.059779
+version: '1.0'
 ---
 
 # Sphinx ドキュメントビルド

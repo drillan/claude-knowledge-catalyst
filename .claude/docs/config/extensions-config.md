@@ -1,41 +1,60 @@
 ---
-extensions:
-  - myst_parser
-  - sphinx.ext.autodoc
-  - sphinx.ext.napoleon
-  - sphinx.ext.viewcode
-  - sphinx.ext.intersphinx
-
-myst_enable_extensions:
-  - amsmath
-  - attrs_inline
-  - colon_fence
-  - deflist
-  - dollarmath
-  - fieldlist
-  - html_admonition
-  - html_image
-  - linkify
-  - replacements
-  - smartquotes
-  - strikethrough
-  - substitution
-  - tasklist
-
+author: null
 autodoc_default_options:
-  members: true
   member-order: bysource
+  members: true
   special-members: __init__
   undoc-members: true
-
-napoleon_google_docstring: true
-napoleon_numpy_docstring: true
-napoleon_include_init_with_doc: false
-
+claude_feature: []
+claude_model: []
+complexity: intermediate
+confidence: low
+created: 2025-06-21 00:04:32.051004
+domain:
+- ai-ml
+- data-science
+extensions:
+- myst_parser
+- sphinx.ext.autodoc
+- sphinx.ext.napoleon
+- sphinx.ext.viewcode
+- sphinx.ext.intersphinx
 intersphinx_mapping:
   python:
-    - https://docs.python.org/3
-    - null
+  - https://docs.python.org/3
+  - null
+myst_enable_extensions:
+- amsmath
+- attrs_inline
+- colon_fence
+- deflist
+- dollarmath
+- fieldlist
+- html_admonition
+- html_image
+- linkify
+- replacements
+- smartquotes
+- strikethrough
+- substitution
+- tasklist
+napoleon_google_docstring: true
+napoleon_include_init_with_doc: false
+napoleon_numpy_docstring: true
+projects:
+- claude-knowledge-catalyst
+purpose: null
+status: draft
+success_rate: null
+tags: []
+team: []
+tech:
+- api
+- python
+title: Sphinx拡張機能設定
+type: prompt
+updated: 2025-06-21 00:04:32.051060
+version: '1.0'
 ---
 
 # Sphinx拡張機能設定

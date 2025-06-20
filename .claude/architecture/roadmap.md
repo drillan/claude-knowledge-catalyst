@@ -1,16 +1,44 @@
 ---
-title: "CKC 開発ロードマップ"
-created: "2025-06-19"
-updated: "2025-06-20"
-version: "2.0"
-category: "resource"
-subcategory: "Documentation"
-tags: ["roadmap", "development", "planning", "claude-integration", "obsidian"]
-complexity: "intermediate"
-quality: "high"
-purpose: "Claude Code ⇄ Obsidian統合システムの開発ロードマップ"
-project: "claude-knowledge-catalyst"
-status: "production"
+author: null
+category: resource
+claude_feature: []
+claude_model: []
+complexity: advanced
+confidence: medium
+created: 2025-06-19 00:00:00
+domain:
+- ai-ml
+- automation
+- data-science
+- database
+- mobile
+- testing
+- web-dev
+project: claude-knowledge-catalyst
+projects:
+- claude-knowledge-catalyst
+purpose: Claude Code ⇄ Obsidian統合システムの開発ロードマップ
+quality: high
+status: production
+subcategory: Documentation
+success_rate: null
+tags:
+- claude-integration
+- development
+- obsidian
+- planning
+- roadmap
+team: []
+tech:
+- api
+- database
+- git
+- python
+- typescript
+title: CKC 開発ロードマップ
+type: prompt
+updated: 2025-06-21 00:04:32.037953
+version: '2.0'
 ---
 
 # CKC 開発ロードマップ

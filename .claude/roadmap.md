@@ -1,3 +1,39 @@
+---
+author: null
+category: concept
+claude_feature: []
+claude_model: []
+complexity: advanced
+confidence: medium
+created: 2025-06-20 00:00:00
+domain:
+- ai-ml
+- data-science
+- devops
+- web-dev
+project: claude-knowledge-catalyst
+projects:
+- claude-knowledge-catalyst
+purpose: Auto-generated metadata for roadmap
+quality: high
+status: draft
+subcategory: Development_Patterns
+success_rate: null
+tags:
+- architecture
+- design
+- structure
+- system
+team: []
+tech:
+- api
+- git
+title: Roadmap
+type: prompt
+updated: 2025-06-21 00:04:32.029154
+version: '1.0'
+---
+
 # Claude Knowledge Catalyst ロードマップ
 
 ## 完了済みフェーズ

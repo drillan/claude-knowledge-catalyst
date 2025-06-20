@@ -1,16 +1,46 @@
 ---
-title: "開発環境ガイド"
-created: "2025-06-19"
-updated: "2025-06-19" 
-version: "1.0"
-category: "concept"
-subcategory: "Development_Patterns"
-tags: ["development", "environment", "uv", "python", "guide", "best-practices"]
-complexity: "intermediate"
-quality: "high"
-purpose: "CKCプロジェクトの開発環境設定とベストプラクティスの包括的ガイド"
-project: "claude-knowledge-catalyst"
-status: "production"
+author: null
+category: concept
+claude_feature: []
+claude_model: []
+complexity: advanced
+confidence: medium
+created: 2025-06-19 00:00:00
+domain:
+- ai-ml
+- automation
+- data-science
+- devops
+- mobile
+- security
+- testing
+- web-dev
+project: claude-knowledge-catalyst
+projects:
+- claude-knowledge-catalyst
+purpose: CKCプロジェクトの開発環境設定とベストプラクティスの包括的ガイド
+quality: high
+status: production
+subcategory: Development_Patterns
+success_rate: null
+tags:
+- best-practices
+- development
+- environment
+- guide
+- python
+- uv
+team: []
+tech:
+- api
+- git
+- javascript
+- python
+- typescript
+title: 開発環境ガイド
+type: prompt
+updated: 2025-06-21 00:04:32.024531
+version: '1.0'
 ---
 
 # 開発環境ガイド
@@ -553,6 +583,62 @@ curl -s https://pypistats.org/api/packages/claude-knowledge-catalyst/recent
 ```
 
 この包括的なリリース管理戦略により、品質の高い安定したリリースプロセスを維持し、ユーザーに信頼性の高いソフトウェアを提供しています。
+
+## デモスクリプト実行ガイドライン
+
+デモおよびテストスクリプトでは、プロジェクトのルートディレクトリから適切にCKCコマンドを実行し、デモ環境をクリーンに保つことが重要です。
+
+### 実行方法の原則
+
+**❌ 問題のあるパターン：**
+```bash
+# PythonコードをBashスクリプト内で直接呼び出し
+uv run python -c "
+import sys, os
+sys.path.insert(0, '$PROJECT_ROOT/src')
+os.chdir('$demo_dir')
+from claude_knowledge_catalyst.cli.main import main
+main()
+" "$@"
+```
+
+**✅ 推奨パターン：**
+```bash
+# デモディレクトリで閉じた実行
+cd demo_directory
+uv run --project "$PROJECT_ROOT" ckc [command]
+```
+
+### デモ環境の分離原則
+
+- demoディレクトリ内のファイル生成はdemoディレクトリ内で完結させる
+- プロジェクトルートでの不要なファイル生成を防ぐ
+- demo/CLAUDE.mdで環境設定ルールを明確化
+
+### 分類システムの課題と改善
+
+**既知の問題：**
+- CKCが再分類時にcategoryメタデータを無視する傾向
+- tagsのpythonを優先して誤分類する問題
+- Improvement_Logディレクトリの用途混乱
+
+**改善提案：**
+- categoryメタデータ優先のルーティングシステム
+- ディレクトリ用途の明確化
+- 10刻み番号システムの適切な実装
+
+### 知見更新ワークフロー
+
+**プロジェクト知見の管理方針：**
+新たな知見が得られた際は、以下のファイルを体系的に更新する：
+
+- `.claude/context.md`: 背景・制約・技術選定理由
+- `.claude/project-knowledge.md`: 実装パターン・設計決定
+- `.claude/project-improvements.md`: 試行錯誤・改善記録
+- `.claude/common-patterns.md`: 定型実装・コマンドパターン
+
+**一時ファイル管理：**
+デバッグやテスト生成ファイルは`.claude/debugging-guide.md`のルールに従って適切に移動または削除する。整理は定期的に実施し、プロジェクトの清潔性を保つ。
 
 ## Troubleshooting
 

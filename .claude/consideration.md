@@ -1,16 +1,39 @@
 ---
-title: "ディレクトリ番号接頭辞システムの包括的考察"
-created: "2025-06-19"
-updated: "2025-06-19"
-version: "1.0"
-category: "concept"
-subcategory: "Best_Practices"
-tags: ["directory", "structure", "design", "obsidian", "organization"]
-complexity: "advanced"
-quality: "high"
-purpose: "ディレクトリ構造設計の戦略的考察と推奨解決策"
-project: "claude-knowledge-catalyst"
-status: "production"
+author: null
+category: concept
+claude_feature: []
+claude_model: []
+complexity: advanced
+confidence: medium
+created: 2025-06-19 00:00:00
+domain:
+- automation
+- data-science
+project: claude-knowledge-catalyst
+projects:
+- claude-knowledge-catalyst
+purpose: ディレクトリ構造設計の戦略的考察と推奨解決策
+quality: high
+status: production
+subcategory: Best_Practices
+success_rate: null
+tags:
+- design
+- directory
+- obsidian
+- organization
+- structure
+team: []
+tech:
+- api
+- git
+- javascript
+- python
+- typescript
+title: ディレクトリ番号接頭辞システムの包括的考察
+type: prompt
+updated: 2025-06-21 00:04:32.022143
+version: '1.0'
 ---
 
 # ディレクトリ番号接頭辞システムの包括的考察

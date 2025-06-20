@@ -1,16 +1,32 @@
 ---
-title: "一時ファイル清掃コマンド"
-created: "2025-06-19"
-updated: "2025-06-19"
-version: "1.0"
-category: "code"
-subcategory: "Shell"
-tags: ["cleanup", "temporary", "files", "maintenance", "debug"]
-complexity: "beginner"
-quality: "medium"
-purpose: "デバッグ・テスト生成ファイルの清掃コマンド"
-project: "claude-knowledge-catalyst"
-status: "draft"
+author: null
+category: code
+claude_feature: []
+claude_model: []
+complexity: beginner
+confidence: medium
+created: 2025-06-19 00:00:00
+domain: []
+project: claude-knowledge-catalyst
+projects:
+- claude-knowledge-catalyst
+purpose: デバッグ・テスト生成ファイルの清掃コマンド
+quality: medium
+status: draft
+subcategory: Shell
+success_rate: null
+tags:
+- cleanup
+- debug
+- files
+- maintenance
+- temporary
+team: []
+tech: []
+title: 一時ファイル清掃コマンド
+type: prompt
+updated: 2025-06-21 00:04:32.061278
+version: '1.0'
 ---
 
 # 一時ファイル清掃コマンド

@@ -1,15 +1,38 @@
 ---
-title: "CKC アーキテクチャ概要"
-created: "2025-06-19"
-updated: "2025-06-19"
-version: "1.0"
-category: "Development_Patterns"
-tags: ["architecture", "system-design", "ckc", "software-engineering", "design-patterns"]
-complexity: "expert"
-quality: "high"
-purpose: "CKCシステムの包括的アーキテクチャ設計と技術仕様書"
-project: "claude-knowledge-catalyst"
-status: "production"
+author: null
+category: Development_Patterns
+claude_feature: []
+claude_model: []
+complexity: advanced
+confidence: medium
+created: 2025-06-19 00:00:00
+domain:
+- ai-ml
+- data-science
+- testing
+project: claude-knowledge-catalyst
+projects:
+- claude-knowledge-catalyst
+purpose: CKCシステムの包括的アーキテクチャ設計と技術仕様書
+quality: high
+status: production
+success_rate: null
+tags:
+- architecture
+- ckc
+- design-patterns
+- software-engineering
+- system-design
+team: []
+tech:
+- api
+- git
+- react
+- typescript
+title: CKC アーキテクチャ概要
+type: prompt
+updated: 2025-06-21 00:04:32.041324
+version: '1.0'
 ---
 
 # CKC アーキテクチャ概要

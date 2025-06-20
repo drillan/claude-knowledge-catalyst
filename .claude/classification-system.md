@@ -1,16 +1,44 @@
 ---
-title: "Claude Code統合分類システム"
-created: "2025-06-19"
-updated: "2025-06-19"
-version: "1.0"
-category: "concept"
-subcategory: "AI_Fundamentals"
-tags: ["classification", "claude", "automation", "knowledge-management", "ai"]
-complexity: "intermediate"
-quality: "high"
-purpose: "CKCの自動分類システムとClaude Code統合の設計概念"
-project: "claude-knowledge-catalyst"
-status: "production"
+author: null
+claude_feature:
+- analysis
+- classification
+claude_model:
+- opus
+- sonnet
+complexity: intermediate
+confidence: medium
+created: 2025-06-19 00:00:00
+domain:
+- ai-ml
+- ai-systems
+- automation
+- data-science
+- knowledge-management
+projects:
+- claude-knowledge-catalyst
+purpose: CKCの自動分類システムとClaude Code統合の設計概念
+status: production
+success_rate: 85
+tags:
+- ai
+- automation
+- classification
+- claude
+- knowledge-management
+team:
+- ai-research
+- backend
+tech:
+- ai
+- claude
+- javascript
+- python
+- typescript
+title: Claude Code統合分類システム
+type: concept
+updated: 2025-06-21 00:04:32.032818
+version: '1.0'
 ---
 
 # Claude Code統合分類システム

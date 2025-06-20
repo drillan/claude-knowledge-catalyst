@@ -1,15 +1,45 @@
 ---
-title: "Project Knowledge - 技術的洞察とパターン"
-created: "2025-06-19"
-updated: "2025-06-19"
-version: "1.0"
-category: "Development_Patterns"
-tags: ["project-knowledge", "architecture", "python", "pydantic", "uv", "design-patterns", "best-practices"]
-complexity: "intermediate"
-quality: "high"
-purpose: "CKCプロジェクトの技術的決定事項と設計パターンの記録"
-project: "claude-knowledge-catalyst"
-status: "production"
+author: null
+claude_feature:
+- analysis
+- architecture
+claude_model:
+- opus
+- sonnet
+complexity: advanced
+confidence: medium
+created: 2025-06-19 00:00:00
+domain:
+- ai-ml
+- automation
+- data-science
+- development
+- knowledge-management
+- testing
+- web-dev
+projects:
+- claude-knowledge-catalyst
+purpose: CKCプロジェクトの技術的決定事項と設計パターンの記録
+status: production
+success_rate: null
+tags:
+- architecture
+- best-practices
+- design-patterns
+- project-knowledge
+- pydantic
+- python
+- uv
+team: []
+tech:
+- api
+- git
+- python
+- typescript
+title: Project Knowledge - 技術的洞察とパターン
+type: prompt
+updated: 2025-06-21 00:10:30.907427
+version: '1.0'
 ---
 
 # Project Knowledge - 技術的洞察とパターン

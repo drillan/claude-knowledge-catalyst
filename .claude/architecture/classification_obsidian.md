@@ -1,19 +1,43 @@
 ---
+author: null
 category: concept
+claude_feature: []
+claude_model: []
 complexity: advanced
-created: '2025-06-19'
+confidence: high
+created: 2025-06-19 00:00:00
+domain:
+- ai-ml
+- automation
+- data-science
+- mobile
+- testing
+- web-dev
 project: claude-knowledge-catalyst
+projects:
+- claude-knowledge-catalyst
 purpose: Auto-generated metadata for classification_obsidian
 quality: high
 status: draft
 subcategory: Development_Patterns
+success_rate: null
 tags:
 - architecture
 - design
-- system
+- ff6b6b
 - structure
+- system
+team: []
+tech:
+- api
+- aws
+- git
+- javascript
+- python
+- typescript
 title: Classification Obsidian
-updated: '2025-06-19'
+type: prompt
+updated: 2025-06-21 00:04:32.043003
 version: '1.0'
 ---
 

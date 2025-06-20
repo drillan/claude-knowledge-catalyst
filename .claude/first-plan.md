@@ -1,15 +1,53 @@
 ---
-title: "Claude Code知見管理システムの評価と改善提案"
-created: "2025-06-19"
-updated: "2025-06-19"
-version: "1.0"
-category: "AI_Fundamentals"
-tags: ["claude-code", "obsidian", "knowledge-management", "ai-development", "system-design"]
-complexity: "expert"
-quality: "high"
-purpose: "Claude Code知見管理システムの包括的評価と戦略的改善提案"
-project: "claude-knowledge-catalyst"
-status: "production"
+author: null
+category: AI_Fundamentals
+claude_feature: []
+claude_model: []
+complexity: advanced
+confidence: high
+created: 2025-06-19 00:00:00
+domain:
+- ai-ml
+- automation
+- data-science
+- testing
+- web-dev
+project: claude-knowledge-catalyst
+projects:
+- claude-knowledge-catalyst
+purpose: Claude Code知見管理システムの包括的評価と戦略的改善提案
+quality: high
+status: production
+success_rate: null
+tags:
+- ai-development
+- claude
+- claude-code
+- code
+- concept
+- domain
+- feature
+- knowledge-management
+- obsidian
+- project_log
+- prompt
+- quality
+- resource
+- status
+- system-design
+- tech
+team: []
+tech:
+- api
+- git
+- javascript
+- python
+- react
+- typescript
+title: Claude Code知見管理システムの評価と改善提案
+type: prompt
+updated: 2025-06-21 00:04:32.025918
+version: '1.0'
 ---
 
 システムのドラフト: https://skywork.ai/share/v2/doc/1934961378998464512?pid=1934960167970738176&sid=gen_doc-CT15fFzo9&t=gen_doc

@@ -1,16 +1,33 @@
 ---
-title: "知見更新コマンド"
-created: "2025-06-19"
-updated: "2025-06-19"
-version: "1.0"
-category: "code"
-subcategory: "Shell"
-tags: ["knowledge", "learning", "documentation", "update", "workflow"]
-complexity: "beginner"
-quality: "medium"
-purpose: "新規知見取得時のドキュメント更新コマンド"
-project: "claude-knowledge-catalyst"
-status: "production"
+author: null
+category: code
+claude_feature: []
+claude_model: []
+complexity: beginner
+confidence: medium
+created: 2025-06-19 00:00:00
+domain: []
+project: claude-knowledge-catalyst
+projects:
+- claude-knowledge-catalyst
+purpose: 新規知見取得時のドキュメント更新コマンド
+quality: medium
+status: production
+subcategory: Shell
+success_rate: null
+tags:
+- documentation
+- knowledge
+- learning
+- update
+- workflow
+team: []
+tech:
+- typescript
+title: 知見更新コマンド
+type: prompt
+updated: 2025-06-21 00:04:32.051810
+version: '1.0'
 ---
 
 # 知見更新コマンド

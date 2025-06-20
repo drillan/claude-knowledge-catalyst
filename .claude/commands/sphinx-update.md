@@ -1,6 +1,29 @@
 ---
-name: sphinx-update
+author: null
+claude_feature: []
+claude_model: []
+complexity: intermediate
+confidence: medium
+created: 2025-06-21 00:04:32.053911
 description: Update Sphinx configuration from .claude/config/ files
+domain:
+- ai-ml
+- data-science
+- web-dev
+name: sphinx-update
+projects:
+- claude-knowledge-catalyst
+purpose: null
+status: draft
+success_rate: null
+tags:
+- '336790'
+team: []
+tech: []
+title: Sphinx 設定更新
+type: prompt
+updated: 2025-06-21 00:04:32.054017
+version: '1.0'
 ---
 
 # Sphinx 設定更新

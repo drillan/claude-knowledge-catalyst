@@ -1,14 +1,36 @@
 ---
+author: null
+claude_feature: []
+claude_model: []
+complexity: beginner
+confidence: medium
+created: 2025-06-21 00:04:32.048527
+domain:
+- ai-ml
+- data-science
+- web-dev
 html_theme: furo
 html_theme_options:
-  sidebar_hide_name: true
-  light_css_variables:
-    color-brand-primary: "#336790"
-    color-brand-content: "#336790"
   dark_css_variables:
-    color-brand-primary: "#E5B62F"
-    color-brand-content: "#E5B62F"
-html_title: "プロジェクトドキュメント"
+    color-brand-content: '#E5B62F'
+    color-brand-primary: '#E5B62F'
+  light_css_variables:
+    color-brand-content: '#336790'
+    color-brand-primary: '#336790'
+  sidebar_hide_name: true
+html_title: プロジェクトドキュメント
+projects:
+- claude-knowledge-catalyst
+purpose: null
+status: draft
+success_rate: null
+tags: []
+team: []
+tech: []
+title: Sphinx テーマ設定
+type: code
+updated: 2025-06-21 00:04:32.048633
+version: '1.0'
 ---
 
 # Sphinx テーマ設定

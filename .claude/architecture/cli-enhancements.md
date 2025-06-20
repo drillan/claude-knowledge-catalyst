@@ -1,16 +1,38 @@
 ---
-title: "CKC CLI機能拡張提案"
-created: "2025-06-19"
-updated: "2025-06-19"
-version: "1.0"
-category: "concept"
-subcategory: "Development_Patterns"
-tags: ["cli", "enhancement", "smart-sync", "user-experience", "architecture"]
-complexity: "intermediate"
-quality: "high"
-purpose: "CKC CLIの機能拡張とユーザビリティ向上提案"
-project: "claude-knowledge-catalyst"
-status: "pending"
+author: null
+category: concept
+claude_feature: []
+claude_model: []
+complexity: advanced
+confidence: medium
+created: 2025-06-19 00:00:00
+domain:
+- ai-ml
+- automation
+- data-science
+- mobile
+- web-dev
+project: claude-knowledge-catalyst
+projects:
+- claude-knowledge-catalyst
+purpose: CKC CLIの機能拡張とユーザビリティ向上提案
+quality: high
+status: pending
+subcategory: Development_Patterns
+success_rate: null
+tags:
+- architecture
+- cli
+- enhancement
+- smart-sync
+- user-experience
+team: []
+tech:
+- python
+title: CKC CLI機能拡張提案
+type: prompt
+updated: 2025-06-21 00:04:32.035846
+version: '1.0'
 ---
 
 # CKC CLI機能拡張提案

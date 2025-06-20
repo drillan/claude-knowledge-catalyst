@@ -1,3 +1,41 @@
+---
+author: null
+category: resource
+claude_feature: []
+claude_model: []
+complexity: advanced
+confidence: medium
+created: 2025-06-20 00:00:00
+domain:
+- ai-ml
+- data-science
+- testing
+- web-dev
+project: claude-knowledge-catalyst
+projects:
+- claude-knowledge-catalyst
+purpose: Auto-generated metadata for RTD_SETUP
+quality: high
+status: draft
+subcategory: Documentation
+success_rate: null
+tags:
+- documentation
+- guide
+- manual
+- reference
+team: []
+tech:
+- api
+- git
+- python
+- typescript
+title: Rtd Setup
+type: prompt
+updated: 2025-06-21 00:04:32.045981
+version: '1.0'
+---
+
 # Read the Docs セットアップガイド
 
 このファイルは、Claude Knowledge CatalystのドキュメントをRead the Docsでホスティングするための設定手順を説明します。

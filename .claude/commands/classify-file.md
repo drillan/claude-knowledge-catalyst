@@ -1,16 +1,38 @@
 ---
-title: "ファイル分類コマンド"
-created: "2025-06-19"
-updated: "2025-06-19"
-version: "1.0"
-category: "prompt"
-subcategory: "Templates"
-tags: ["classification", "prompt", "template", "obsidian", "automation"]
-complexity: "intermediate"
-quality: "high"
-purpose: "単一ファイルの分類用プロンプトテンプレート"
-project: "claude-knowledge-catalyst"
-status: "production"
+author: null
+category: prompt
+claude_feature: []
+claude_model: []
+complexity: intermediate
+confidence: medium
+created: 2025-06-19 00:00:00
+domain:
+- ai-ml
+- automation
+- data-science
+project: claude-knowledge-catalyst
+projects:
+- claude-knowledge-catalyst
+purpose: 単一ファイルの分類用プロンプトテンプレート
+quality: high
+status: production
+subcategory: Templates
+success_rate: null
+tags:
+- automation
+- classification
+- obsidian
+- prompt
+- template
+team: []
+tech:
+- javascript
+- python
+- typescript
+title: ファイル分類コマンド
+type: prompt
+updated: 2025-06-21 00:04:32.060675
+version: '1.0'
 ---
 
 # ファイル分類コマンド

@@ -1,16 +1,39 @@
 ---
-title: "CKCスマート同期コマンド"
-created: "2025-06-19"
-updated: "2025-06-19"
-version: "2.0"
-category: "code"
-subcategory: "Python"
-tags: ["sync", "automation", "claude", "workflow", "smart", "cli"]
-complexity: "advanced"
-quality: "high"
-purpose: "CKC CLIスマート同期コマンドのスラッシュコマンドラッパー"
-project: "claude-knowledge-catalyst"
-status: "production"
+author: null
+category: code
+claude_feature: []
+claude_model: []
+complexity: advanced
+confidence: medium
+created: 2025-06-19 00:00:00
+domain:
+- ai-ml
+- data-science
+- mobile
+- testing
+project: claude-knowledge-catalyst
+projects:
+- claude-knowledge-catalyst
+purpose: CKC CLIスマート同期コマンドのスラッシュコマンドラッパー
+quality: high
+status: production
+subcategory: Python
+success_rate: null
+tags:
+- automation
+- claude
+- cli
+- smart
+- sync
+- workflow
+team: []
+tech:
+- python
+- typescript
+title: CKCスマート同期コマンド
+type: prompt
+updated: 2025-06-21 00:04:32.062067
+version: '2.0'
 ---
 
 # CKCスマート同期コマンド
