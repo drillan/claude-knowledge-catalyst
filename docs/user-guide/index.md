@@ -10,7 +10,6 @@ Claude Knowledge Catalystの実践的な使用方法とベストプラクティ�
 
 core-concepts
 claude-md-sync
-tutorials/index
 ```
 
 ## Overview
@@ -22,9 +21,6 @@ CKCの中核となる概念と設計思想について詳しく説明します�
 
 ### [CLAUDE.md同期](claude-md-sync.md)
 CLAUDE.mdファイルをObsidianに同期する機能の詳細な使用方法とセキュリティ設定。
-
-### [Tutorials](tutorials/index.md)
-段階的なチュートリアルで、具体的な使用方法を学習できます。
 
 ### Best Practices
 効果的な知識管理とワークフローのためのベストプラクティス（準備中）。
@@ -53,7 +49,6 @@ CLAUDE.mdファイルをセキュアに同期する方法
 :::
 
 :::{grid-item-card} 📚 Tutorials
-:link: tutorials/index
 :link-type: doc
 
 ステップバイステップで学ぶ実践ガイド

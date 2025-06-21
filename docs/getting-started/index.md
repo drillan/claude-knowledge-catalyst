@@ -121,5 +121,4 @@ uv run ckc sync
 ## Next Steps
 
 - [Core Concepts](../user-guide/core-concepts.md) - CKCの中核概念を理解
-- [Tutorials](../user-guide/tutorials/index.md) - 実践的なチュートリアル
 - **Best Practices** - 効果的な使用方法（準備中）

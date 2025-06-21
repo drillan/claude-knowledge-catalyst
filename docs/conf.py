@@ -137,7 +137,7 @@ intersphinx_mapping = {
     'sphinx': ('https://www.sphinx-doc.org/en/master/', None),
     'myst': ('https://myst-parser.readthedocs.io/en/latest/', None),
     'pydantic': ('https://docs.pydantic.dev/latest/', None),
-    'typer': ('https://typer.tiangolo.com/', None),
+    'click': ('https://click.palletsprojects.com/', None),
 }
 
 # External links

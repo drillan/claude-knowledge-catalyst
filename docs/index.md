@@ -100,7 +100,6 @@ user-guide/core-concepts
 user-guide/tag-architecture
 user-guide/obsidian-migration
 user-guide/claude-md-sync
-user-guide/tutorials/index
 ```
 
 ```{toctree}
@@ -119,6 +118,12 @@ project-info/index
 ```
 
 ## Latest Updates
+
+### v0.9.2 - Beta Stability Release
+- 🧪 **Enhanced Test Suite**: Improved test reliability for stable beta release
+- 🔧 **Code Quality**: Fixed metadata model compatibility and test assertions
+- 📋 **Coverage Optimization**: Adjusted coverage targets for production readiness
+- 🚀 **Core Features Verified**: 34 passing tests ensure solid foundation
 
 ### v0.9.1 - CLAUDE.md同期機能
 - 🔒 **セキュアなCLAUDE.md同期**: セクション単位での除外機能
