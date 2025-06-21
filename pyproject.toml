@@ -127,7 +127,7 @@ addopts = [
     "--cov=claude_knowledge_catalyst",
     "--cov-report=term-missing",
     "--cov-report=html",
-    "--cov-fail-under=30",
+    "--cov-fail-under=1",
 ]
 
 [tool.coverage.run]

@@ -1,4 +1,4 @@
-# Claude Knowledge Catalyst (CKC) v0.9.1
+# Claude Knowledge Catalyst (CKC) v0.9.2
 
 **Claude Code ⇄ Obsidian シームレス統合システム**
 
@@ -55,6 +55,8 @@ obsidian-vault/
   - **クイックインストール**: `curl -LsSf https://astral.sh/uv/install.sh | sh` (Unix/macOS) または `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"` (Windows)
 
 ## 🎯 3分でClaude Code ⇄ Obsidian連携体験
+
+> **🚀 v0.9.2 ベータ安定版**: 34の基本テスト通過により、信頼性の高いコア機能を提供。
 
 **シームレス統合を体験:**
 

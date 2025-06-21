@@ -1,6 +1,8 @@
-# Claude Knowledge Catalyst Demo Scripts
+# Claude Knowledge Catalyst v0.9.2 Demo Scripts
 
 このディレクトリには、Claude Knowledge Catalyst (CKC) の純粋タグ中心システムを実際に体験するためのデモスクリプトが含まれています。
+
+> **📋 v0.9.2 Beta Stability Release**: このバージョンではコア機能の安定性が向上し、34の基本テストが確実に通過するよう品質改善が行われました。
 
 ## 🎯 純粋タグ中心システム体験
 
