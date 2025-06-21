@@ -173,3 +173,4 @@ test_vault/
 .claude/debug/
 .claude/temp/
 .claude/*_vault/ckc_config.yaml
+.claude/settings.local.json

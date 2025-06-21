@@ -9,14 +9,17 @@ import sys
 # Add source directory to path for autodoc
 sys.path.insert(0, os.path.abspath('../src'))
 
+# Import version from package
+from claude_knowledge_catalyst import __version__
+
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'Claude Knowledge Catalyst'
-copyright = '2025, CKC Contributors'
-author = 'CKC Contributors'
-release = '0.9.0'
-version = '0.9.0'
+copyright = '2024-2025, driller'
+author = 'driller'
+release = __version__
+version = __version__
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -96,8 +99,8 @@ html_short_title = 'CKC Docs'
 # SEO and metadata
 html_meta = {
     'description': 'Claude Knowledge Catalyst - 知識の触媒作用を実現する統合的な知識管理システム',
-    'keywords': 'Claude, AI, Knowledge Management, Obsidian, Documentation, Python',
-    'author': 'CKC Contributors',
+    'keywords': 'Claude, Automation, Knowledge Management, Obsidian, Documentation, Python',
+    'author': 'driller',
     'viewport': 'width=device-width, initial-scale=1.0',
 }
 

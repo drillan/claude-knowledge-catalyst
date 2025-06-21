@@ -60,10 +60,10 @@ configuration
 - `automation.metadata_enhancer` - メタデータ自動強化
 - `automation.structure_automation` - 構造自動化
 
-## AI Integration
+## Automation Integration
 
-### AI Assistant
-- `ai.ai_assistant` - AI統合インターフェース
+### Automation Assistant
+- `automation.assistant` - 自動化統合インターフェース
 
 ## Auto-Generated API Documentation
 

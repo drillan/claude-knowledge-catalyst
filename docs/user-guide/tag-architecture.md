@@ -1,10 +1,10 @@
 # Tag Architecture Guide
 
-Claude Code ⇄ Obsidian統合の副次的効果として実現される、AI搭載多次元タグシステムについて詳しく解説します。
+Claude Code ⇄ Obsidian統合の副次的効果として実現される、自動多次元タグシステムについて詳しく解説します。
 
 ## タグアーキテクチャの位置づけ
 
-CKCの主目標は**Claude Code ⇄ Obsidian統合**ですが、その過程で手動分類負荷を軽減するために、AI搭載多次元タグシステムが副次的効果として生まれます。
+CKCの主目標は**Claude Code ⇄ Obsidian統合**ですが、その過程で手動分類負荷を軽減するために、自動多次元タグシステムが副次的効果として生まれます。
 
 ### 従来の問題とCKCの解決アプローチ
 
@@ -15,7 +15,7 @@ graph TB
     C --> C1["「これはプロンプト？コード？」"]
     C --> C2["カテゴリ決定疲労"]
     
-    B --> D[CKC: AI自動分析]
+    B --> D[CKC: 自動分析]
     D --> E[多次元タグ自動生成]
     E --> F[Obsidian最適化配置]
     F --> G[シームレス統合完了]
@@ -29,7 +29,7 @@ graph TB
 
 ### タグ次元の概要
 
-CKCのAI分析により、以下の7次元でコンテンツが自動分類されます：
+CKCの自動分析により、以下の7次元でコンテンツが自動分類されます：
 
 ```yaml
 # Claude Code開発コンテンツの自動分析例
@@ -39,7 +39,7 @@ domain: [web-dev, backend]             # アプリケーション領域
 team: [backend, fullstack]             # チーム関連性
 status: tested                         # ライフサイクル状態
 complexity: intermediate              # スキルレベル
-confidence: high                      # AI分析信頼度
+confidence: high                      # 分析信頼度
 ```
 
 ### 各次元の詳細解説
@@ -54,7 +54,7 @@ type:
   resource:  # 参考資料・ドキュメント・リンク
 ```
 
-**AI判定例:**
+**判定例:**
 ```bash
 $ uv run ckc classify .claude/api_prompt.md --show-evidence
 
@@ -135,7 +135,7 @@ complexity:
   expert:       # エキスパート向け・研究レベル
 ```
 
-#### 7. Confidence（AI分析信頼度）
+#### 7. Confidence（分析信頼度）
 
 ```yaml
 confidence:
@@ -170,7 +170,7 @@ token_estimate: 150               # 推定トークン数
 temperature: 0.7                  # 推奨温度設定
 ```
 
-## AI分析プロセス
+## 自動分析プロセス
 
 ### 自動分析フロー
 
@@ -178,7 +178,7 @@ temperature: 0.7                  # 推奨温度設定
 graph TB
     A[.claude/ファイル作成] --> B[コンテンツ読み取り]
     B --> C[前処理・正規化]
-    C --> D[AI分析エンジン]
+    C --> D[自動分析エンジン]
     D --> E[7次元分類]
     E --> F[信頼度評価]
     F --> G[メタデータ生成]
@@ -191,7 +191,7 @@ graph TB
 ```bash
 $ uv run ckc classify .claude/react_component.md --show-evidence
 
-AI分析結果:
+分析結果:
 ├── type: code (信頼度: 94%)
 │   └── 根拠: "```jsx", "export default", "コンポーネント"
 ├── tech: [react, typescript, jsx] (信頼度: 96%)
@@ -280,10 +280,10 @@ tags:
     security_level: ["public", "internal", "confidential"]
 ```
 
-### AI分析の調整
+### 分析の調整
 
 ```yaml
-# AI分析設定
+# 自動分析設定
 ai:
   auto_classification: true
   confidence_threshold: 0.75
@@ -303,7 +303,7 @@ ai:
 
 1. **自動分析の活用**
    ```bash
-   # AI分析を信頼し、手動調整は最小限に
+   # 自動分析を信頼し、手動調整は最小限に
    uv run ckc classify .claude/ --batch --auto-apply
    ```
 
@@ -329,7 +329,7 @@ type: concept
 tech: [python, fastapi]
 domain: [web-dev, backend]
 complexity: advanced
-confidence: medium  # AI分析では低かったが、実際は確実
+confidence: medium  # 自動分析では低かったが、実際は確実
 manual_override: true  # 手動調整したことを記録
 custom_tags: [enterprise, scalability]  # プロジェクト特化タグ
 ---
@@ -342,11 +342,11 @@ custom_tags: [enterprise, scalability]  # プロジェクト特化タグ
 ### 主な価値
 - **手動分類負荷軽減**: 「どのカテゴリ？」の決定疲労解消
 - **知識発見強化**: Obsidian内での高度な横断検索
-- **AI透明性**: 分析根拠の明示による信頼性確保
+- **分析透明性**: 分析根拠の明示による信頼性確保
 
 ### 統合との関係
 - **主目標**: Claude Code ⇄ Obsidian シームレス統合
-- **副次効果**: AI搭載多次元タグによる組織化
+- **副次効果**: 自動多次元タグによる組織化
 - **結果**: 手動負荷なしの構造化知識管理
 
 このタグアーキテクチャにより、開発者は分類作業に時間を取られることなく、Claude Code開発に集中しながら、Obsidianで高度に組織化された知識を自動蓄積できます。

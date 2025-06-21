@@ -9,7 +9,7 @@
 既存のObsidianボルトを**Claude Code ⇄ Obsidian統合システム**に対応させ、以下を実現します：
 
 - **Claude Code開発知見の自動同期**
-- **AI強化メタデータによる組織化**
+- **自動強化メタデータによる組織化**
 - **手動分類負荷の軽減**
 - **高度な知識発見機能**
 
@@ -21,7 +21,7 @@ graph LR
     B --> C[Claude Code統合ボルト]
     
     A1[手動組織化<br/>基本メタデータ<br/>単純タグ] --> A
-    C --> C1[自動同期<br/>AI強化メタデータ<br/>多次元タグ]
+    C --> C1[自動同期<br/>自動強化メタデータ<br/>多次元タグ]
     
     style A fill:#fff2cc
     style C fill:#d5e8d4
@@ -77,7 +77,7 @@ uv run ckc migrate \
 ```
 
 **移行内容:**
-- 全ファイルのAI分析とメタデータ強化
+- 全ファイルの自動分析とメタデータ強化
 - Claude Code統合最適化構造への再編成
 - 既存タグの多次元タグシステムへの変換
 - Obsidian設定の統合機能対応
@@ -96,7 +96,7 @@ uv run ckc migrate \
 ```
 
 **強化内容:**
-- AI分析による既存ファイルのメタデータ強化
+- 自動分析による既存ファイルのメタデータ強化
 - Claude Code統合用ディレクトリの追加
 - 既存構造を保持したまま機能追加
 
@@ -148,7 +148,7 @@ uv run ckc analyze-structure /existing/vault --output analysis.json
 ```mermaid
 graph TB
     A[既存ファイル読み取り] --> B[コンテンツ分析]
-    B --> C[AI メタデータ生成]
+    B --> C[自動メタデータ生成]
     C --> D[既存タグ変換]
     D --> E[新構造配置決定]
     E --> F[Obsidian最適化]
@@ -192,7 +192,7 @@ migration_date: 2025-06-20
 RESTful APIの設計原則について...
 
 ## Claude Code統合用メタデータ
-- **AI分析信頼度**: 92%
+- **分析信頼度**: 92%
 - **推奨活用場面**: バックエンド設計、API開発
 - **関連知識**: [[REST設計パターン]], [[HTTP ステータスコード]]
 
@@ -217,7 +217,7 @@ obsidian-vault/
 ├── active/                     # 作業中（新規）
 ├── archive/                    # 完了・非推奨（新規）
 ├── knowledge/                  # メイン知識領域（強化）
-│   ├── prompts/               # AI分析により自動分類
+│   ├── prompts/               # 自動分析により自動分類
 │   ├── code/                  # コードスニペット
 │   ├── concepts/              # 概念・設計
 │   └── resources/             # 参考資料
@@ -241,7 +241,7 @@ uv run ckc analytics migration-report --vault /enhanced/vault
 # 出力例:
 # 移行統計:
 # ✅ 処理済みファイル: 245/245 (100%)
-# ✅ AI強化メタデータ: 189/245 (77%)
+# ✅ 強化メタデータ: 189/245 (77%)
 # ✅ 自動分類成功: 201/245 (82%)
 # ✅ 構造最適化: 完了
 # ⚠️  手動確認推奨: 15ファイル
@@ -377,7 +377,7 @@ uv run ckc migration-status --manual-review
 # 定期的な最適化
 uv run ckc optimize --vault /enhanced/vault --weekly
 
-# AI分析の再実行（新しいモデルでの改善）
+# 分析の再実行（新しいアルゴリズムでの改善）
 uv run ckc reanalyze --confidence-below 80 --upgrade-model
 ```
 
@@ -421,7 +421,7 @@ Obsidian移行により、以下が実現されます：
 - **手動分類負荷の劇的軽減**
 
 ### 🚀 副次的効果
-- **AI強化メタデータ**による高度組織化
+- **自動強化メタデータ**による高度組織化
 - **多次元タグシステム**での知識発見
 - **Obsidian最適化構造**での効率向上
 

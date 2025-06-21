@@ -2,7 +2,7 @@
 
 **Claude Code ⇄ Obsidian Seamless Integration System**
 
-Automatically synchronize insights from Claude Code development processes with Obsidian vaults for structured knowledge management. AI-powered analysis reduces manual classification overhead.
+Automatically synchronize insights from Claude Code development processes with Obsidian vaults for structured knowledge management. Automated analysis reduces manual classification overhead.
 
 > **[📋 Japanese Version](README-ja.md)** | **[🌐 Documentation](https://claude-knowledge-catalyst.readthedocs.io/)**
 
@@ -20,13 +20,13 @@ Automatically synchronize insights from Claude Code development processes with O
 - **Bidirectional Integration**: Complete integration between Claude Code development and Obsidian knowledge management
 - **Structured Organization**: Systematize knowledge using Obsidian's powerful features
 
-### 🤖 AI-Powered Metadata Enhancement
+### 🤖 Automated Metadata Enhancement
 - **Automatic Analysis**: Analyze content and generate metadata for Obsidian
-- **Intelligent Tagging**: Multi-dimensional tag system that reduces manual classification overhead
-- **Evidence-Based Classification**: Reliable organization with clear rationale for AI decisions
+- **Smart Tagging**: Multi-dimensional tag system that reduces manual classification overhead
+- **Evidence-Based Classification**: Reliable organization with clear rationale for automated decisions
 
 ```yaml
-# AI-Enhanced Metadata Example (Secondary Effect)
+# Enhanced Metadata Example (Secondary Effect)
 type: [prompt, code, concept, resource]           # Content nature
 tech: [python, react, fastapi, kubernetes, ...]   # Technology stack
 domain: [web-dev, ml, devops, mobile, ...]        # Application domain
@@ -49,10 +49,10 @@ obsidian-vault/
 
 ## Prerequisites
 
-- **Python 3.11+**: [Download Python](https://www.python.org/downloads/)
-- **uv**: Modern Python package manager
+- **uv**: Modern Python package manager (includes Python 3.11+ automatically)
   - **Installation**: Follow the [official uv installation guide](https://docs.astral.sh/uv/getting-started/installation/)
   - **Quick install**: `curl -LsSf https://astral.sh/uv/install.sh | sh` (Unix/macOS) or `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"` (Windows)
+- **Python**: Not required separately - uv manages Python 3.11+ automatically
 
 ## 🎯 3-Minute Claude Code ⇄ Obsidian Integration Experience
 
@@ -78,7 +78,7 @@ uv run ckc sync
 **What happens:**
 - ✅ **Seamless Integration**: Complete integration between Claude Code development and Obsidian knowledge management
 - ✅ **Automatic Structuring**: Organize `.claude/` content with Obsidian-optimized structure
-- ✅ **AI-Enhanced Metadata**: Automatic tagging that reduces manual classification
+- ✅ **Enhanced Metadata**: Automatic tagging that reduces manual classification
 - ✅ **Real-time Sync**: Instantly reflect knowledge accumulation during development process
 
 ## Core Features
@@ -102,7 +102,7 @@ uv run ckc sync
 
 ### 🎨 Obsidian-Optimized Templates
 - **Claude Code Specialized**: Obsidian templates for prompts, code, concepts, and resources
-- **AI-Enhanced Suggestions**: Automatic template selection based on development context
+- **Smart Suggestions**: Automatic template selection based on development context
 - **Evolving Structure**: Obsidian vault optimization according to project growth
 
 ## Quick Start
@@ -143,7 +143,7 @@ git branch -vv
 git status --porcelain
 \`\`\`" > .claude/git_tips.md
 
-# Verify AI analysis and Obsidian metadata generation
+# Verify automated analysis and Obsidian metadata generation
 uv run ckc classify .claude/git_tips.md --show-evidence
 ```
 
@@ -159,7 +159,7 @@ uv run ckc migrate --source /existing/obsidian --target /enhanced/vault --dry-ru
 
 ## Available CLI Commands
 
-### 🚀 AI-Powered Classification
+### 🚀 Automated Classification
 
 ```bash
 # Automatic content analysis
@@ -219,7 +219,7 @@ auto_sync: true
 tag_system:
   enabled: true
   multi_dimensional: true
-  ai_classification: true
+  auto_classification: true
   confidence_threshold: 0.75
 
 # 7-dimensional tag schema
@@ -240,8 +240,8 @@ sync_targets:
     enabled: true
     enhance_metadata: true
 
-# AI-powered features
-ai:
+# Automated features
+automation:
   auto_classification: true
   evidence_tracking: true
   natural_language_search: true
@@ -268,7 +268,7 @@ CKC implements a revolutionary pure tag-centered architecture:
 
 - **Cognitive Load Zero**: Eliminates category decision fatigue
 - **7-Dimensional Classification**: Multi-layer tag system for precise organization
-- **AI-Powered Intelligence**: 75%+ accuracy content understanding
+- **Automated Intelligence**: Pattern-matching content understanding
 - **State-Based Workflow**: Organization by lifecycle, not content type
 - **Dynamic Discovery**: Cross-dimensional knowledge search
 - **Obsidian Enhancement**: Transform basic vaults → intelligent systems
@@ -321,7 +321,7 @@ CKC implements a revolutionary pure tag-centered architecture:
 # Experience tag-centered migration
 ./demo/tag_centered_demo.sh
 
-# Try zero-config classification  
+# Try automated classification  
 ./demo/demo.sh
 
 # Multi-team collaboration
@@ -330,7 +330,8 @@ CKC implements a revolutionary pure tag-centered architecture:
 
 ## Requirements
 
-- **Python**: 3.11 or higher
+- **Python Runtime**: 3.11+ (managed automatically by uv)
+- **Package Manager**: uv (handles Python installation and dependency management)
 - **Memory**: Minimum 512MB, Recommended 2GB for large vaults
 - **Storage**: 10MB for CKC, varies based on vault size
 - **OS**: Windows 10+, macOS 11+, Linux (Ubuntu 20.04+)

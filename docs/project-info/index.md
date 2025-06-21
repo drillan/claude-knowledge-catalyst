@@ -26,20 +26,18 @@ Claude Codeとの開発プロセスで生まれる知見を自動的に構造化
 - **進化**: 継続的な改善と新機能の追加
 - **オープン**: オープンソースとして、コミュニティと共に成長
 
-## バージョン情報
+## 主要機能
 
-### 現在のバージョン: v0.9.0
-
-#### 主要機能
 - 適応型システム基盤による知識成熟度管理
 - インテリジェント分類システム
 - Obsidian深層統合
 - プロジェクト横断知識関連付け
 
-#### 技術仕様
-- **Python**: 3.11以上
+## 技術仕様
+
+- **Pythonランタイム**: 3.11以上（uvが自動管理）
+- **パッケージマネージャー**: uv
 - **主要依存関係**: Pydantic, Typer, Rich, Watchdog
-- **テストカバレッジ**: 85%以上
 - **ドキュメント**: Sphinx + MyST Parser
 
 ## プロジェクト統計
@@ -74,7 +72,7 @@ MIT License - 商用利用、改変、配布を自由に行えます。
 
 ### 著作権
 ```
-Copyright (c) 2025 CKC Contributors
+Copyright (c) 2024-2025 driller
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -101,7 +99,7 @@ in the Software without restriction...
 
 ### 統合ツール
 - **Obsidian**: 知識管理ボルト
-- **Claude Code**: AI開発支援
+- **Claude Code**: 自動化開発支援
 - **VS Code**: 開発環境統合
 
 ### 類似プロジェクト

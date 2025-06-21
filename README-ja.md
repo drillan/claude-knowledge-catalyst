@@ -2,7 +2,7 @@
 
 **Claude Code ⇄ Obsidian シームレス統合システム**
 
-Claude Code開発プロセスで生まれる知見を自動的にObsidianボルトと同期し、構造化された知識管理を実現。AI搭載分析により、手動分類の負荷を軽減します。
+Claude Code開発プロセスで生まれる知見を自動的にObsidianボルトと同期し、構造化された知識管理を実現。自動分析により、手動分類の負荷を軽減します。
 
 > **[📋 English](README.md)** | **[🌐 ドキュメント](https://claude-knowledge-catalyst.readthedocs.io/)**
 
@@ -20,13 +20,13 @@ Claude Code開発プロセスで生まれる知見を自動的にObsidianボル�
 - **双方向連携**: Claude Code開発とObsidian知識管理の完全統合
 - **構造化組織**: Obsidianの強力な機能を活用した知識体系化
 
-### 🤖 AI搭載メタデータ強化
+### 🤖 自動メタデータ強化
 - **自動分析**: コンテンツを解析してObsidian用メタデータを生成
-- **インテリジェントタグ付け**: 手動分類負荷を軽減する多次元タグシステム
-- **証拠ベース分類**: AI判定の根拠を明示した信頼性の高い組織化
+- **スマートタグ付け**: 手動分類負荷を軽減する多次元タグシステム
+- **証拠ベース分類**: 自動判定の根拠を明示した信頼性の高い組織化
 
 ```yaml
-# AI強化メタデータ例（副次的効果）
+# 強化メタデータ例（副次的効果）
 type: [prompt, code, concept, resource]           # コンテンツ性質
 tech: [python, react, fastapi, kubernetes, ...]   # 技術スタック
 domain: [web-dev, ml, devops, mobile, ...]        # アプリケーション領域
@@ -49,10 +49,10 @@ obsidian-vault/
 
 ## 前提条件
 
-- **Python 3.11+**: [Python をダウンロード](https://www.python.org/downloads/)
-- **uv**: モダンなPythonパッケージマネージャー
+- **uv**: モダンなPythonパッケージマネージャー（Python 3.11+を自動管理）
   - **インストール**: [公式uv インストールガイド](https://docs.astral.sh/uv/getting-started/installation/)に従ってください
   - **クイックインストール**: `curl -LsSf https://astral.sh/uv/install.sh | sh` (Unix/macOS) または `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"` (Windows)
+- **Python**: 個別インストール不要 - uvがPython 3.11+を自動管理
 
 ## 🎯 3分でClaude Code ⇄ Obsidian連携体験
 
@@ -78,7 +78,7 @@ uv run ckc sync
 **何が起こるか:**
 - ✅ **シームレス統合**: Claude Code開発とObsidian知識管理の完全連携
 - ✅ **自動構造化**: `.claude/`コンテンツをObsidian最適化構造で組織化
-- ✅ **AI強化メタデータ**: 手動分類を軽減する自動タグ付け
+- ✅ **強化メタデータ**: 手動分類を軽減する自動タグ付け
 - ✅ **リアルタイム同期**: 開発プロセスでの知識蓄積を即座に反映
 
 ## コア機能
@@ -102,7 +102,7 @@ uv run ckc sync
 
 ### 🎨 動的テンプレートシステム
 - **タイプ特化**: プロンプト、コード、概念、リソース用テンプレート
-- **AI強化**: インテリジェントテンプレート提案
+- **スマート提案**: インテリジェントテンプレート提案
 - **進化する構造**: あなたの知識パターンに適応するテンプレート
 
 ## クイックスタート
@@ -143,7 +143,7 @@ git branch -vv
 git status --porcelain
 \`\`\`" > .claude/git_tips.md
 
-# AI推論を確認: type=code, tech=git, domain=development
+# 自動推論を確認: type=code, tech=git, domain=development
 uv run ckc classify .claude/git_tips.md --show-evidence
 ```
 
@@ -159,7 +159,7 @@ uv run ckc migrate --source /existing/obsidian --target /enhanced/vault --dry-ru
 
 ## 利用可能なCLIコマンド
 
-### 🚀 AI搭載分類
+### 🚀 自動分類
 
 ```bash
 # 自動コンテンツ分析
@@ -219,7 +219,7 @@ auto_sync: true
 tag_system:
   enabled: true
   multi_dimensional: true
-  ai_classification: true
+  auto_classification: true
   confidence_threshold: 0.75
 
 # 7次元タグスキーマ
@@ -240,8 +240,8 @@ sync_targets:
     enabled: true
     enhance_metadata: true
 
-# AI搭載機能
-ai:
+# 自動化機能
+automation:
   auto_classification: true
   evidence_tracking: true
   natural_language_search: true
@@ -268,7 +268,7 @@ CKCは革命的な純粋タグ中心アーキテクチャを実装:
 
 - **認知負荷ゼロ**: カテゴリ決定疲労の排除
 - **7次元分類**: 精密組織化のための多層タグシステム
-- **AI搭載インテリジェンス**: 75%+精度コンテンツ理解
+- **自動インテリジェンス**: パターンマッチングコンテンツ理解
 - **状態ベースワークフロー**: コンテンツタイプではなくライフサイクルによる組織化
 - **動的発見**: クロス次元知識検索
 - **Obsidian強化**: 基本ボルト → インテリジェントシステム変換
@@ -321,7 +321,7 @@ CKCは革命的な純粋タグ中心アーキテクチャを実装:
 # タグ中心移行を体験
 ./demo/tag_centered_demo.sh
 
-# ゼロ設定分類を試す
+# 自動分類を試す
 ./demo/demo.sh
 
 # マルチチーム協働
@@ -330,7 +330,8 @@ CKCは革命的な純粋タグ中心アーキテクチャを実装:
 
 ## 動作環境
 
-- **Python**: 3.11以上
+- **Pythonランタイム**: 3.11以上（uvが自動管理）
+- **パッケージマネージャー**: uv（Pythonインストールと依存関係管理を処理）
 - **メモリ**: 最小512MB、大型ボルトには2GB推奨
 - **ストレージ**: CKCに10MB、ボルトサイズに依存
 - **OS**: Windows 10+、macOS 11+、Linux (Ubuntu 20.04+)

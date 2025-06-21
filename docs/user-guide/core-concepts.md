@@ -12,7 +12,7 @@ CKCは「Claude Code開発プロセス」と「Obsidian知識管理」の完全�
 graph TB
     A[Claude Code開発] --> B[.claude/ディレクトリ]
     B --> C[CKC リアルタイム監視]
-    C --> D[AI分析エンジン]
+    C --> D[自動分析エンジン]
     D --> E[メタデータ生成]
     E --> F[Obsidianボルト構造化]
     F --> G[知識活用・検索]
@@ -32,30 +32,30 @@ CKCは`.claude/`ディレクトリの変更を即座に検出し、Obsidianボ�
 
 ```
 # 同期プロセスの例
-claude_file_created → AI分析 → メタデータ生成 → Obsidian配置
+claude_file_created → 自動分析 → メタデータ生成 → Obsidian配置
 .claude/prompt.md → コンテンツ解析 → タグ付け → knowledge/prompts/
 ```
 
 #### 同期の流れ
 1. **ファイル検出**: `.claude/`内の新規作成・変更を監視
-2. **AI分析**: コンテンツを解析してObsidian用メタデータを生成
+2. **自動分析**: コンテンツを解析してObsidian用メタデータを生成
 3. **構造化配置**: Obsidianボルトの最適な位置に配置
 4. **関連付け**: 既存知識との関連性を自動発見
 
-### 🤖 AI搭載メタデータ強化
+### 🤖 自動メタデータ強化
 
 #### 自動分析システム
 
 CKCは以下の要素を総合的に分析して、Obsidian最適化メタデータを生成します：
 
 ```yaml
-# AI分析による自動メタデータ生成例
+# 自動分析によるメタデータ生成例
 title: "API統合パターン"
 type: prompt                    # コンテンツ性質の自動判定
 tech: [python, fastapi, rest]   # 技術スタック自動抽出
 domain: [web-dev, backend]      # 領域分類
 complexity: intermediate       # 難易度推定
-confidence: high              # AI分析信頼度
+confidence: high              # 分析信頼度
 claude_model: sonnet-4        # 使用Claudeモデル
 success_rate: 85              # 推定効果性
 obsidian_tags: ["#development", "#api", "#backend"]
@@ -63,12 +63,12 @@ obsidian_tags: ["#development", "#api", "#backend"]
 
 #### 分析根拠の透明性
 
-AI判定の根拠を明示することで、信頼性の高い分類を実現：
+自動判定の根拠を明示することで、信頼性の高い分類を実現：
 
 ```bash
 $ uv run ckc classify .claude/api_prompt.md --show-evidence
 
-AI分析結果:
+分析結果:
 ├── type: prompt (信頼度: 92%)
 │   └── 根拠: "以下のプロンプトを使用して" "APIを統合する方法"
 ├── tech: [python, fastapi] (信頼度: 88%)
@@ -124,7 +124,7 @@ graph LR
 #### 主要タグ次元
 
 ```yaml
-# 7次元タグシステム（AI自動生成）
+# 7次元タグシステム（自動生成）
 type: [prompt, code, concept, resource]           # コンテンツ性質
 tech: [python, react, fastapi, kubernetes, ...]   # 技術スタック
 domain: [web-dev, ml, devops, mobile, ...]        # アプリケーション領域
@@ -185,7 +185,7 @@ uv run ckc search --tech python --success-rate ">80"
 
 ### 📊 For Obsidian Users
 
-#### AI強化組織化
+#### 自動強化組織化
 - **自動分類**: 手動でのカテゴリ分けが不要
 - **メタデータ生成**: 豊富な検索可能属性を自動追加
 - **関連性発見**: 意外な知識のつながりを発見
@@ -219,7 +219,7 @@ obsidian:
   structure_type: "state_based"  # 状態ベース組織化
   auto_queries: true             # 動的クエリ生成
 
-# AI分析設定
+# 自動分析設定
 ai:
   auto_classification: true
   confidence_threshold: 0.75
@@ -292,6 +292,6 @@ team_integration:
 
 ## まとめ
 
-CKCのコア概念は「Claude Code開発プロセス」と「Obsidian知識管理」の完全統合です。AI搭載メタデータ強化により手動分類負荷を軽減し、開発者が本来の作業に集中できる環境を提供します。
+CKCのコア概念は「Claude Code開発プロセス」と「Obsidian知識管理」の完全統合です。自動メタデータ強化により手動分類負荷を軽減し、開発者が本来の作業に集中できる環境を提供します。
 
 多次元タグシステムは副次的効果として、Obsidian内での高度な知識発見と組織化を実現します。

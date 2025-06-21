@@ -4,10 +4,10 @@
 
 ## 前提条件
 
-- **Python 3.11+**: [Download Python](https://www.python.org/downloads/)
-- **uv**: Modern Python package manager
+- **uv**: Modern Python package manager（Python 3.11+を自動管理）
   - **インストール**: [公式uv インストールガイド](https://docs.astral.sh/uv/getting-started/installation/)
   - **クイックインストール**: `curl -LsSf https://astral.sh/uv/install.sh | sh` (Unix/macOS)
+- **Python**: 個別インストール不要 - uvがPython 3.11+を自動管理
 - **Claude Codeプロジェクト**: `.claude/`ディレクトリを含むプロジェクト
 - **Obsidianボルト**: 接続先のObsidianボルト
 
@@ -89,14 +89,14 @@ git status --porcelain
 git fetch --all
 git pull origin main
 ```" > .claude/git_tips.md
-
-# AI分析とObsidian用メタデータ生成を確認
-uv run ckc classify .claude/git_tips.md --show-evidence
 ````
 
-**AI分析結果例:**
+# 自動分析とObsidian用メタデータ生成を確認
+uv run ckc classify .claude/git_tips.md --show-evidence
+
+**分析結果例:**
 ```
-AI分析結果:
+分析結果:
 ├── type: code (信頼度: 91%)
 │   └── 根拠: "```bash", "git", "コマンド集"
 ├── tech: [git, bash] (信頼度: 95%)
@@ -118,7 +118,7 @@ ls -la /path/to/your/obsidian/vault/knowledge/code/
 ```
 
 **Obsidianで生成されるファイル例:**
-```markdown
+````markdown
 ---
 title: "Git便利コマンド集"
 type: code
@@ -149,7 +149,7 @@ git pull origin main
 ## 関連知識
 - [[Git Workflow]]
 - [[Version Control Best Practices]]
-```
+````
 
 ## Step 5: 高度機能の体験
 
@@ -179,7 +179,7 @@ type: prompt
 - 具体的な修正例
 - セキュリティリスクの指摘" > .claude/api_review_prompt.md
 
-# AI分析実行
+# 自動分析実行
 uv run ckc classify .claude/api_review_prompt.md --show-evidence
 ```
 
@@ -234,8 +234,8 @@ version: "1.0"
 project_name: "Claude API Project"
 auto_sync: true
 
-# AI分析設定
-ai:
+# 自動分析設定
+automation:
   auto_classification: true
   confidence_threshold: 0.75
   evidence_tracking: true
@@ -283,7 +283,7 @@ WHERE type = "code" AND status = "production"
 
 ### タグベース検索
 
-````markdown
+```markdown
 # 技術別知識
 #tech/python AND #status/production
 
@@ -307,10 +307,10 @@ WHERE type = "code" AND status = "production"
    uv run ckc sync --force
    ```
 
-2. **AI分析が不正確**
+2. **自動分析が不正確**
    ```bash
    # 信頼度閾値調整
-   uv run ckc config set ai.confidence_threshold 0.8
+   uv run ckc config set automation.confidence_threshold 0.8
    ```
 
 3. **Obsidianパスエラー**

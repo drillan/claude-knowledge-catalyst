@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **🧪 Test Suite Quality**: Improved test reliability for stable beta release
   - Fixed metadata model field references (`category` → `type`)
   - Corrected Pure Tag-Centered Architecture test assertions
-  - Temporarily disabled incomplete AI classifier tests for future implementation
+  - Temporarily disabled incomplete automated classifier tests for future implementation
   - Maintained core functionality test coverage (34 tests passing)
 - **📋 Test Coverage**: Adjusted coverage requirements for beta release quality
 - **🏗️ Code Quality**: Ensured basic functionality tests pass reliably
@@ -28,14 +28,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Priority-based classification logic: metadata > tags > content analysis
   - Subcategory mapping for consistent directory structure (e.g., 'development_patterns' → 'Development_Patterns')
   - Support for specialized subcategories: Templates, Best_Practices, Improvement_Log for Prompts
-- **🤖 Claude-Integrated Classification**: Intelligent content analysis with 100% accuracy
+- **🤖 Automated Classification**: Intelligent content analysis with 100% accuracy
   - Automatic metadata generation for unclassified files
   - Content-aware categorization based on file purpose and structure
   - Batch processing capabilities for large file sets
   - Quality and complexity assessment for knowledge items
 - **⚡ CKC Commands System**: Dedicated `_commands` directory structure for system automation
   - System-level `_commands` directory with organized subcategories (Slash_Commands, CLI_Tools, Automation, Scripts)
-  - `command` category added to classification system with intelligent detection
+  - `command` category added to classification system with smart detection
   - Separation of commands from knowledge content for cleaner vault organization
 - **🚀 Smart-Sync CLI Integration**: Complete CLI integration with interactive batch processing
   - `/ckc-smart-sync`: Interactive batch classification and synchronization

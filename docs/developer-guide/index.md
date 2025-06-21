@@ -40,7 +40,7 @@ graph TB
     Sync --> Templates[Template System]
     
     Core --> Analytics[Analytics]
-    Analytics --> AI[AI Assistant]
+    Analytics --> AUTO[Automation Assistant]
     
     Watcher --> ClaudeMD
     ClaudeMD --> Metadata

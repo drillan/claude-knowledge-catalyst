@@ -272,8 +272,8 @@ ckc analyze claude-integration --project .
 ### 🔄 Claude Code開発ワークフロー統合
 CLAUDE.md同期は[シームレス統合システム](core-concepts.md#シームレス統合システム)の中核として動作し、開発プロセス全体をObsidianと統合します。
 
-### 🤖 AI強化メタデータシステム
-[AI搭載メタデータ強化](core-concepts.md#-ai搭載メタデータ強化)により、Claude開発コンテキストに特化した豊富な情報が自動付与されます。
+### 🤖 自動強化メタデータシステム
+[自動メタデータ強化](core-concepts.md#-自動メタデータ強化)により、Claude開発コンテキストに特化した豊富な情報が自動付与されます。
 
 ### 🏛️ Obsidian最適化統合
 [Obsidian最適化ボルト構造](core-concepts.md#obsidian最適化ボルト構造)の一部として、ボルト構造とdataviewクエリを最適化します。
