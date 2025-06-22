@@ -12,7 +12,8 @@
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
-      "Bash(shellcheck:*)"
+      "Bash(shellcheck:*)",
+      "Bash(rg:*)"
     ],
     "deny": [
       "Bash(rm -rf:*)",

@@ -355,8 +355,8 @@ class AIKnowledgeAssistant:
                 if metadata.type:
                     analysis["type_distribution"][metadata.type] = analysis["type_distribution"].get(metadata.type, 0) + 1
                 
-                # Check for orphaned files (no tags, no category)
-                if not metadata.tags and not metadata.category:
+                # Check for orphaned files (no tags, no type)
+                if not metadata.tags and not metadata.type:
                     analysis["orphaned_files"].append(str(md_file))
                     
             except Exception:
@@ -1070,11 +1070,11 @@ updated: "{timestamp}"
             score += 0.2
         if metadata.tags:
             score += 0.2
-        if metadata.category:
+        if metadata.type:
             score += 0.2
         if metadata.purpose:
             score += 0.2
-        if metadata.quality:
+        if metadata.confidence:
             score += 0.2
         
         return score
@@ -1108,11 +1108,11 @@ updated: "{timestamp}"
         """Predict usage scenarios."""
         scenarios = []
         
-        if metadata.category == "prompt":
+        if metadata.type == "prompt":
             scenarios.append("AI interaction guidance")
-        elif metadata.category == "code":
+        elif metadata.type == "code":
             scenarios.append("Implementation reference")
-        elif metadata.category == "concept":
+        elif metadata.type == "concept":
             scenarios.append("Learning and understanding")
         
         return scenarios
@@ -1121,10 +1121,34 @@ updated: "{timestamp}"
         """Predict content shelf life."""
         if "api" in content.lower() or "version" in content.lower():
             return "short"  # APIs change frequently
-        elif metadata.category == "concept":
+        elif metadata.type == "concept":
             return "long"   # Concepts are more stable
         else:
             return "medium"
+
+    def _suggest_content_types(self, content: str) -> List[str]:
+        """Suggest content types based on content analysis."""
+        suggested_types = []
+        content_lower = content.lower()
+        
+        # Check for prompt patterns
+        if any(pattern in content_lower for pattern in ["prompt", "claude", "ask", "request", "generate"]):
+            suggested_types.append("prompt")
+        
+        # Check for code patterns
+        if any(pattern in content for pattern in ["```", "def ", "function ", "class ", "import ", "const ", "let "]):
+            suggested_types.append("code")
+        
+        # Check for concept patterns
+        if any(pattern in content_lower for pattern in ["concept", "theory", "principle", "methodology", "approach"]):
+            suggested_types.append("concept")
+        
+        # Check for resource patterns
+        if any(pattern in content_lower for pattern in ["resource", "link", "reference", "documentation", "guide"]):
+            suggested_types.append("resource")
+        
+        # Return most likely type first
+        return suggested_types if suggested_types else ["prompt"]
 
 
 def create_ai_assistant(vault_path: Path, config: CKCConfig) -> AIKnowledgeAssistant:

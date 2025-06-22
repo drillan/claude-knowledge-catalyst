@@ -1,0 +1,144 @@
+# Domain classification patterns for SmartContentClassifier
+# Patterns to identify application domains and areas of expertise
+
+web-dev:
+  high_confidence:
+    - "frontend"
+    - "backend"
+    - "web application"
+    - "api endpoint"
+    - "http request"
+  medium_confidence:
+    - "web"
+    - "server"
+    - "client"
+  keywords:
+    - "rest"
+    - "graphql"
+    - "microservice"
+    - "spa"
+    - "ssr"
+
+data-science:
+  high_confidence:
+    - "data analysis"
+    - "machine learning"
+    - "dataset"
+    - "model training"
+  medium_confidence:
+    - "data"
+    - "analytics"
+    - "ml"
+  keywords:
+    - "pandas"
+    - "numpy"
+    - "scikit-learn"
+    - "jupyter"
+    - "visualization"
+
+devops:
+  high_confidence:
+    - "ci/cd"
+    - "deployment"
+    - "infrastructure"
+    - "monitoring"
+  medium_confidence:
+    - "devops"
+  keywords:
+    - "jenkins"
+    - "terraform"
+    - "ansible"
+    - "kubernetes"
+    - "docker"
+
+mobile-dev:
+  high_confidence:
+    - "mobile app"
+    - "ios development"
+    - "android development"
+  medium_confidence:
+    - "mobile"
+  keywords:
+    - "react native"
+    - "flutter"
+    - "swift"
+    - "kotlin"
+    - "app store"
+
+cybersecurity:
+  high_confidence:
+    - "security vulnerability"
+    - "penetration testing"
+    - "encryption"
+  medium_confidence:
+    - "security"
+    - "secure"
+  keywords:
+    - "authentication"
+    - "authorization"
+    - "ssl"
+    - "https"
+    - "firewall"
+
+testing:
+  high_confidence:
+    - "unit test"
+    - "integration test"
+    - "test case"
+    - "test coverage"
+  medium_confidence:
+    - "test"
+    - "testing"
+  keywords:
+    - "pytest"
+    - "jest"
+    - "mock"
+    - "assertion"
+    - "tdd"
+
+ai-ml:
+  high_confidence:
+    - "artificial intelligence"
+    - "machine learning"
+    - "neural network"
+    - "deep learning"
+  medium_confidence:
+    - "ai"
+    - "ml"
+  keywords:
+    - "tensorflow"
+    - "pytorch"
+    - "model"
+    - "training"
+    - "inference"
+
+database:
+  high_confidence:
+    - "database design"
+    - "sql query"
+    - "data modeling"
+    - "database schema"
+  medium_confidence:
+    - "database"
+    - "db"
+  keywords:
+    - "postgresql"
+    - "mysql"
+    - "mongodb"
+    - "redis"
+    - "migration"
+
+automation:
+  high_confidence:
+    - "automation script"
+    - "task automation"
+    - "workflow automation"
+  medium_confidence:
+    - "automation"
+    - "script"
+  keywords:
+    - "cron"
+    - "scheduler"
+    - "pipeline"
+    - "batch"
+    - "trigger"

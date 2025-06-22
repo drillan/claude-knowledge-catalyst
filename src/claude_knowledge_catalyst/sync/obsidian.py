@@ -331,6 +331,10 @@ class ObsidianVaultManager:
         """Create Obsidian vault configuration files."""
         obsidian_dir = self.vault_path / ".obsidian"
         obsidian_dir.mkdir(exist_ok=True)
+        
+        # Ensure _system directory exists for system files
+        system_dir = self.vault_path / "_system"
+        system_dir.mkdir(exist_ok=True)
 
         # Create app.json with tag-centered settings
         app_config = {

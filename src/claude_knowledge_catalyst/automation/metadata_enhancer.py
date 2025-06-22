@@ -62,9 +62,9 @@ class AdvancedMetadataEnhancer:
         if not hasattr(metadata, 'complexity'):
             metadata.complexity = self._assess_complexity(content, content_analysis)
         
-        # Enhance quality assessment
-        if not metadata.quality or metadata.quality == "experimental":
-            metadata.quality = self._assess_quality(content, content_analysis, metadata)
+        # Enhance confidence assessment (quality renamed to confidence in metadata model)
+        if not metadata.confidence or metadata.confidence == "experimental":
+            metadata.confidence = self._assess_quality(content, content_analysis, metadata)
         
         # Enhance success rate estimation
         if not metadata.success_rate:
@@ -85,7 +85,7 @@ class AdvancedMetadataEnhancer:
         # Related projects inference
         related_projects = self._infer_related_projects(content, file_path)
         if related_projects:
-            metadata.related_projects = list(set(metadata.related_projects + related_projects))
+            metadata.projects = list(set(metadata.projects + related_projects))
         
         # Update timestamp
         metadata.updated = datetime.now()
@@ -314,7 +314,7 @@ class AdvancedMetadataEnhancer:
             confidence_score += 2
         
         # Medium confidence indicators
-        if metadata.quality == "high":
+        if metadata.confidence == "high":
             confidence_score += 1
         
         if analysis["word_count"] > 500:

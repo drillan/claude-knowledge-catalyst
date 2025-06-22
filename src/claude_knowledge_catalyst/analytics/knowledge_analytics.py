@@ -110,10 +110,10 @@ class KnowledgeAnalytics:
             for tag in metadata.tags:
                 overview["tag_distribution"][tag] += 1
             
-            # Status and quality
+            # Status and confidence (quality renamed to confidence in metadata model)
             overview["status_distribution"][metadata.status] += 1
-            if metadata.quality:
-                overview["quality_distribution"][metadata.quality] += 1
+            if metadata.confidence:
+                overview["quality_distribution"][metadata.confidence] += 1
             
             # Timeline analysis
             created_month = metadata.created.strftime("%Y-%m")
@@ -230,12 +230,12 @@ class KnowledgeAnalytics:
                 completeness["has_tags"] += 1
             
             if metadata.type:
-                completeness["has_type"] += 1
+                completeness["has_category"] += 1
             
             if metadata.purpose:
                 completeness["has_purpose"] += 1
             
-            if metadata.quality:
+            if metadata.confidence:
                 completeness["has_quality_rating"] += 1
             
             # Complete metadata (has most fields)
@@ -250,14 +250,14 @@ class KnowledgeAnalytics:
             if complete_count >= 4:
                 completeness["complete_metadata"] += 1
             
-            # Quality indicators
+            # Quality indicators (using confidence attribute)
             quality_indicators = metrics["content_quality_indicators"]
-            if metadata.quality:
-                if metadata.quality == "high":
+            if metadata.confidence:
+                if metadata.confidence == "high":
                     quality_indicators["high_quality"] += 1
-                elif metadata.quality == "medium":
+                elif metadata.confidence == "medium":
                     quality_indicators["medium_quality"] += 1
-                elif metadata.quality == "low":
+                elif metadata.confidence == "low":
                     quality_indicators["low_quality"] += 1
             else:
                 quality_indicators["quality_unknown"] += 1
@@ -359,7 +359,7 @@ class KnowledgeAnalytics:
             if metadata.author:
                 patterns["collaboration_patterns"]["authors"][metadata.author] += 1
             
-            for project in metadata.related_projects:
+            for project in metadata.projects:
                 patterns["collaboration_patterns"]["projects"][project] += 1
         
         # Convert defaultdicts to regular dicts
@@ -408,7 +408,7 @@ class KnowledgeAnalytics:
             evolution["knowledge_growth"]["monthly_growth"][month] += 1
             
             if metadata.type:
-                evolution["knowledge_growth"]["type_growth"][metadata.type][month] += 1
+                evolution["knowledge_growth"]["category_growth"][metadata.type][month] += 1
         
         # Knowledge connections and relationships
         for file_path, metadata in knowledge_items:
@@ -419,7 +419,7 @@ class KnowledgeAnalytics:
                     evolution["knowledge_connections"]["tag_relationships"][tag2].add(tag1)
             
             # Project connections
-            for project in metadata.related_projects:
+            for project in metadata.projects:
                 evolution["knowledge_connections"]["project_knowledge_map"][project].append({
                     "file": str(file_path),
                     "type": metadata.type,
@@ -462,7 +462,7 @@ class KnowledgeAnalytics:
         # Analyze current state
         total_files = len(knowledge_items)
         files_without_tags = sum(1 for _, m in knowledge_items if not m.tags)
-        files_without_category = sum(1 for _, m in knowledge_items if not m.category)
+        files_without_category = sum(1 for _, m in knowledge_items if not m.type)
         outdated_files = sum(1 for _, m in knowledge_items 
                            if (datetime.now() - m.updated).days > 180)
         
@@ -498,7 +498,7 @@ class KnowledgeAnalytics:
             })
         
         # Quality-based recommendations
-        high_quality_files = sum(1 for _, m in knowledge_items if m.quality == "high")
+        high_quality_files = sum(1 for _, m in knowledge_items if m.confidence == "high")
         if high_quality_files < total_files * 0.3:
             recommendations.append({
                 "priority": "low",

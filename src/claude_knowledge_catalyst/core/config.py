@@ -168,7 +168,12 @@ class CKCConfig(BaseModel):
     @classmethod
     def resolve_paths(cls, v: str | Path) -> Path:
         """Resolve relative paths."""
-        return Path(v).resolve()
+        try:
+            return Path(v).resolve()
+        except (FileNotFoundError, OSError):
+            # If path can't be resolved (e.g., during testing or if directory doesn't exist),
+            # return the path as-is to avoid breaking config loading
+            return Path(v)
 
     @classmethod
     def load_from_file(cls, config_path: str | Path) -> "CKCConfig":
