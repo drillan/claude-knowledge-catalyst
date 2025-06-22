@@ -9,6 +9,15 @@ from enum import Enum
 from ..core.metadata import KnowledgeMetadata
 from ..core.tag_standards import TagStandardsManager
 
+# YAKE integration
+try:
+    from .yake_extractor import YAKEKeywordExtractor, YAKEConfig, Keyword, YAKE_AVAILABLE
+except ImportError:
+    YAKE_AVAILABLE = False
+    YAKEKeywordExtractor = None
+    YAKEConfig = None
+    Keyword = None
+
 
 class ConfidenceLevel(Enum):
     """Confidence levels for AI classifications."""
@@ -32,8 +41,25 @@ class ClassificationResult:
 class SmartContentClassifier:
     """AI-powered content classifier using pattern recognition and NLP."""
     
-    def __init__(self):
+    def __init__(self, enable_yake: bool = True):
         self.tag_standards = TagStandardsManager()
+        self.enable_yake = enable_yake and YAKE_AVAILABLE
+        
+        # Initialize YAKE extractor if available
+        if self.enable_yake:
+            try:
+                yake_config = YAKEConfig(
+                    max_ngram_size=2,
+                    top_keywords=10,
+                    confidence_threshold=0.2
+                )
+                self.yake_extractor = YAKEKeywordExtractor(yake_config)
+            except Exception as e:
+                self.enable_yake = False
+                self.yake_extractor = None
+        else:
+            self.yake_extractor = None
+            
         self._initialize_patterns()
     
     def _initialize_patterns(self) -> None:
@@ -75,6 +101,11 @@ class SmartContentClassifier:
                 'high_confidence': ['git clone', 'git commit', 'git push', 'git pull', 'git merge'],
                 'medium_confidence': ['git'],
                 'keywords': ['github', 'gitlab', 'repository', 'branch', 'merge request']
+            },
+            'sql': {
+                'high_confidence': ['select ', 'from ', 'where ', 'insert into', 'update ', 'delete from'],
+                'medium_confidence': ['sql', 'database', 'query'],
+                'keywords': ['join', 'group by', 'order by', 'having', 'alter table', 'create table']
             }
         }
         
@@ -531,3 +562,201 @@ class SmartContentClassifier:
                         summary["confidence_distribution"]["low"] += 1
         
         return summary
+    
+    # YAKE-enhanced methods
+    def _extract_yake_keywords(self, content: str) -> List[str]:
+        """Extract keywords using YAKE if available."""
+        if not self.enable_yake or not self.yake_extractor:
+            return []
+        
+        try:
+            keywords = self.yake_extractor.extract_keywords(content)
+            return [kw.text.lower() for kw in keywords if kw.confidence > 0.3]
+        except Exception:
+            return []
+    
+    def _enhance_classification_with_yake(self, content: str, pattern_results: List[ClassificationResult]) -> List[ClassificationResult]:
+        """Enhance pattern-based classification with YAKE keywords."""
+        if not self.enable_yake:
+            return pattern_results
+        
+        yake_keywords = self._extract_yake_keywords(content)
+        if not yake_keywords:
+            return pattern_results
+        
+        enhanced_results = pattern_results.copy()
+        
+        # Boost confidence for pattern matches that are also YAKE keywords
+        for result in enhanced_results:
+            if any(keyword in yake_keywords for keyword in [result.suggested_value.lower()]):
+                result.confidence = min(0.95, result.confidence + 0.1)
+                result.evidence.append(f"YAKE keyword match: '{result.suggested_value}'")
+        
+        # Add YAKE-discovered technologies/domains
+        tech_keywords = {
+            'python': ['python', 'django', 'flask', 'pandas', 'numpy'],
+            'javascript': ['javascript', 'react', 'vue', 'node', 'express'],
+            'docker': ['docker', 'container', 'dockerfile'],
+            'kubernetes': ['kubernetes', 'k8s', 'kubectl', 'pod'],
+            'aws': ['aws', 'ec2', 's3', 'lambda'],
+            'api': ['api', 'rest', 'graphql', 'endpoint']
+        }
+        
+        for tech, keywords in tech_keywords.items():
+            if any(kw in yake_keywords for kw in keywords) and not any(r.suggested_value == tech for r in enhanced_results if r.tag_type == 'tech'):
+                matched_keywords = [kw for kw in keywords if kw in yake_keywords]
+                enhanced_results.append(ClassificationResult(
+                    tag_type="tech",
+                    suggested_value=tech,
+                    confidence=ConfidenceLevel.MEDIUM.value,
+                    reasoning=f"YAKE discovered {tech} keywords",
+                    evidence=[f"YAKE keywords: {', '.join(matched_keywords)}"]
+                ))
+        
+        return enhanced_results
+    
+    # Required methods from tests
+    def classify_technology(self, content: str) -> ClassificationResult:
+        """Classify technology from content - returns single best match."""
+        results = self._classify_technology(content.lower())
+        if self.enable_yake:
+            results = self._enhance_classification_with_yake(content, results)
+        
+        if not results:
+            return ClassificationResult(
+                tag_type="tech",
+                suggested_value="unknown",
+                confidence=ConfidenceLevel.VERY_LOW.value,
+                reasoning="No technology patterns detected",
+                evidence=[]
+            )
+        
+        # Return highest confidence result
+        best_result = max(results, key=lambda x: x.confidence)
+        return best_result
+    
+    def classify_category(self, content: str) -> ClassificationResult:
+        """Classify content category - returns single best match."""
+        results = self._classify_content_type(content.lower())
+        
+        if not results:
+            return ClassificationResult(
+                tag_type="type",
+                suggested_value="unknown",
+                confidence=ConfidenceLevel.VERY_LOW.value,
+                reasoning="No category patterns detected",
+                evidence=[]
+            )
+        
+        # Return highest confidence result
+        best_result = max(results, key=lambda x: x.confidence)
+        return best_result
+    
+    def classify_complexity(self, content: str) -> ClassificationResult:
+        """Classify content complexity - returns single best match."""
+        results = self._classify_complexity(content, content.lower())
+        
+        if not results:
+            # Default complexity based on content length
+            content_length = len(content)
+            if content_length < 500:
+                suggested_value = "beginner"
+            elif content_length < 1500:
+                suggested_value = "intermediate"
+            elif content_length < 3000:
+                suggested_value = "advanced"
+            else:
+                suggested_value = "expert"
+            
+            return ClassificationResult(
+                tag_type="complexity",
+                suggested_value=suggested_value,
+                confidence=ConfidenceLevel.LOW.value + 0.1,
+                reasoning=f"Length-based complexity estimation ({content_length} chars)",
+                evidence=[f"Content length: {content_length} characters"]
+            )
+        
+        # Return highest confidence result
+        best_result = max(results, key=lambda x: x.confidence)
+        return best_result
+    
+    def generate_tag_suggestions(self, content: str) -> List[ClassificationResult]:
+        """Generate comprehensive tag suggestions for content."""
+        results = self.classify_content(content)
+        
+        # Enhance with YAKE if available
+        if self.enable_yake:
+            results = self._enhance_classification_with_yake(content, results)
+        
+        return results
+    
+    def enhance_metadata(self, metadata: KnowledgeMetadata, content: str) -> KnowledgeMetadata:
+        """Enhance existing metadata with AI-generated suggestions."""
+        # Get classification suggestions
+        suggestions = self.generate_tag_suggestions(content)
+        
+        # Create enhanced metadata
+        enhanced = KnowledgeMetadata(
+            title=metadata.title,
+            description=metadata.description,
+            tags=metadata.tags.copy() if metadata.tags else [],
+            category=metadata.category,
+            created=metadata.created,
+            updated=metadata.updated,
+            author=metadata.author,
+            version=metadata.version,
+            file_path=metadata.file_path,
+            file_size=metadata.file_size,
+            word_count=metadata.word_count,
+            confidence=metadata.confidence,
+            quality=metadata.quality,
+            status=metadata.status,
+            success_rate=metadata.success_rate,
+            claude_feature=metadata.claude_feature,
+            claude_model=metadata.claude_model,
+            tech=metadata.tech,
+            domain=metadata.domain,
+            projects=metadata.projects,
+            team=metadata.team,
+            purpose=metadata.purpose,
+            subcategory=metadata.subcategory,
+            complexity=metadata.complexity
+        )
+        
+        # Add high-confidence suggestions as tags
+        new_tags = set(enhanced.tags)
+        
+        for suggestion in suggestions:
+            if suggestion.confidence >= ConfidenceLevel.MEDIUM.value:
+                # Add as appropriate field or tag
+                if suggestion.tag_type == "tech" and not enhanced.tech:
+                    if not hasattr(enhanced, 'tech') or not enhanced.tech:
+                        enhanced.tech = [suggestion.suggested_value]
+                    else:
+                        enhanced.tech.append(suggestion.suggested_value)
+                
+                elif suggestion.tag_type == "domain" and not enhanced.domain:
+                    if not hasattr(enhanced, 'domain') or not enhanced.domain:
+                        enhanced.domain = [suggestion.suggested_value]
+                    else:
+                        enhanced.domain.append(suggestion.suggested_value)
+                
+                elif suggestion.tag_type == "type" and not enhanced.category:
+                    enhanced.category = suggestion.suggested_value
+                
+                elif suggestion.tag_type == "complexity" and not enhanced.complexity:
+                    enhanced.complexity = suggestion.suggested_value
+                
+                elif suggestion.tag_type == "claude_feature":
+                    if not hasattr(enhanced, 'claude_feature') or not enhanced.claude_feature:
+                        enhanced.claude_feature = [suggestion.suggested_value]
+                    else:
+                        enhanced.claude_feature.append(suggestion.suggested_value)
+                
+                # Always add as tag if not already present
+                tag_value = suggestion.suggested_value.replace('_', '-')
+                new_tags.add(tag_value)
+        
+        enhanced.tags = list(new_tags)
+        
+        return enhanced

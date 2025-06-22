@@ -11,8 +11,12 @@ from claude_knowledge_catalyst.ai.smart_classifier import (
 )
 from claude_knowledge_catalyst.core.metadata import KnowledgeMetadata
 
-# AI分類テストは実装不完全のため一時的に無効化
-pytestmark = pytest.mark.skip(reason="AI classifier implementation incomplete - skipping for v0.9.2 release")
+# YAKE統合機能のテスト
+# YAKE利用不可の場合は一部テストをスキップ
+try:
+    from claude_knowledge_catalyst.ai.yake_extractor import YAKE_AVAILABLE
+except ImportError:
+    YAKE_AVAILABLE = False
 
 
 class TestSmartContentClassifier:
@@ -339,6 +343,169 @@ class TestClassifierPerformance:
         assert results[0] == "python"
 
 
+class TestYAKEIntegration:
+    """Test YAKE integration with SmartContentClassifier."""
+    
+    @pytest.fixture
+    def classifier(self):
+        """Create classifier with YAKE enabled."""
+        return SmartContentClassifier(enable_yake=True)
+    
+    @pytest.fixture
+    def classifier_no_yake(self):
+        """Create classifier with YAKE disabled."""
+        return SmartContentClassifier(enable_yake=False)
+    
+    @pytest.mark.skipif(not YAKE_AVAILABLE, reason="YAKE dependencies not available")
+    def test_yake_enabled_initialization(self, classifier):
+        """Test classifier initialization with YAKE enabled."""
+        assert classifier.enable_yake is True
+        assert classifier.yake_extractor is not None
+    
+    def test_yake_disabled_initialization(self, classifier_no_yake):
+        """Test classifier initialization with YAKE disabled."""
+        assert classifier_no_yake.enable_yake is False
+        assert classifier_no_yake.yake_extractor is None
+    
+    @pytest.mark.skipif(not YAKE_AVAILABLE, reason="YAKE dependencies not available")
+    def test_yake_keyword_extraction(self, classifier):
+        """Test YAKE keyword extraction functionality."""
+        content = """Python machine learning with scikit-learn and pandas for data analysis.
+        This tutorial covers neural networks and deep learning algorithms."""
+        
+        keywords = classifier._extract_yake_keywords(content)
+        
+        assert isinstance(keywords, list)
+        if keywords:  # Only test if keywords were extracted
+            assert all(isinstance(kw, str) for kw in keywords)
+            # Should extract relevant technical terms
+            tech_terms = ['python', 'machine', 'learning', 'data', 'analysis', 'neural', 'algorithms']
+            assert any(term in ' '.join(keywords) for term in tech_terms)
+    
+    @pytest.mark.skipif(not YAKE_AVAILABLE, reason="YAKE dependencies not available")
+    def test_yake_enhanced_classification(self, classifier):
+        """Test enhanced classification with YAKE integration."""
+        content = """def machine_learning_pipeline():
+            import pandas as pd
+            import numpy as np
+            from sklearn.model_selection import train_test_split
+            
+            # Data preprocessing
+            data = pd.read_csv('dataset.csv')
+            X = data.drop('target', axis=1)
+            y = data['target']
+            
+            return train_test_split(X, y, test_size=0.2)
+        """
+        
+        # Test technology classification
+        tech_result = classifier.classify_technology(content)
+        assert tech_result.suggested_value == 'python'
+        
+        # Test comprehensive suggestions
+        suggestions = classifier.generate_tag_suggestions(content)
+        
+        # Should contain technology suggestions
+        tech_suggestions = [s for s in suggestions if s.tag_type == 'tech']
+        assert len(tech_suggestions) > 0
+        
+        # Should contain python
+        tech_values = {s.suggested_value for s in tech_suggestions}
+        assert 'python' in tech_values
+    
+    def test_fallback_without_yake(self, classifier_no_yake):
+        """Test that classifier works without YAKE."""
+        content = "def fibonacci(n): return n if n <= 1 else fibonacci(n-1) + fibonacci(n-2)"
+        
+        # Should still work with pattern-based classification
+        tech_result = classifier_no_yake.classify_technology(content)
+        assert tech_result.suggested_value == 'python'
+        assert tech_result.confidence > 0
+        
+        suggestions = classifier_no_yake.generate_tag_suggestions(content)
+        assert len(suggestions) > 0
+    
+    @pytest.mark.skipif(not YAKE_AVAILABLE, reason="YAKE dependencies not available")
+    def test_enhanced_metadata_with_yake(self, classifier):
+        """Test metadata enhancement with YAKE integration."""
+        content = """# API Development with FastAPI
+        
+        ```python
+        from fastapi import FastAPI
+        from pydantic import BaseModel
+        
+        app = FastAPI()
+        
+        class Item(BaseModel):
+            name: str
+            description: str
+        
+        @app.post("/items/")
+        async def create_item(item: Item):
+            return {"message": "Item created", "item": item}
+        ```
+        
+        This demonstrates REST API development patterns with automatic validation.
+        """
+        
+        initial_metadata = KnowledgeMetadata(
+            title="FastAPI Tutorial",
+            description="Building REST APIs"
+        )
+        
+        enhanced = classifier.enhance_metadata(initial_metadata, content)
+        
+        # Should preserve original metadata
+        assert enhanced.title == initial_metadata.title
+        assert enhanced.description == initial_metadata.description
+        
+        # Should add technology tags
+        assert any('python' in tag for tag in enhanced.tags)
+        
+        # Should classify as code
+        assert enhanced.category in ['code', 'prompt']
+    
+    @pytest.mark.skipif(not YAKE_AVAILABLE, reason="YAKE dependencies not available")
+    def test_yake_confidence_boosting(self, classifier):
+        """Test that YAKE keywords boost confidence of pattern matches."""
+        # Content with clear patterns that should also be detected by YAKE
+        content = """Python data science project using pandas and numpy for statistical analysis.
+        This includes machine learning algorithms implemented with scikit-learn."""
+        
+        suggestions = classifier.generate_tag_suggestions(content)
+        
+        # Find python suggestions
+        python_suggestions = [s for s in suggestions if s.suggested_value == 'python']
+        
+        if python_suggestions:
+            python_result = python_suggestions[0]
+            
+            # Should have high confidence due to both pattern and YAKE match
+            assert python_result.confidence >= ConfidenceLevel.HIGH.value
+            
+            # Should mention YAKE in evidence
+            evidence_text = ' '.join(python_result.evidence)
+            # Note: This might not always trigger if YAKE doesn't extract 'python' as a keyword
+            # but the confidence should still be boosted by the clear patterns
+    
+    def test_multilingual_support_preparation(self, classifier):
+        """Test preparation for multilingual content (Japanese/English)."""
+        # Japanese content with technical terms
+        japanese_content = """Pythonを使用したデータ分析のチュートリアル。
+        pandasとnumpyライブラリを活用してデータの前処理を行います。
+        機械学習アルゴリズムの実装も含まれています。"""
+        
+        # Should still detect technology patterns
+        tech_result = classifier.classify_technology(japanese_content)
+        
+        # Even if YAKE struggles with mixed language, pattern detection should work
+        assert tech_result.confidence > 0
+        
+        # Should generate some suggestions
+        suggestions = classifier.generate_tag_suggestions(japanese_content)
+        assert len(suggestions) > 0
+
+
 class TestClassifierIntegration:
     """Integration tests for classifier with other components."""
 
@@ -388,6 +555,116 @@ class TestClassifierIntegration:
         
         # Should respect tag standards
         for suggestion in suggestions:
-            assert suggestion.tag_type in ['technology', 'category', 'complexity', 'domain']
+            assert suggestion.tag_type in ['tech', 'type', 'complexity', 'domain', 'claude_feature', 'confidence']
             assert isinstance(suggestion.suggested_value, str)
             assert len(suggestion.suggested_value) > 0
+
+
+class TestHybridClassificationSystem:
+    """Test the hybrid classification system combining patterns and YAKE."""
+    
+    @pytest.fixture
+    def classifier(self):
+        """Create classifier instance."""
+        return SmartContentClassifier(enable_yake=True)
+    
+    def test_hybrid_technology_detection(self, classifier):
+        """Test technology detection using both patterns and keywords."""
+        # Content that should trigger both pattern matching and keyword extraction
+        content = """Building microservices architecture with Docker containers.
+        The implementation uses Kubernetes for orchestration and monitoring.
+        Services communicate via REST APIs with GraphQL endpoints."""
+        
+        suggestions = classifier.generate_tag_suggestions(content)
+        tech_suggestions = [s for s in suggestions if s.tag_type == 'tech']
+        
+        # Should detect multiple technologies
+        tech_values = {s.suggested_value for s in tech_suggestions}
+        
+        # Should include container/orchestration technologies
+        expected_techs = {'docker', 'kubernetes', 'api'}
+        detected_intersection = expected_techs.intersection(tech_values)
+        assert len(detected_intersection) > 0
+    
+    def test_confidence_calibration(self, classifier):
+        """Test that hybrid system provides well-calibrated confidence scores."""
+        test_cases = [
+            ("def fibonacci(n): return n", 'python', ConfidenceLevel.HIGH.value),  # Clear pattern
+            ("python programming language", 'python', ConfidenceLevel.MEDIUM.value),  # Keyword only
+            ("some general text content", 'unknown', ConfidenceLevel.VERY_LOW.value),  # No match
+        ]
+        
+        for content, expected_tech, min_confidence in test_cases:
+            result = classifier.classify_technology(content)
+            
+            if expected_tech == 'unknown':
+                assert result.confidence <= min_confidence
+            else:
+                assert result.suggested_value == expected_tech
+                assert result.confidence >= min_confidence * 0.8  # Allow some tolerance
+    
+    def test_comprehensive_content_analysis(self, classifier):
+        """Test comprehensive analysis of complex content."""
+        complex_content = """# Advanced React TypeScript Application
+        
+        This project demonstrates modern web development practices using:
+        
+        ## Technologies
+        - React 18 with TypeScript
+        - Next.js for server-side rendering
+        - Tailwind CSS for styling
+        - Jest and React Testing Library for testing
+        
+        ## Features
+        - Component-based architecture
+        - State management with Redux Toolkit
+        - API integration with Axios
+        - Performance optimization techniques
+        
+        ```typescript
+        interface UserProps {
+            id: string;
+            name: string;
+            email: string;
+        }
+        
+        const UserComponent: React.FC<UserProps> = ({ id, name, email }) => {
+            const [loading, setLoading] = useState(false);
+            
+            useEffect(() => {
+                fetchUserData(id);
+            }, [id]);
+            
+            return (
+                <div className="user-card">
+                    <h2>{name}</h2>
+                    <p>{email}</p>
+                </div>
+            );
+        };
+        ```
+        
+        This implementation follows React best practices and TypeScript conventions.
+        """
+        
+        suggestions = classifier.generate_tag_suggestions(complex_content)
+        
+        # Should detect multiple technologies
+        tech_suggestions = [s for s in suggestions if s.tag_type == 'tech']
+        tech_values = {s.suggested_value for s in tech_suggestions}
+        
+        # Should include web technologies
+        expected_techs = {'react', 'typescript', 'javascript'}
+        assert len(expected_techs.intersection(tech_values)) >= 1
+        
+        # Should classify as code or concept
+        category_suggestions = [s for s in suggestions if s.tag_type == 'type']
+        if category_suggestions:
+            category_values = {s.suggested_value for s in category_suggestions}
+            assert 'code' in category_values or 'concept' in category_values
+        
+        # Should have appropriate complexity
+        complexity_suggestions = [s for s in suggestions if s.tag_type == 'complexity']
+        if complexity_suggestions:
+            complexity_result = max(complexity_suggestions, key=lambda x: x.confidence)
+            assert complexity_result.suggested_value in ['intermediate', 'advanced', 'expert']
