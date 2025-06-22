@@ -1,7 +1,9 @@
 ---
 author: null
 category: project_log
-claude_feature: []
+claude_feature:
+- code-generation
+- debugging
 claude_model: []
 complexity: advanced
 confidence: medium

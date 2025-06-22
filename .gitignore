@@ -174,3 +174,15 @@ test_vault/
 .claude/temp/
 .claude/*_vault/ckc_config.yaml
 .claude/settings.local.json
+
+# CKC development and testing artifacts
+.claude_backup_migration_*/
+comparison-test/
+migration-test/
+demo/
+coverage.json
+tests/*.backup
+*.backup
+
+# Publications and articles
+publications/

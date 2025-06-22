@@ -1,12 +1,16 @@
 ---
 author: null
 category: code
-claude_feature: []
+claude_feature:
+- code-generation
+- documentation
 claude_model: []
 complexity: beginner
 confidence: medium
 created: 2025-06-19 00:00:00
-domain: []
+domain:
+- machine-learning
+- deep-learning
 project: claude-knowledge-catalyst
 projects:
 - claude-knowledge-catalyst

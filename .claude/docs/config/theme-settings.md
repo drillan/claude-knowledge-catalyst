@@ -1,6 +1,7 @@
 ---
 author: null
-claude_feature: []
+claude_feature:
+- code-generation
 claude_model: []
 complexity: beginner
 confidence: medium
@@ -26,7 +27,10 @@ status: draft
 success_rate: null
 tags: []
 team: []
-tech: []
+tech:
+- html
+- css
+- bash
 title: Sphinx テーマ設定
 type: code
 updated: 2025-06-21 00:04:32.048633

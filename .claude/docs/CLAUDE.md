@@ -1,16 +1,39 @@
 ---
-title: "ドキュメントガイド"
-created: "2025-06-19"
-updated: "2025-06-19"
-version: "1.0"
-category: "concept"
-subcategory: "Development_Patterns"
-tags: ["documentation", "sphinx", "guide", "architecture", "workflow"]
-complexity: "intermediate"
-quality: "high"
-purpose: "Sphinxドキュメントシステムの包括的ガイド"
-project: "claude-knowledge-catalyst"
-status: "production"
+author: null
+category: concept
+claude_feature:
+- code-generation
+- documentation
+claude_model: []
+complexity: advanced
+confidence: medium
+created: 2025-06-19 00:00:00
+domain:
+- ai-ml
+- automation
+- data-science
+- web-dev
+project: claude-knowledge-catalyst
+projects:
+- claude-knowledge-catalyst
+purpose: Sphinxドキュメントシステムの包括的ガイド
+quality: high
+status: production
+subcategory: Development_Patterns
+success_rate: null
+tags:
+- architecture
+- documentation
+- guide
+- sphinx
+- workflow
+team: []
+tech:
+- python
+title: ドキュメントガイド
+type: prompt
+updated: 2025-06-19 00:00:00
+version: '1.0'
 ---
 
 # ドキュメントガイド

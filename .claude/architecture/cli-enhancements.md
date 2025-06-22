@@ -1,7 +1,9 @@
 ---
 author: null
 category: concept
-claude_feature: []
+claude_feature:
+- code-generation
+- optimization
 claude_model: []
 complexity: advanced
 confidence: medium

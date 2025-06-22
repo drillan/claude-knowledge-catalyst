@@ -1,7 +1,9 @@
 ---
 author: null
 category: concept
-claude_feature: []
+claude_feature:
+- code-generation
+- debugging
 claude_model: []
 complexity: advanced
 confidence: medium
@@ -10,6 +12,7 @@ domain:
 - ai-ml
 - automation
 - data-science
+- database
 - devops
 - testing
 - web-dev
@@ -31,6 +34,7 @@ team: []
 tech:
 - api
 - aws
+- database
 - git
 - python
 - typescript
@@ -338,5 +342,102 @@ class DemoTestEnvironment:
 - 開発生産性向上
 - コードレビュー効率
 - 新規貢献者のオンボーディング時間
+
+### YAKE統合による知的分類システム導入 (2025-06-22)
+
+**改善の背景**:
+テストカバレッジ向上要請から始まり、AI分野のキーワード抽出技術を調査した結果、YAKE (Yet Another Keyword Extractor) を発見。従来のパターンマッチング分類に自然言語処理を組み合わせることで分類精度向上を目指した。
+
+**実施した改善**:
+1. **YAKE統合アーキテクチャ設計**
+   - `ai/yake_extractor.py`: 多言語対応キーワード抽出エンジン
+   - `ai/smart_classifier.py`: ハイブリッド分類システムに拡張
+   - 後方互換性保証: YAKE利用不可時の適切なフォールバック
+
+2. **6段階包括評価プロセス確立**
+   ```bash
+   Phase 1: ブランチ戦略最適化 (baseline vs feature branch)
+   Phase 2: 多技術スタックテストデータ準備
+   Phase 3: 自動化比較システム構築
+   Phase 4: 多角的評価軸実行 (カバレッジ・パフォーマンス・精度)
+   Phase 5: 実プロジェクト(.claude)での分類品質検証
+   Phase 6: 科学的評価レポート作成
+   ```
+
+3. **テストカバレッジ大幅改善**
+   - 全体: 5% → 10% (2倍向上)
+   - YAKE module: 88% (28新規テストケース)
+   - SmartClassifier: 16% → 74% (4.6倍向上)
+
+**技術的成果**:
+```python
+# ハイブリッド分類の実装例
+def _enhance_classification_with_yake(self, content: str, pattern_results: List[ClassificationResult]) -> List[ClassificationResult]:
+    """パターンマッチング + YAKE キーワード抽出のハイブリッド分類"""
+    yake_keywords = self._extract_yake_keywords(content)
+    
+    # パターンマッチ結果の信頼度向上
+    for result in enhanced_results:
+        if any(keyword in yake_keywords for keyword in [result.suggested_value.lower()]):
+            result.confidence = min(0.95, result.confidence + 0.1)
+    
+    # YAKE発見技術の追加
+    for tech, keywords in tech_keywords.items():
+        if any(kw in yake_keywords for kw in keywords):
+            # 新技術パターンを追加
+```
+
+**実用性能での検証結果**:
+- **処理時間**: 0.284s → 0.455s (1.6倍、許容範囲)
+- **高信頼度分類**: +7件改善 (151→158)
+- **新技術検出**: SQL 0→9件 (新機能)
+- **ファイル処理**: 32ファイル全て成功
+
+**学んだ重要な教訓**:
+
+1. **科学的評価の価値**
+   - 極小データでの性能テスト(28倍遅延)は過度に悲観的
+   - 実用環境での測定(1.6倍)が実際の影響を正確に反映
+   - ブランチベース比較により客観的な評価が可能
+
+2. **パフォーマンステストの落とし穴**
+   ```python
+   # 問題: 極小コンテンツでの測定
+   content = "def test(): pass"  # 17文字
+   # → YAKE初期化コストが支配的 (28倍遅延)
+   
+   # 現実: 実際のファイルサイズ
+   average_file_size = 2-5KB  # .claudeディレクトリ実測
+   # → 初期化コストが相対的に小さい (1.6倍遅延)
+   ```
+
+3. **ハイブリッドアプローチの有効性**
+   - パターンマッチングの確実性 + キーワード抽出の柔軟性
+   - 既存機能を損なわずに新機能を追加
+   - エラー時の優雅な劣化
+
+4. **テスト戦略の進化**
+   ```bash
+   # 従来: 機能単体テスト
+   uv run pytest tests/test_smart_classifier.py
+   
+   # 追加: 統合性能テスト
+   uv run pytest --cov=src/claude_knowledge_catalyst --cov-report=html
+   
+   # 新規: 実用環境での検証
+   python migration-test/claude_migration_comparison.py
+   ```
+
+**波及効果**:
+- テスト文化の成熟: 単体→統合→実用環境の3層テスト
+- 性能評価手法の確立: マイクロベンチマーク vs 実用測定
+- AIエンハンスメントパターンの確立: 既存システム + AI = ハイブリッド
+- オープンソース活用: YAKE, langdetect, unidecode等の適切な選択
+
+**今後への示唆**:
+1. **段階的AI導入**: 全置換ではなく既存機能の段階的強化
+2. **評価方法の標準化**: 6段階評価プロセスの他機能への適用
+3. **依存関係管理**: オプショナル依存関係の適切な設計
+4. **ユーザー価値検証**: 技術的改善が実際のユーザー体験向上につながることの確認
 
 この改善履歴を定期的に更新し、プロジェクトの進化を記録していく。

@@ -1,7 +1,9 @@
 ---
 author: null
 category: resource
-claude_feature: []
+claude_feature:
+- code-generation
+- documentation
 claude_model: []
 complexity: advanced
 confidence: medium

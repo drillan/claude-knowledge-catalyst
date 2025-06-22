@@ -1,7 +1,9 @@
 ---
 author: null
 category: prompt
-claude_feature: []
+claude_feature:
+- code-generation
+- analysis
 claude_model: []
 complexity: intermediate
 confidence: medium

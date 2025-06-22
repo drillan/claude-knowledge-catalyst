@@ -5,7 +5,8 @@ autodoc_default_options:
   members: true
   special-members: __init__
   undoc-members: true
-claude_feature: []
+claude_feature:
+- code-generation
 claude_model: []
 complexity: intermediate
 confidence: low

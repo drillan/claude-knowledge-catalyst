@@ -1,6 +1,7 @@
 ---
 author: null
-claude_feature: []
+claude_feature:
+- code-generation
 claude_model: []
 complexity: intermediate
 confidence: medium
@@ -19,7 +20,9 @@ success_rate: null
 tags:
 - '336790'
 team: []
-tech: []
+tech:
+- html
+- css
 title: Sphinx 設定更新
 type: prompt
 updated: 2025-06-21 00:04:32.054017

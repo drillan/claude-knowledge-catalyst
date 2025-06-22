@@ -1,7 +1,8 @@
 ---
 author: null
 category: concept
-claude_feature: []
+claude_feature:
+- code-generation
 claude_model: []
 complexity: advanced
 confidence: medium
@@ -47,14 +48,17 @@ version: '1.0'
 - **設定管理**: Pydantic（バリデーション付きデータモデル）
 - **CLI**: Click + Rich（美しいコマンドラインインターフェース）
 - **ファイル監視**: Watchdog（デバウンス機能付きファイルシステム監視）
+- **AI分類**: YAKE + SmartContentClassifier（ハイブリッド分類システム）
+- **NLP**: YAKE>=0.4.8, langdetect>=1.0.9, unidecode>=1.3.0
 
 ### 核となる機能
 1. **自動同期**: `.claude/`ディレクトリを監視してリアルタイム同期
-2. **メタデータ管理**: タグ、カテゴリ、成功指標による自動的なメタデータ強化
-3. **テンプレートシステム**: プロンプト、コードスニペット、概念、プロジェクトログ用の豊富なテンプレート
-4. **Obsidian統合**: Obsidianボルトとの深い統合（適切なディレクトリ構造とリンク）
-5. **マルチプロジェクト対応**: 複数プロジェクトでのファイル分離と横断検索（詳細: `.claude/next_action.md`）
-6. **成功追跡**: プロンプトの効果測定と継続的改善
+2. **AI分類システム**: YAKE統合による高精度技術スタック検出とタグ自動生成
+3. **メタデータ管理**: タグ、カテゴリ、成功指標による自動的なメタデータ強化
+4. **テンプレートシステム**: プロンプト、コードスニペット、概念、プロジェクトログ用の豊富なテンプレート
+5. **Obsidian統合**: Obsidianボルトとの深い統合（適切なディレクトリ構造とリンク）
+6. **マルチプロジェクト対応**: 複数プロジェクトでのファイル分離と横断検索（詳細: `.claude/next_action.md`）
+7. **成功追跡**: プロンプトの効果測定と継続的改善
 
 ## アーキテクチャ制約
 
@@ -65,6 +69,9 @@ src/claude_knowledge_catalyst/
 │   ├── config.py          # 設定管理
 │   ├── metadata.py        # メタデータ抽出・管理  
 │   └── watcher.py         # ファイルシステム監視
+├── ai/                    # AI分類システム
+│   ├── smart_classifier.py # ハイブリッド分類エンジン
+│   └── yake_extractor.py  # YAKE統合キーワード抽出
 ├── sync/                  # 同期モジュール
 │   └── obsidian.py        # Obsidian統合
 ├── templates/             # テンプレートシステム
@@ -76,9 +83,11 @@ src/claude_knowledge_catalyst/
 ### 設計パターン
 - **Pydanticモデル**: 設定とデータ検証
 - **プラグインアーキテクチャ**: 拡張可能な同期ターゲット
+- **ハイブリッドAI分類**: パターンマッチング + YAKE キーワード抽出
 - **テンプレート駆動**: コンテンツ生成
 - **イベント駆動**: ファイル同期
 - **構造化メタデータ**: インテリジェントな組織化
+- **後方互換性保証**: YAKE無効時のフォールバック機構
 
 ## 開発制約
 
@@ -87,6 +96,15 @@ src/claude_knowledge_catalyst/
 - **開発環境セットアップ**: `uv sync --dev`
 - **コマンド実行**: `uv run ckc [command]`
 - **依存関係追加**: `uv add package-name`
+
+### AI機能依存関係
+```bash
+# YAKE統合機能有効化
+uv add yake>=0.4.8 langdetect>=1.0.9 unidecode>=1.3.0
+
+# 分類機能無効時の動作確認
+uv run pytest tests/test_yake_extractor.py::test_fallback_without_yake
+```
 
 ### コード品質
 ```bash
@@ -99,8 +117,9 @@ uv run ruff format src/ tests/
 # 型チェック
 uv run mypy src/
 
-# テスト
-uv run pytest
+# テスト（AI機能含む）
+uv run pytest tests/
+uv run pytest --cov=src/claude_knowledge_catalyst --cov-report=html
 ```
 
 ### ファイルパス操作

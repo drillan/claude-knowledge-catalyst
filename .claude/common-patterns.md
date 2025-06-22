@@ -1,13 +1,16 @@
 ---
 author: null
 category: concept
-claude_feature: []
+claude_feature:
+- code-generation
+- analysis
 claude_model: []
 complexity: advanced
 confidence: medium
 created: 2025-06-19 00:00:00
 domain:
 - ai-ml
+- automation
 - data-science
 - security
 - testing
@@ -30,6 +33,7 @@ team: []
 tech:
 - api
 - git
+- javascript
 - python
 - typescript
 title: Common Patterns - よく使用するコマンドパターン
@@ -288,6 +292,51 @@ uv run python -c "import claude_knowledge_catalyst; print('OK')"
 
 # 依存関係の確認
 uv run pip list | grep claude
+```
+
+### AI分類システムのテストパターン
+
+```bash
+# YAKE統合機能のテスト
+uv run pytest tests/test_yake_extractor.py -v
+
+# YAKE利用可能性の確認
+uv run python -c "from claude_knowledge_catalyst.ai.yake_extractor import YAKE_AVAILABLE; print(f'YAKE Available: {YAKE_AVAILABLE}')"
+
+# ハイブリッド分類のテスト
+uv run pytest tests/test_ai_smart_classifier.py::TestYAKEIntegration -v
+
+# 分類機能のクイックテスト
+uv run python -c "
+from claude_knowledge_catalyst.ai.smart_classifier import SmartContentClassifier
+classifier = SmartContentClassifier()
+result = classifier.classify_technology('def fibonacci(n): return n')
+print(f'Tech: {result.suggested_value}, Confidence: {result.confidence:.2f}')
+"
+
+# 実用性能での分類テスト
+uv run python -m claude_knowledge_catalyst.cli.main classify .claude --batch --format json
+
+# 依存関係の追加/削除
+uv add yake>=0.4.8 langdetect>=1.0.9 unidecode>=1.3.0  # YAKE機能有効化
+uv remove yake langdetect unidecode                     # YAKE機能無効化
+```
+
+### 包括的評価パターン
+
+```bash
+# 6段階評価プロセスの実行
+python migration-test/claude_migration_comparison.py
+
+# テストカバレッジ測定
+uv run pytest --cov=src/claude_knowledge_catalyst --cov-report=html --cov-report=term
+
+# パフォーマンス比較テスト
+uv run python comparison-test/comparison_script.py
+
+# ブランチ別機能比較
+git checkout baseline-v0.9.2 && uv run ckc classify .claude --batch
+git checkout feature/yake-integration && uv run ckc classify .claude --batch
 ```
 
 ### ファイル権限の修正

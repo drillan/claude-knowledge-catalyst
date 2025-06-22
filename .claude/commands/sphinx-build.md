@@ -1,6 +1,8 @@
 ---
 author: null
-claude_feature: []
+claude_feature:
+- code-generation
+- documentation
 claude_model: []
 complexity: intermediate
 confidence: medium
@@ -18,7 +20,9 @@ status: draft
 success_rate: null
 tags: []
 team: []
-tech: []
+tech:
+- html
+- bash
 title: Sphinx ドキュメントビルド
 type: code
 updated: 2025-06-21 00:04:32.059779
