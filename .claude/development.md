@@ -679,3 +679,181 @@ uv info
 - 大規模なプロジェクトでは`--no-cache`オプションを避ける
 - ネットワーク環境が不安定な場合は`--retries`オプションを使用
 - 並列処理を活用するため、十分なメモリを確保する
+
+## リリース手順
+
+CKCの新バージョンをリリースする際の標準手順を説明します。
+
+### 前提条件
+- テストが全て通過している（`uv run pytest`）
+- コード品質チェックが完了している（`uv run ruff check && uv run mypy`）
+- ドキュメントが更新されている
+- CHANGELOGが更新されている
+
+### リリース手順（v0.10.0の例）
+
+#### 1. 最終準備
+```bash
+# 全てのテストを実行
+uv run pytest
+
+# コード品質チェック
+uv run ruff check src/ tests/
+uv run ruff format src/ tests/
+uv run mypy src/
+
+# デモスクリプトのテスト（必要に応じて）
+./demo/demo.sh
+./demo/tag_centered_demo.sh
+```
+
+#### 2. 変更をコミット
+```bash
+# 全ての変更をステージング
+git add .
+git add .claude/  # 開発ドキュメントも含める
+
+# 統合コミット作成
+git commit -m "enhance: Complete v0.10.0 with improved demos and updated .claude
+
+- Add YAKE integration demonstration in demo.sh
+- Fix CLI command compatibility in tag_centered_demo.sh  
+- Improve shell syntax compliance (shellcheck clean)
+- Update README.md with accurate v0.10.0 feature descriptions
+- Fix cleanup.sh directory structure alignment
+- Update .claude/ knowledge base with v0.10.0 improvements
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+#### 3. タグ作成（既存タグ更新の場合）
+```bash
+# 既存タグを削除（未公開の場合のみ）
+git tag -d v0.10.0
+
+# 新しいタグを作成
+git tag -a v0.10.0 -m "Release v0.10.0: YAKE Integration with Enhanced Demos
+
+🚀 Core Features:
+- Advanced YAKE keyword extraction system
+- Multi-language support (7 languages including Japanese)  
+- Hybrid classification (pattern matching + AI enhancement)
+- 147 passing tests, enhanced stability
+
+🎯 Enhanced Demo Experience:
+- Interactive YAKE integration demonstration
+- Multi-language content analysis showcase
+- Complete shell syntax compliance
+
+📚 Knowledge Base Updates:
+- Comprehensive development patterns
+- YAKE integration lessons and best practices
+
+Built with ❤️ by the Claude community"
+```
+
+#### 4. リモートにプッシュ
+```bash
+# mainブランチをプッシュ
+git push origin main
+
+# タグをプッシュ
+git push origin v0.10.0
+```
+
+#### 5. GitHub Releasesを作成
+```bash
+# GitHub CLIを使用してリリースを作成
+gh release create v0.10.0 \
+  --title "Claude Knowledge Catalyst v0.10.0 - YAKE Integration Release" \
+  --notes "$(cat <<'EOF'
+# 🚀 Claude Knowledge Catalyst v0.10.0: YAKE Integration Release
+
+## 🆕 Revolutionary Features
+
+### YAKE Integration & Hybrid Classification
+- **Advanced Keyword Extraction**: YAKE (Yet Another Keyword Extractor) unsupervised algorithm
+- **Multi-language Support**: 7 languages including English, Japanese, Spanish, French, German, Italian, Portuguese
+- **Hybrid Classification**: Pattern matching + AI enhancement for superior accuracy
+
+### Enhanced Demo Experience
+- **Interactive YAKE Demonstration**: Experience keyword extraction in action
+- **Multi-language Content Analysis**: English + Japanese technical content
+- **Complete Shell Compliance**: Error-free demo execution
+
+## 🔧 Technical Improvements
+
+### Test Suite Excellence
+- **147 Passing Tests**: 0 failures, production-ready stability
+- **Enhanced Coverage**: Improved from 19.33% to 28.25%
+- **YAKE Module Coverage**: 88% with comprehensive test cases
+
+## 🚀 Getting Started
+
+\`\`\`bash
+# Install or upgrade
+pip install claude-knowledge-catalyst==0.10.0
+
+# Experience YAKE integration
+./demo/demo.sh
+\`\`\`
+
+**Built with ❤️ by the Claude community**
+EOF
+)"
+```
+
+#### 6. リリース確認
+```bash
+# リリースが正常に作成されたことを確認
+gh release list
+
+# 出力例:
+# Claude Knowledge Catalyst v0.10.0 - YAKE Integration Release  Latest  v0.10.0  2025-06-22T09:35:11Z
+```
+
+### リリース後の確認事項
+
+#### GitHub確認
+- [ ] GitHub Releasesページで新バージョンが表示されている
+- [ ] リリースノートが正確に表示されている
+- [ ] "Latest"タグが新バージョンに付いている
+
+#### 機能確認
+- [ ] デモスクリプトが正常に動作する
+- [ ] 新機能が期待通りに動作する
+- [ ] 後方互換性が保たれている
+
+### トラブルシューティング
+
+#### タグが既に存在する場合
+```bash
+# ローカルタグを削除
+git tag -d v0.10.0
+
+# リモートタグを削除（必要に応じて）
+git push origin --delete v0.10.0
+
+# 新しいタグを作成してプッシュ
+git tag -a v0.10.0 -m "Release notes..."
+git push origin v0.10.0
+```
+
+#### GitHub Releaseの修正
+```bash
+# リリースを削除
+gh release delete v0.10.0
+
+# 新しいリリースを作成
+gh release create v0.10.0 --title "..." --notes "..."
+```
+
+### ベストプラクティス
+
+1. **セマンティックバージョニング**: MAJOR.MINOR.PATCH形式を遵守
+2. **包括的なリリースノート**: 新機能、改善、破壊的変更を明記
+3. **デモ品質**: リリース前にデモスクリプトの動作を確認
+4. **ドキュメント同期**: リリースと同時にドキュメントを更新
+5. **後方互換性**: 既存ユーザーへの影響を最小限に
