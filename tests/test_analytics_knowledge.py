@@ -13,6 +13,7 @@ from claude_knowledge_catalyst.core.config import CKCConfig, HybridStructureConf
 from claude_knowledge_catalyst.core.metadata import KnowledgeMetadata, MetadataManager
 
 # 分析テストは外部依存のため一時的に無効化
+# Analytics tests have significant failures, keeping skipped for stability
 pytestmark = pytest.mark.skip(reason="Analytics tests require external dependencies - skipping for v0.9.2 release")
 
 

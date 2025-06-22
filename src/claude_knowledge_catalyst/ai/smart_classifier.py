@@ -695,62 +695,53 @@ class SmartContentClassifier:
         # Get classification suggestions
         suggestions = self.generate_tag_suggestions(content)
         
-        # Create enhanced metadata
+        # Create enhanced metadata using current metadata fields
         enhanced = KnowledgeMetadata(
             title=metadata.title,
-            description=metadata.description,
-            tags=metadata.tags.copy() if metadata.tags else [],
-            category=metadata.category,
             created=metadata.created,
             updated=metadata.updated,
-            author=metadata.author,
             version=metadata.version,
-            file_path=metadata.file_path,
-            file_size=metadata.file_size,
-            word_count=metadata.word_count,
-            confidence=metadata.confidence,
-            quality=metadata.quality,
+            type=metadata.type,
             status=metadata.status,
+            tech=metadata.tech.copy() if metadata.tech else [],
+            domain=metadata.domain.copy() if metadata.domain else [],
             success_rate=metadata.success_rate,
-            claude_feature=metadata.claude_feature,
-            claude_model=metadata.claude_model,
-            tech=metadata.tech,
-            domain=metadata.domain,
-            projects=metadata.projects,
-            team=metadata.team,
-            purpose=metadata.purpose,
-            subcategory=metadata.subcategory,
-            complexity=metadata.complexity
+            complexity=metadata.complexity,
+            confidence=metadata.confidence,
+            projects=metadata.projects.copy() if metadata.projects else [],
+            team=metadata.team.copy() if metadata.team else [],
+            claude_model=metadata.claude_model.copy() if metadata.claude_model else [],
+            claude_feature=metadata.claude_feature.copy() if metadata.claude_feature else [],
+            tags=metadata.tags.copy() if metadata.tags else [],
+            author=metadata.author,
+            source=metadata.source,
+            checksum=metadata.checksum,
+            purpose=metadata.purpose
         )
         
-        # Add high-confidence suggestions as tags
+        # Add high-confidence suggestions to appropriate fields
         new_tags = set(enhanced.tags)
         
         for suggestion in suggestions:
             if suggestion.confidence >= ConfidenceLevel.MEDIUM.value:
                 # Add as appropriate field or tag
-                if suggestion.tag_type == "tech" and not enhanced.tech:
-                    if not hasattr(enhanced, 'tech') or not enhanced.tech:
-                        enhanced.tech = [suggestion.suggested_value]
-                    else:
+                if suggestion.tag_type == "tech":
+                    if suggestion.suggested_value not in enhanced.tech:
                         enhanced.tech.append(suggestion.suggested_value)
                 
-                elif suggestion.tag_type == "domain" and not enhanced.domain:
-                    if not hasattr(enhanced, 'domain') or not enhanced.domain:
-                        enhanced.domain = [suggestion.suggested_value]
-                    else:
+                elif suggestion.tag_type == "domain":
+                    if suggestion.suggested_value not in enhanced.domain:
                         enhanced.domain.append(suggestion.suggested_value)
                 
-                elif suggestion.tag_type == "type" and not enhanced.category:
-                    enhanced.category = suggestion.suggested_value
+                elif suggestion.tag_type == "type" and enhanced.type == "prompt":
+                    # Only override default type
+                    enhanced.type = suggestion.suggested_value
                 
                 elif suggestion.tag_type == "complexity" and not enhanced.complexity:
                     enhanced.complexity = suggestion.suggested_value
                 
                 elif suggestion.tag_type == "claude_feature":
-                    if not hasattr(enhanced, 'claude_feature') or not enhanced.claude_feature:
-                        enhanced.claude_feature = [suggestion.suggested_value]
-                    else:
+                    if suggestion.suggested_value not in enhanced.claude_feature:
                         enhanced.claude_feature.append(suggestion.suggested_value)
                 
                 # Always add as tag if not already present

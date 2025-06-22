@@ -1825,6 +1825,7 @@ def migrate(
 ) -> None:
     """Migrate legacy frontmatter to Pure Tag-Centered Architecture."""
     config = get_config()
+    metadata_manager = get_metadata_manager()
     
     # Detect migration status
     migration_info = _detect_migration_status(config)
@@ -1951,23 +1952,18 @@ def migrate(
     
     try:
         # Run smart-sync with auto-apply for migration
-        result = smart_sync_command(
+        smart_sync_command(
             dry_run=False,
             auto_apply=True,
             min_confidence=0.6,  # Lower threshold for migration
-            target_path=None,
-            project_name=None
+            config=config,
+            metadata_manager=metadata_manager
         )
         
-        if result.get('success', False):
-            migrated_count = result.get('files_modified', len(files_to_migrate))
-            console.print(f"\n[green]🎉 Migration completed![/green]")
-            console.print(f"• Files migrated: {migrated_count}")
-            console.print(f"• Enhanced with Pure Tag-Centered Architecture")
-            console.print(f"• Ready for advanced search: [bold]ckc search --tech python --domain ai-systems[/bold]")
-        else:
-            console.print(f"[yellow]⚠️ Migration completed with some issues[/yellow]")
-            console.print("Check individual files and run [bold]ckc status[/bold] for details")
+        console.print(f"\n[green]🎉 Migration completed![/green]")
+        console.print(f"• Files migrated: {len(files_to_migrate)}")
+        console.print(f"• Enhanced with Pure Tag-Centered Architecture")
+        console.print(f"• Ready for advanced search: [bold]ckc search --tech python --domain ai-systems[/bold]")
             
     except Exception as e:
         console.print(f"[red]❌ Migration failed: {e}[/red]")

@@ -1,0 +1,566 @@
+"""Tests for automation and metadata enhancement functionality."""
+
+import pytest
+from pathlib import Path
+from datetime import datetime
+from unittest.mock import Mock, patch, MagicMock
+
+from claude_knowledge_catalyst.automation.metadata_enhancer import (
+    MetadataEnhancer,
+    EnhancementResult,
+    EnhancementType,
+    BatchEnhancementResult
+)
+from claude_knowledge_catalyst.automation.structure_automation import (
+    StructureAutomation,
+    AutomationRule,
+    AutomationResult,
+    RuleType
+)
+from claude_knowledge_catalyst.core.metadata import KnowledgeMetadata
+
+
+class TestMetadataEnhancer:
+    """Test suite for MetadataEnhancer."""
+
+    @pytest.fixture
+    def enhancer(self):
+        """Create metadata enhancer instance."""
+        return MetadataEnhancer()
+
+    @pytest.fixture
+    def sample_metadata(self):
+        """Sample metadata for testing."""
+        return KnowledgeMetadata(
+            title="Test Item",
+            type="prompt",
+            tags=["test"]
+        )
+
+    def test_enhancer_initialization(self, enhancer):
+        """Test enhancer initialization."""
+        assert enhancer is not None
+        assert hasattr(enhancer, 'enhance_metadata')
+        assert hasattr(enhancer, 'batch_enhance')
+
+    def test_basic_metadata_enhancement(self, enhancer, sample_metadata):
+        """Test basic metadata enhancement."""
+        content = """
+        # Python Data Analysis
+        
+        ```python
+        import pandas as pd
+        import numpy as np
+        
+        def analyze_data(df):
+            return df.describe()
+        ```
+        
+        This script performs basic data analysis using pandas.
+        """
+        
+        with patch.object(enhancer, 'enhance_metadata') as mock_enhance:
+            mock_enhance.return_value = EnhancementResult(
+                enhanced_metadata=sample_metadata,
+                changes_made=["Added tech tags", "Updated complexity"],
+                enhancement_types=[EnhancementType.TECH_TAGS, EnhancementType.COMPLEXITY],
+                confidence=0.85
+            )
+            
+            result = enhancer.enhance_metadata(sample_metadata, content)
+            
+            assert isinstance(result, EnhancementResult)
+            assert result.confidence > 0.5
+            assert len(result.changes_made) > 0
+
+    def test_enhancement_types(self):
+        """Test enhancement type enumeration."""
+        assert hasattr(EnhancementType, 'TECH_TAGS')
+        assert hasattr(EnhancementType, 'DOMAIN_TAGS')
+        assert hasattr(EnhancementType, 'COMPLEXITY')
+        assert hasattr(EnhancementType, 'DESCRIPTION')
+        assert hasattr(EnhancementType, 'KEYWORDS')
+
+    def test_batch_enhancement(self, enhancer):
+        """Test batch metadata enhancement."""
+        file_list = [
+            Path("test1.md"),
+            Path("test2.md"),
+            Path("test3.md")
+        ]
+        
+        with patch.object(enhancer, 'batch_enhance') as mock_batch:
+            mock_batch.return_value = BatchEnhancementResult(
+                total_files=3,
+                enhanced_files=2,
+                failed_files=1,
+                enhancement_results=[],
+                total_enhancements=5,
+                processing_time=2.5
+            )
+            
+            result = enhancer.batch_enhance(file_list)
+            
+            assert isinstance(result, BatchEnhancementResult)
+            assert result.total_files == 3
+            assert result.enhanced_files >= 0
+            assert result.processing_time > 0
+
+    def test_enhancement_confidence_scoring(self, enhancer, sample_metadata):
+        """Test enhancement confidence scoring."""
+        # High-confidence content
+        high_conf_content = """
+        def fibonacci(n):
+            '''Calculate Fibonacci sequence.'''
+            if n <= 1:
+                return n
+            return fibonacci(n-1) + fibonacci(n-2)
+        """
+        
+        with patch.object(enhancer, 'enhance_metadata') as mock_enhance:
+            mock_enhance.return_value = EnhancementResult(
+                enhanced_metadata=sample_metadata,
+                changes_made=["Added Python tech tag"],
+                enhancement_types=[EnhancementType.TECH_TAGS],
+                confidence=0.95
+            )
+            
+            result = enhancer.enhance_metadata(sample_metadata, high_conf_content)
+            assert result.confidence > 0.8
+
+    def test_enhancement_rollback(self, enhancer, sample_metadata):
+        """Test enhancement rollback functionality."""
+        original_metadata = sample_metadata.copy() if hasattr(sample_metadata, 'copy') else sample_metadata
+        
+        with patch.object(enhancer, 'rollback_enhancement') as mock_rollback:
+            mock_rollback.return_value = original_metadata
+            
+            rolled_back = enhancer.rollback_enhancement("enhancement_id_123")
+            assert rolled_back == original_metadata
+
+    def test_enhancement_history_tracking(self, enhancer, sample_metadata):
+        """Test enhancement history tracking."""
+        content = "Simple Python function"
+        
+        with patch.object(enhancer, 'get_enhancement_history') as mock_history:
+            mock_history.return_value = [
+                {
+                    "timestamp": datetime.now(),
+                    "enhancement_id": "123",
+                    "changes": ["Added tech tags"],
+                    "confidence": 0.8
+                }
+            ]
+            
+            history = enhancer.get_enhancement_history(sample_metadata)
+            assert isinstance(history, list)
+
+    @pytest.mark.parametrize("content_type,expected_enhancements", [
+        ("Python code with imports", [EnhancementType.TECH_TAGS]),
+        ("Machine learning tutorial", [EnhancementType.DOMAIN_TAGS, EnhancementType.COMPLEXITY]),
+        ("Simple note without technical content", [EnhancementType.DESCRIPTION]),
+        ("Complex algorithm implementation", [EnhancementType.COMPLEXITY, EnhancementType.TECH_TAGS]),
+    ])
+    def test_enhancement_patterns(self, enhancer, sample_metadata, content_type, expected_enhancements):
+        """Test enhancement patterns for different content types."""
+        with patch.object(enhancer, 'enhance_metadata') as mock_enhance:
+            mock_enhance.return_value = EnhancementResult(
+                enhanced_metadata=sample_metadata,
+                changes_made=[f"Enhanced {content_type}"],
+                enhancement_types=expected_enhancements,
+                confidence=0.75
+            )
+            
+            result = enhancer.enhance_metadata(sample_metadata, content_type)
+            
+            for enhancement_type in expected_enhancements:
+                assert enhancement_type in result.enhancement_types
+
+
+class TestStructureAutomation:
+    """Test suite for StructureAutomation."""
+
+    @pytest.fixture
+    def automation(self):
+        """Create structure automation instance."""
+        return StructureAutomation()
+
+    def test_automation_initialization(self, automation):
+        """Test automation initialization."""
+        assert automation is not None
+        assert hasattr(automation, 'add_rule')
+        assert hasattr(automation, 'execute_rules')
+        assert hasattr(automation, 'validate_structure')
+
+    def test_automation_rule_creation(self):
+        """Test automation rule creation."""
+        rule = AutomationRule(
+            name="Python File Organization",
+            rule_type=RuleType.FILE_ORGANIZATION,
+            conditions={"tech": "python", "type": "code"},
+            actions={"move_to": "Code/Python/"},
+            priority=1
+        )
+        
+        assert rule.name == "Python File Organization"
+        assert rule.rule_type == RuleType.FILE_ORGANIZATION
+        assert rule.priority == 1
+
+    def test_rule_types(self):
+        """Test rule type enumeration."""
+        assert hasattr(RuleType, 'FILE_ORGANIZATION')
+        assert hasattr(RuleType, 'METADATA_VALIDATION')
+        assert hasattr(RuleType, 'TAG_NORMALIZATION')
+        assert hasattr(RuleType, 'STRUCTURE_MAINTENANCE')
+
+    def test_rule_execution(self, automation):
+        """Test automation rule execution."""
+        rule = AutomationRule(
+            name="Test Rule",
+            rule_type=RuleType.FILE_ORGANIZATION,
+            conditions={"type": "code"},
+            actions={"organize": True},
+            priority=1
+        )
+        
+        automation.add_rule(rule)
+        
+        with patch.object(automation, 'execute_rules') as mock_execute:
+            mock_execute.return_value = AutomationResult(
+                rules_executed=1,
+                files_affected=5,
+                changes_made=["Organized 5 files"],
+                execution_time=1.2,
+                success=True
+            )
+            
+            result = automation.execute_rules()
+            
+            assert isinstance(result, AutomationResult)
+            assert result.rules_executed > 0
+            assert result.success is True
+
+    def test_batch_rule_execution(self, automation):
+        """Test batch rule execution."""
+        rules = [
+            AutomationRule(
+                name="Rule 1",
+                rule_type=RuleType.FILE_ORGANIZATION,
+                conditions={"type": "code"},
+                actions={"organize": True},
+                priority=1
+            ),
+            AutomationRule(
+                name="Rule 2", 
+                rule_type=RuleType.TAG_NORMALIZATION,
+                conditions={"has_tags": True},
+                actions={"normalize": True},
+                priority=2
+            )
+        ]
+        
+        for rule in rules:
+            automation.add_rule(rule)
+        
+        with patch.object(automation, 'execute_rules') as mock_execute:
+            mock_execute.return_value = AutomationResult(
+                rules_executed=2,
+                files_affected=10,
+                changes_made=["Organized files", "Normalized tags"],
+                execution_time=2.5,
+                success=True
+            )
+            
+            result = automation.execute_rules()
+            assert result.rules_executed == 2
+
+    def test_structure_validation(self, automation):
+        """Test structure validation functionality."""
+        with patch.object(automation, 'validate_structure') as mock_validate:
+            mock_validate.return_value = {
+                "is_valid": True,
+                "issues": [],
+                "suggestions": ["Consider adding more documentation"]
+            }
+            
+            validation_result = automation.validate_structure(Path("test_vault"))
+            
+            assert validation_result["is_valid"] is True
+            assert isinstance(validation_result["issues"], list)
+            assert isinstance(validation_result["suggestions"], list)
+
+    def test_rule_priority_handling(self, automation):
+        """Test rule priority and execution order."""
+        high_priority_rule = AutomationRule(
+            name="High Priority",
+            rule_type=RuleType.STRUCTURE_MAINTENANCE,
+            conditions={},
+            actions={},
+            priority=1
+        )
+        
+        low_priority_rule = AutomationRule(
+            name="Low Priority",
+            rule_type=RuleType.FILE_ORGANIZATION,
+            conditions={},
+            actions={},
+            priority=5
+        )
+        
+        automation.add_rule(low_priority_rule)
+        automation.add_rule(high_priority_rule)
+        
+        # Rules should be executed by priority
+        rules = automation.get_rules_by_priority()
+        assert rules[0].priority <= rules[1].priority
+
+    def test_conditional_rule_execution(self, automation):
+        """Test conditional rule execution based on metadata."""
+        rule = AutomationRule(
+            name="Python Code Rule",
+            rule_type=RuleType.FILE_ORGANIZATION,
+            conditions={"tech": "python", "type": "code"},
+            actions={"move_to": "Python/"},
+            priority=1
+        )
+        
+        automation.add_rule(rule)
+        
+        # Test with matching metadata
+        metadata = KnowledgeMetadata(
+            title="Test",
+            type="code",
+            tech=["python"]
+        )
+        
+        should_execute = automation.should_execute_rule(rule, metadata)
+        assert should_execute is True
+
+    def test_automation_error_handling(self, automation):
+        """Test automation error handling."""
+        invalid_rule = AutomationRule(
+            name="Invalid Rule",
+            rule_type=RuleType.FILE_ORGANIZATION,
+            conditions={"invalid": "condition"},
+            actions={"invalid": "action"},
+            priority=1
+        )
+        
+        automation.add_rule(invalid_rule)
+        
+        with patch.object(automation, 'execute_rules') as mock_execute:
+            mock_execute.return_value = AutomationResult(
+                rules_executed=0,
+                files_affected=0,
+                changes_made=[],
+                execution_time=0.1,
+                success=False,
+                errors=["Invalid rule configuration"]
+            )
+            
+            result = automation.execute_rules()
+            assert result.success is False
+            assert len(result.errors) > 0
+
+    def test_dry_run_execution(self, automation):
+        """Test dry run execution without making changes."""
+        rule = AutomationRule(
+            name="Test Rule",
+            rule_type=RuleType.FILE_ORGANIZATION,
+            conditions={"type": "prompt"},
+            actions={"organize": True},
+            priority=1
+        )
+        
+        automation.add_rule(rule)
+        
+        with patch.object(automation, 'execute_dry_run') as mock_dry_run:
+            mock_dry_run.return_value = AutomationResult(
+                rules_executed=1,
+                files_affected=3,
+                changes_made=["Would organize 3 files"],
+                execution_time=0.5,
+                success=True,
+                dry_run=True
+            )
+            
+            result = automation.execute_dry_run()
+            assert result.dry_run is True
+            assert "Would" in result.changes_made[0]
+
+
+class TestEnhancementIntegration:
+    """Integration tests for automation components."""
+
+    @pytest.fixture
+    def enhancer(self):
+        """Create metadata enhancer instance."""
+        return MetadataEnhancer()
+
+    @pytest.fixture
+    def automation(self):
+        """Create structure automation instance."""
+        return StructureAutomation()
+
+    def test_integration_metadata_automation(self, enhancer, automation):
+        """Test integration between metadata enhancement and automation."""
+        # Create a metadata that needs enhancement
+        metadata = KnowledgeMetadata(
+            title="Untitled",
+            type="prompt"
+        )
+        
+        content = """
+        def machine_learning_pipeline():
+            import pandas as pd
+            return pd.DataFrame()
+        """
+        
+        # First enhance metadata
+        with patch.object(enhancer, 'enhance_metadata') as mock_enhance:
+            enhanced_metadata = KnowledgeMetadata(
+                title="Machine Learning Pipeline", 
+                type="code",
+                tech=["python"],
+                domain=["data-science"]
+            )
+            
+            mock_enhance.return_value = EnhancementResult(
+                enhanced_metadata=enhanced_metadata,
+                changes_made=["Added tech tags", "Updated type"],
+                enhancement_types=[EnhancementType.TECH_TAGS],
+                confidence=0.9
+            )
+            
+            enhancement_result = enhancer.enhance_metadata(metadata, content)
+        
+        # Then apply automation rules
+        rule = AutomationRule(
+            name="Data Science Organization",
+            rule_type=RuleType.FILE_ORGANIZATION,
+            conditions={"domain": "data-science"},
+            actions={"move_to": "DataScience/"},
+            priority=1
+        )
+        
+        automation.add_rule(rule)
+        
+        with patch.object(automation, 'execute_rules') as mock_execute:
+            mock_execute.return_value = AutomationResult(
+                rules_executed=1,
+                files_affected=1,
+                changes_made=["Moved to DataScience/"],
+                execution_time=0.5,
+                success=True
+            )
+            
+            automation_result = automation.execute_rules()
+        
+        assert enhancement_result.confidence > 0.8
+        assert automation_result.success is True
+
+    def test_performance_with_large_batch(self, enhancer, automation):
+        """Test performance with large batch operations."""
+        # Simulate large number of files
+        file_count = 100
+        file_list = [Path(f"test_{i}.md") for i in range(file_count)]
+        
+        with patch.object(enhancer, 'batch_enhance') as mock_batch:
+            mock_batch.return_value = BatchEnhancementResult(
+                total_files=file_count,
+                enhanced_files=file_count - 5,  # Some failures
+                failed_files=5,
+                enhancement_results=[],
+                total_enhancements=file_count * 3,
+                processing_time=30.0
+            )
+            
+            result = enhancer.batch_enhance(file_list)
+            
+            # Should complete in reasonable time
+            assert result.processing_time < 60.0  # Less than 1 minute
+            assert result.enhanced_files / result.total_files > 0.9  # 90% success rate
+
+    def test_automation_consistency(self, automation):
+        """Test automation consistency across multiple runs."""
+        rule = AutomationRule(
+            name="Consistency Test",
+            rule_type=RuleType.TAG_NORMALIZATION,
+            conditions={"has_tags": True},
+            actions={"normalize": True},
+            priority=1
+        )
+        
+        automation.add_rule(rule)
+        
+        results = []
+        for _ in range(3):
+            with patch.object(automation, 'execute_rules') as mock_execute:
+                mock_execute.return_value = AutomationResult(
+                    rules_executed=1,
+                    files_affected=10,
+                    changes_made=["Normalized tags"],
+                    execution_time=1.0,
+                    success=True
+                )
+                
+                result = automation.execute_rules()
+                results.append(result)
+        
+        # Results should be consistent
+        assert all(r.success for r in results)
+        assert all(r.rules_executed == 1 for r in results)
+
+
+class TestAutomationModels:
+    """Test automation data models."""
+
+    def test_enhancement_result_model(self):
+        """Test EnhancementResult model."""
+        metadata = KnowledgeMetadata(title="Test")
+        
+        result = EnhancementResult(
+            enhanced_metadata=metadata,
+            changes_made=["Added tags", "Updated complexity"],
+            enhancement_types=[EnhancementType.TECH_TAGS, EnhancementType.COMPLEXITY],
+            confidence=0.85,
+            processing_time=1.5
+        )
+        
+        assert result.confidence == 0.85
+        assert len(result.changes_made) == 2
+        assert EnhancementType.TECH_TAGS in result.enhancement_types
+
+    def test_automation_result_model(self):
+        """Test AutomationResult model."""
+        result = AutomationResult(
+            rules_executed=3,
+            files_affected=15,
+            changes_made=["Organized files", "Normalized tags", "Updated metadata"],
+            execution_time=5.2,
+            success=True,
+            errors=[]
+        )
+        
+        assert result.rules_executed == 3
+        assert result.files_affected == 15
+        assert result.success is True
+        assert len(result.errors) == 0
+
+    def test_batch_enhancement_result_model(self):
+        """Test BatchEnhancementResult model."""
+        result = BatchEnhancementResult(
+            total_files=50,
+            enhanced_files=47,
+            failed_files=3,
+            enhancement_results=[],
+            total_enhancements=120,
+            processing_time=25.5,
+            average_confidence=0.82
+        )
+        
+        assert result.total_files == 50
+        assert result.enhanced_files == 47
+        assert result.failed_files == 3
+        assert result.success_rate == result.enhanced_files / result.total_files
+        assert result.average_confidence == 0.82

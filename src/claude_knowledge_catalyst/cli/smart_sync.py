@@ -269,7 +269,8 @@ def smart_sync_command(
     directory: str = ".claude",
     backup: bool = True,
     config: CKCConfig = None,
-    metadata_manager: MetadataManager = None
+    metadata_manager: MetadataManager = None,
+    min_confidence: float = 0.7
 ) -> None:
     """Smart sync main logic"""
     

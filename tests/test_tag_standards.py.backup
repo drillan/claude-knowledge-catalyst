@@ -1,0 +1,340 @@
+"""Tests for tag standards management system."""
+
+import pytest
+from pathlib import Path
+
+from claude_knowledge_catalyst.core.tag_standards import (
+    TagStandardsManager,
+    TagType,
+    TagValidationResult
+)
+
+
+class TestTagStandardsManager:
+    """Test suite for TagStandardsManager."""
+
+    @pytest.fixture
+    def manager(self):
+        """Create tag standards manager instance."""
+        return TagStandardsManager()
+
+    def test_manager_initialization(self, manager):
+        """Test manager initialization."""
+        assert manager is not None
+        assert hasattr(manager, 'validate_tag')
+        assert hasattr(manager, 'get_standard_tags')
+        assert hasattr(manager, 'normalize_tag')
+
+    def test_tag_type_enum(self):
+        """Test TagType enum values."""
+        assert hasattr(TagType, 'TECH')
+        assert hasattr(TagType, 'DOMAIN')
+        assert hasattr(TagType, 'TYPE')
+        assert hasattr(TagType, 'COMPLEXITY')
+        assert hasattr(TagType, 'STATUS')
+
+    def test_tag_validation_basic(self, manager):
+        """Test basic tag validation."""
+        # Valid technology tag
+        result = manager.validate_tag("python", TagType.TECH)
+        assert isinstance(result, TagValidationResult)
+        assert result.is_valid is True
+        
+        # Valid domain tag
+        result = manager.validate_tag("web-dev", TagType.DOMAIN)
+        assert isinstance(result, TagValidationResult)
+
+    def test_tag_normalization(self, manager):
+        """Test tag normalization."""
+        # Test case variations
+        test_cases = [
+            ("Python", "python"),
+            ("WEB-DEV", "web-dev"),
+            ("JavaScript", "javascript"),
+            ("Data_Science", "data-science"),
+            ("AI/ML", "ai-ml"),
+        ]
+        
+        for input_tag, expected in test_cases:
+            normalized = manager.normalize_tag(input_tag)
+            assert normalized == expected
+
+    def test_standard_tags_retrieval(self, manager):
+        """Test retrieval of standard tags by type."""
+        # Technology tags
+        tech_tags = manager.get_standard_tags(TagType.TECH)
+        assert isinstance(tech_tags, list)
+        assert len(tech_tags) > 0
+        assert "python" in tech_tags
+        assert "javascript" in tech_tags
+        
+        # Domain tags
+        domain_tags = manager.get_standard_tags(TagType.DOMAIN)
+        assert isinstance(domain_tags, list)
+        assert len(domain_tags) > 0
+        assert "web-dev" in domain_tags
+        
+        # Type tags
+        type_tags = manager.get_standard_tags(TagType.TYPE)
+        assert isinstance(type_tags, list)
+        assert "prompt" in type_tags
+        assert "code" in type_tags
+        assert "concept" in type_tags
+
+    def test_complexity_validation(self, manager):
+        """Test complexity tag validation."""
+        valid_complexity = ["beginner", "intermediate", "advanced", "expert"]
+        
+        for complexity in valid_complexity:
+            result = manager.validate_tag(complexity, TagType.COMPLEXITY)
+            assert result.is_valid is True
+        
+        # Invalid complexity
+        result = manager.validate_tag("invalid-complexity", TagType.COMPLEXITY)
+        assert result.is_valid is False
+
+    def test_status_validation(self, manager):
+        """Test status tag validation."""
+        valid_statuses = ["draft", "tested", "production", "deprecated"]
+        
+        for status in valid_statuses:
+            result = manager.validate_tag(status, TagType.STATUS)
+            assert result.is_valid is True
+        
+        # Invalid status
+        result = manager.validate_tag("invalid-status", TagType.STATUS)
+        assert result.is_valid is False
+
+    def test_tag_suggestions(self, manager):
+        """Test tag suggestions for partial matches."""
+        # Test suggestions for partial tech tags
+        suggestions = manager.get_tag_suggestions("pyth", TagType.TECH)
+        assert isinstance(suggestions, list)
+        assert "python" in suggestions
+        
+        # Test suggestions for partial domain tags
+        suggestions = manager.get_tag_suggestions("web", TagType.DOMAIN)
+        assert isinstance(suggestions, list)
+        assert "web-dev" in suggestions
+
+    def test_custom_tag_validation(self, manager):
+        """Test validation of custom/non-standard tags."""
+        # Custom tags should be allowed but marked as non-standard
+        result = manager.validate_tag("custom-framework", TagType.TECH)
+        assert isinstance(result, TagValidationResult)
+        # Custom tags might be valid but not standard
+
+    @pytest.mark.parametrize("tag,tag_type,should_be_valid", [
+        ("python", TagType.TECH, True),
+        ("web-dev", TagType.DOMAIN, True),
+        ("prompt", TagType.TYPE, True),
+        ("beginner", TagType.COMPLEXITY, True),
+        ("draft", TagType.STATUS, True),
+        ("invalid-tag-name", TagType.TECH, False),
+        ("", TagType.TECH, False),  # Empty tag
+    ])
+    def test_tag_validation_matrix(self, manager, tag, tag_type, should_be_valid):
+        """Test tag validation with various combinations."""
+        result = manager.validate_tag(tag, tag_type)
+        if should_be_valid:
+            assert result.is_valid or result.confidence > 0.5
+        else:
+            assert not result.is_valid
+
+    def test_batch_tag_validation(self, manager):
+        """Test batch validation of multiple tags."""
+        tags_to_validate = [
+            ("python", TagType.TECH),
+            ("web-dev", TagType.DOMAIN),
+            ("intermediate", TagType.COMPLEXITY),
+            ("production", TagType.STATUS)
+        ]
+        
+        results = []
+        for tag, tag_type in tags_to_validate:
+            result = manager.validate_tag(tag, tag_type)
+            results.append(result)
+        
+        assert len(results) == len(tags_to_validate)
+        assert all(isinstance(r, TagValidationResult) for r in results)
+
+    def test_edge_cases(self, manager):
+        """Test edge cases in tag validation."""
+        edge_cases = [
+            ("", TagType.TECH),  # Empty string
+            ("   ", TagType.TECH),  # Whitespace only
+            ("very-long-tag-name-that-exceeds-normal-length", TagType.TECH),
+            ("tag with spaces", TagType.TECH),
+            ("tag@with#special$chars", TagType.TECH),
+            ("123numeric", TagType.TECH),
+        ]
+        
+        for tag, tag_type in edge_cases:
+            try:
+                result = manager.validate_tag(tag, tag_type)
+                assert isinstance(result, TagValidationResult)
+            except Exception as e:
+                # Should handle gracefully
+                assert "validation" in str(e).lower() or "invalid" in str(e).lower()
+
+    def test_tag_similarity_scoring(self, manager):
+        """Test tag similarity scoring for suggestions."""
+        # Test similarity between similar tags
+        similarity = manager.calculate_similarity("javascript", "java")
+        assert 0 <= similarity <= 1
+        assert similarity > 0.5  # Should be somewhat similar
+        
+        # Test similarity between very different tags
+        similarity = manager.calculate_similarity("python", "database")
+        assert 0 <= similarity <= 1
+        assert similarity < 0.5  # Should be less similar
+
+
+class TestTagValidationResult:
+    """Test TagValidationResult model."""
+
+    def test_validation_result_creation(self):
+        """Test TagValidationResult creation."""
+        result = TagValidationResult(
+            is_valid=True,
+            normalized_tag="python",
+            confidence=0.95,
+            suggestions=["python3", "python2"],
+            reasoning="Exact match with standard technology tag"
+        )
+        
+        assert result.is_valid is True
+        assert result.normalized_tag == "python"
+        assert result.confidence == 0.95
+        assert len(result.suggestions) == 2
+        assert "standard" in result.reasoning.lower()
+
+    def test_invalid_tag_result(self):
+        """Test TagValidationResult for invalid tags."""
+        result = TagValidationResult(
+            is_valid=False,
+            normalized_tag="invalid-tag",
+            confidence=0.1,
+            suggestions=["python", "javascript", "typescript"],
+            reasoning="No close match found in standard tags"
+        )
+        
+        assert result.is_valid is False
+        assert result.confidence < 0.5
+        assert len(result.suggestions) > 0
+
+
+class TestTagStandardsIntegration:
+    """Integration tests for tag standards system."""
+
+    @pytest.fixture
+    def manager(self):
+        """Create tag standards manager instance."""
+        return TagStandardsManager()
+
+    def test_integration_with_metadata(self, manager):
+        """Test integration with metadata system."""
+        # Test tags that might come from metadata
+        metadata_tags = ["python", "web-development", "beginner", "draft"]
+        
+        results = []
+        for tag in metadata_tags:
+            # Determine likely tag type based on content
+            if tag in ["python", "javascript", "docker"]:
+                tag_type = TagType.TECH
+            elif tag in ["beginner", "intermediate", "advanced"]:
+                tag_type = TagType.COMPLEXITY
+            elif tag in ["draft", "tested", "production"]:
+                tag_type = TagType.STATUS
+            else:
+                tag_type = TagType.DOMAIN
+            
+            result = manager.validate_tag(tag, tag_type)
+            results.append(result)
+        
+        assert len(results) == len(metadata_tags)
+        # Most should be valid or have high confidence
+        valid_count = sum(1 for r in results if r.is_valid or r.confidence > 0.7)
+        assert valid_count >= len(metadata_tags) * 0.75  # At least 75% should be valid
+
+    def test_performance_with_large_tag_set(self, manager):
+        """Test performance with many tag validations."""
+        # Generate many tags for validation
+        test_tags = [
+            f"tag-{i}" for i in range(100)
+        ] + [
+            "python", "javascript", "docker", "kubernetes", "react", 
+            "web-dev", "data-science", "ai-ml", "backend", "frontend"
+        ]
+        
+        results = []
+        for tag in test_tags:
+            result = manager.validate_tag(tag, TagType.TECH)
+            results.append(result)
+        
+        assert len(results) == len(test_tags)
+        # Should complete in reasonable time (this is implicit in test passing)
+
+    def test_consistency_across_calls(self, manager):
+        """Test that validation results are consistent."""
+        tag = "python"
+        tag_type = TagType.TECH
+        
+        # Run same validation multiple times
+        results = []
+        for _ in range(5):
+            result = manager.validate_tag(tag, tag_type)
+            results.append(result)
+        
+        # All results should be identical
+        first_result = results[0]
+        for result in results[1:]:
+            assert result.is_valid == first_result.is_valid
+            assert result.normalized_tag == first_result.normalized_tag
+            assert result.confidence == first_result.confidence
+
+
+class TestTagStandardsConfiguration:
+    """Test tag standards configuration and customization."""
+
+    def test_custom_standards_loading(self):
+        """Test loading custom tag standards."""
+        custom_config = {
+            "tech": ["custom-framework", "proprietary-tool"],
+            "domain": ["custom-domain"],
+            "type": ["custom-type"]
+        }
+        
+        manager = TagStandardsManager(custom_standards=custom_config)
+        
+        # Should include custom standards
+        tech_tags = manager.get_standard_tags(TagType.TECH)
+        assert "custom-framework" in tech_tags
+
+    def test_standards_extension(self):
+        """Test extending existing standards."""
+        # Start with default manager
+        manager = TagStandardsManager()
+        
+        # Add custom standards
+        manager.add_custom_standard("my-custom-tech", TagType.TECH)
+        
+        # Should now validate the custom tag
+        result = manager.validate_tag("my-custom-tech", TagType.TECH)
+        assert result.is_valid is True
+
+    def test_standards_export_import(self, manager):
+        """Test exporting and importing standards configuration."""
+        # Export current standards
+        exported_config = manager.export_standards()
+        assert isinstance(exported_config, dict)
+        assert "tech" in exported_config
+        assert "domain" in exported_config
+        
+        # Should be able to create new manager with exported config
+        new_manager = TagStandardsManager(custom_standards=exported_config)
+        
+        # Should have same validation behavior
+        result1 = manager.validate_tag("python", TagType.TECH)
+        result2 = new_manager.validate_tag("python", TagType.TECH)
+        assert result1.is_valid == result2.is_valid
