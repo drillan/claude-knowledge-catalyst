@@ -5,8 +5,8 @@ from typing import Any
 
 from ..core.config import SyncTarget
 from ..core.metadata import KnowledgeMetadata, MetadataManager
-from ..templates.tag_centered_templates import TagCenteredTemplateManager
 from ..obsidian.query_builder import generate_obsidian_queries_file
+from ..templates.tag_centered_templates import TagCenteredTemplateManager
 
 
 class ObsidianVaultManager:
@@ -45,8 +45,7 @@ class ObsidianVaultManager:
 
             # Use template manager to create complete structure
             results = self.template_manager.create_vault_structure(
-                self.vault_path, 
-                include_examples=True
+                self.vault_path, include_examples=True
             )
 
             # Create vault configuration
@@ -55,10 +54,10 @@ class ObsidianVaultManager:
             # Check results
             success_count = sum(1 for success in results.values() if success)
             total_count = len(results)
-            
+
             print(f"Initialized pure tag-centered vault at: {self.vault_path}")
             print(f"Created {success_count}/{total_count} components successfully")
-            
+
             return success_count == total_count
 
         except Exception as e:
@@ -144,7 +143,7 @@ class ObsidianVaultManager:
         """
         # Pure tag-centered: State-based classification (not content-based)
         # Uses minimal 6-directory structure based on workflow state
-        
+
         # State-based directory placement
         if metadata.status == "draft":
             base_path = "inbox"
@@ -225,9 +224,7 @@ class ObsidianVaultManager:
 
         # Add related projects section (using pure tag system)
         if metadata.projects:
-            links = " | ".join(
-                f"[[{project}]]" for project in metadata.projects
-            )
+            links = " | ".join(f"[[{project}]]" for project in metadata.projects)
             enhancements.append(f"\n**Related Projects:** {links}\n")
 
         # Add metadata summary (pure tag system)
@@ -331,7 +328,7 @@ class ObsidianVaultManager:
         """Create Obsidian vault configuration files."""
         obsidian_dir = self.vault_path / ".obsidian"
         obsidian_dir.mkdir(exist_ok=True)
-        
+
         # Ensure _system directory exists for system files
         system_dir = self.vault_path / "_system"
         system_dir.mkdir(exist_ok=True)
@@ -349,10 +346,10 @@ class ObsidianVaultManager:
             "defaultViewMode": "preview",
             "enabledPlugins": [
                 "tag-wrangler",
-                "dataview", 
+                "dataview",
                 "templater-obsidian",
-                "obsidian-git"
-            ]
+                "obsidian-git",
+            ],
         }
 
         import json
@@ -382,7 +379,7 @@ class ObsidianVaultManager:
         (obsidian_dir / "core-plugins.json").write_text(
             json.dumps(core_plugins, indent=2), encoding="utf-8"
         )
-        
+
         # Create optimized query reference for tag-centered system
         queries_content = generate_obsidian_queries_file()
         (self.vault_path / "_system" / "Obsidian_Queries_Reference.md").write_text(

@@ -158,6 +158,7 @@ class TestTemplateManager:
     def test_template_not_found(self):
         """Test handling of non-existent templates."""
         from jinja2 import TemplateNotFound
+
         with pytest.raises(TemplateNotFound):
             self.manager.get_template("non_existent.md")
 

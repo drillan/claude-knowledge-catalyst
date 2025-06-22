@@ -1,13 +1,12 @@
 """Tests for metadata management."""
 
-import pytest
-
 # Metadata tests - core functionality testing
 # pytestmark = pytest.mark.skip(reason="Metadata tests require AI dependencies - skipping for v0.9.2 release")
-
 import tempfile
 from datetime import datetime
 from pathlib import Path
+
+import pytest
 
 from claude_knowledge_catalyst.core.metadata import KnowledgeMetadata, MetadataManager
 

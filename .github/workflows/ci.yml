@@ -1,0 +1,197 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run tests daily at 2 AM UTC to catch dependency issues
+    - cron: '0 2 * * *'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test on Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+        
+    - name: Set up Python ${{ matrix.python-version }}
+      run: uv python install ${{ matrix.python-version }}
+      
+    - name: Install dependencies
+      run: |
+        uv sync --dev
+        
+    - name: Lint with ruff
+      run: |
+        uv run ruff check src/ tests/ --output-format=github
+        
+    - name: Format check with ruff
+      run: |
+        uv run ruff format src/ tests/ --check
+        
+    - name: Type check with mypy
+      run: |
+        uv run mypy src/ --ignore-missing-imports
+        
+    - name: Run unit tests
+      run: |
+        uv run pytest tests/ -v --tb=short --maxfail=10
+        
+    - name: Run tests with coverage
+      run: |
+        uv run pytest tests/ --cov=src --cov-report=xml --cov-report=term-missing --cov-fail-under=30
+        
+    - name: Upload coverage to Codecov
+      if: matrix.python-version == '3.11'
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+        
+    - name: Set up Python 3.11
+      run: uv python install 3.11
+      
+    - name: Install dependencies
+      run: |
+        uv sync --dev
+        
+    - name: Run essential features tests
+      run: |
+        uv run pytest tests/test_essential_features.py -v --tb=short
+        
+    - name: Run demo integration tests  
+      run: |
+        uv run pytest tests/test_demo_integration.py -v --tb=short
+        
+    - name: Run comprehensive integration tests
+      run: |
+        uv run pytest tests/test_integration_comprehensive.py -v --tb=short
+
+  build-test:
+    name: Build and Install Test
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+        
+    - name: Set up Python 3.11
+      run: uv python install 3.11
+      
+    - name: Build package
+      run: |
+        uv build
+        
+    - name: Install built package
+      run: |
+        uv pip install dist/*.whl
+        
+    - name: Test CLI functionality
+      run: |
+        ckc --version
+        ckc --help
+        
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist-files
+        path: dist/
+
+  security:
+    name: Security Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+        
+    - name: Set up Python 3.11
+      run: uv python install 3.11
+      
+    - name: Install dependencies
+      run: |
+        uv sync --dev
+        
+    - name: Run safety check
+      run: |
+        uv run safety check --json || true
+        
+    - name: Run bandit security check
+      run: |
+        uv run bandit -r src/ -f json || true
+
+  docs:
+    name: Documentation Build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+        
+    - name: Set up Python 3.11
+      run: uv python install 3.11
+      
+    - name: Install dependencies with docs extras
+      run: |
+        uv sync --dev
+        
+    - name: Build documentation
+      run: |
+        cd docs
+        uv run sphinx-build -b html . _build/html -W --keep-going
+      continue-on-error: true
+        
+    - name: Upload documentation artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: documentation
+        path: docs/_build/html/

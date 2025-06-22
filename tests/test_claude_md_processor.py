@@ -3,8 +3,6 @@
 import tempfile
 from pathlib import Path
 
-import pytest
-
 from src.claude_knowledge_catalyst.core.claude_md_processor import ClaudeMdProcessor
 
 
@@ -35,16 +33,16 @@ Run tests with pytest.
 # Secrets
 API_KEY=secret123
 """
-        
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
             f.write(content)
             f.flush()
-            
+
             processor = ClaudeMdProcessor()
             result = processor.process_claude_md(Path(f.name))
-            
+
             assert result == content
-            
+
         Path(f.name).unlink()
 
     def test_process_claude_md_with_exclusions(self):
@@ -61,22 +59,22 @@ API_KEY=secret123
 # Private
 Internal notes here.
 """
-        
+
         expected = """# Project Overview
 This is a test project.
 
 # Commands
 Run tests with pytest."""
-        
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
             f.write(content)
             f.flush()
-            
+
             processor = ClaudeMdProcessor(sections_exclude=["# Secrets", "# Private"])
             result = processor.process_claude_md(Path(f.name))
-            
+
             assert result == expected
-            
+
         Path(f.name).unlink()
 
     def test_get_metadata_for_claude_md(self):
@@ -90,14 +88,14 @@ Run tests with pytest.
 # Best Practices
 Follow these guidelines.
 """
-        
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
             f.write(content)
             f.flush()
-            
+
             processor = ClaudeMdProcessor()
             metadata = processor.get_metadata_for_claude_md(Path(f.name))
-            
+
             assert metadata["file_type"] == "claude_config"
             assert metadata["is_claude_md"] is True
             assert metadata["sections_filtered"] is False
@@ -106,7 +104,7 @@ Follow these guidelines.
             assert metadata["has_commands"] is True
             assert metadata["has_guidelines"] is True
             assert metadata["section_count"] == 3
-            
+
         Path(f.name).unlink()
 
     def test_should_sync_claude_md_valid_file(self):
@@ -114,33 +112,33 @@ Follow these guidelines.
         content = """# Project Overview
 This is a test project.
 """
-        
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
             f.write(content)
             f.flush()
-            
+
             # Rename to CLAUDE.md
             claude_path = Path(f.name).parent / "CLAUDE.md"
             Path(f.name).rename(claude_path)
-            
+
             processor = ClaudeMdProcessor()
             assert processor.should_sync_claude_md(claude_path) is True
-            
+
         claude_path.unlink()
 
     def test_should_sync_claude_md_empty_file(self):
         """Test sync decision for empty CLAUDE.md file."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
             f.write("")
             f.flush()
-            
+
             # Rename to CLAUDE.md
             claude_path = Path(f.name).parent / "CLAUDE.md"
             Path(f.name).rename(claude_path)
-            
+
             processor = ClaudeMdProcessor()
             assert processor.should_sync_claude_md(claude_path) is False
-            
+
         claude_path.unlink()
 
     def test_should_sync_claude_md_wrong_name(self):
@@ -148,14 +146,14 @@ This is a test project.
         content = """# Project Overview
 This is a test project.
 """
-        
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
             f.write(content)
             f.flush()
-            
+
             processor = ClaudeMdProcessor()
             assert processor.should_sync_claude_md(Path(f.name)) is False
-            
+
         Path(f.name).unlink()
 
     def test_section_filtering_case_insensitive(self):
@@ -169,17 +167,17 @@ API_KEY=secret123
 # PRIVATE
 Internal notes here.
 """
-        
+
         expected = """# Project Overview
 This is a test project."""
-        
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
             f.write(content)
             f.flush()
-            
+
             processor = ClaudeMdProcessor(sections_exclude=["# Secrets", "# Private"])
             result = processor.process_claude_md(Path(f.name))
-            
+
             assert result == expected
-            
+
         Path(f.name).unlink()

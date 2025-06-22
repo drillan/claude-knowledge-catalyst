@@ -1,0 +1,130 @@
+name: Feature Request
+description: Suggest an idea for Claude Knowledge Catalyst
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! We appreciate your input in making CKC better.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please check the following before submitting
+      options:
+        - label: I have searched existing issues and this feature hasn't been requested
+          required: true
+        - label: I have read the documentation and this feature doesn't exist
+          required: true
+        - label: This feature would benefit multiple users, not just my specific use case
+          required: true
+
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: Feature Type
+      description: What type of feature are you requesting?
+      options:
+        - New CLI Command
+        - Integration (new sync target)
+        - AI/Classification Enhancement
+        - Template System Enhancement
+        - Configuration Option
+        - Performance Improvement
+        - Developer Experience
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem-statement
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve? What's missing in the current implementation?
+      placeholder: |
+        Describe the problem or gap that this feature would address...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: Describe your ideal solution to the problem
+      placeholder: |
+        How would you like this feature to work? Be as detailed as possible...
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: Use Cases
+      description: Provide specific examples of how this feature would be used
+      placeholder: |
+        Example 1: When I...
+        Example 2: As a user who...
+        Example 3: In my workflow, I need to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What workarounds or alternatives have you considered?
+      placeholder: |
+        Have you tried any workarounds? Are there existing tools that solve this?
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority Level
+      description: How important is this feature to your workflow?
+      options:
+        - Low (Nice to have)
+        - Medium (Would improve my workflow)
+        - High (Essential for my use case)
+        - Critical (Blocking my adoption)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: complexity
+    attributes:
+      label: Implementation Complexity (optional)
+      description: If you're familiar with the codebase, estimate complexity
+      options:
+        - label: Simple (small change, well-defined)
+        - label: Medium (involves multiple components)
+        - label: Complex (requires significant architecture changes)
+        - label: I'm not sure
+
+  - type: textarea
+    id: mockups-examples
+    attributes:
+      label: Mockups or Examples
+      description: Provide any mockups, examples, or references that illustrate your idea
+      placeholder: |
+        You can paste images, code examples, or links to similar features in other tools
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Would you be interested in contributing to this feature?
+      options:
+        - label: I would like to implement this feature myself
+        - label: I can help with testing
+        - label: I can help with documentation
+        - label: I can provide feedback during development
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context or information about the feature request
+      placeholder: Any additional details that might be helpful

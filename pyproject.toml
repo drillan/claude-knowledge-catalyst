@@ -161,5 +161,8 @@ dev-dependencies = [
     "pre-commit>=3.0.0",
     "hatch>=1.14.1",
     "build>=1.2.2.post1",
+    "safety>=3.2.4",
+    "bandit>=1.8.5",
+    "twine>=6.1.0",
 ]
 
