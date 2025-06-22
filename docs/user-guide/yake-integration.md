@@ -305,6 +305,6 @@ team_config:
 
 ## See Also
 
-- [Core Concepts](core-concepts.md) - Understanding CKC's classification system
-- [Tag Architecture](tag-architecture.md) - Multi-dimensional tagging strategy
-- [Smart Classification](../api-reference/smart-classification.md) - Technical implementation details
+- [Core Concepts](core-concepts) - Understanding CKC's classification system
+- [Tag Architecture](tag-architecture) - Multi-dimensional tagging strategy
+- [API Reference](../api-reference/index) - Technical implementation details
