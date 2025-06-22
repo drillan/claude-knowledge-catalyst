@@ -211,45 +211,48 @@ class TestKnowledgeWatcher:
         assert hasattr(watcher, "event_handler")
         assert watcher.is_running is False
 
-    @pytest.mark.skip(
-        reason="Watcher start/stop requires complex setup - skipping for stability"
-    )
+    # Re-enabled for Phase 4 quality improvement
+    # @pytest.mark.skip(
+    #     reason="Watcher start/stop requires complex setup - skipping for stability"
+    # )
     def test_start_watching(self, watcher):
         """Test starting the file watcher."""
         assert watcher.is_running is False
 
         with patch.object(watcher.observer, "start") as mock_start:
-            watcher.start_watching()
+            watcher.start()
 
             mock_start.assert_called_once()
             assert watcher.is_running is True
 
-    @pytest.mark.skip(
-        reason="Watcher start/stop requires complex setup - skipping for stability"
-    )
+    # Re-enabled for Phase 4 quality improvement
+    # @pytest.mark.skip(
+    #     reason="Watcher start/stop requires complex setup - skipping for stability"
+    # )
     def test_stop_watching(self, watcher):
         """Test stopping the file watcher."""
         # Start watching first
         with patch.object(watcher.observer, "start"):
-            watcher.start_watching()
+            watcher.start()
 
         assert watcher.is_running is True
 
         with patch.object(watcher.observer, "stop") as mock_stop:
             with patch.object(watcher.observer, "join") as mock_join:
-                watcher.stop_watching()
+                watcher.stop()
 
                 mock_stop.assert_called_once()
                 mock_join.assert_called_once()
                 assert watcher.is_running is False
 
-    @pytest.mark.skip(
-        reason="Context manager test requires complex setup - skipping for stability"
-    )
+    # Re-enabled for Phase 4 quality improvement - context manager is basic functionality
+    # @pytest.mark.skip(
+    #     reason="Context manager test requires complex setup - skipping for stability"
+    # )
     def test_context_manager(self, watcher):
         """Test watcher as context manager."""
-        with patch.object(watcher, "start_watching") as mock_start:
-            with patch.object(watcher, "stop_watching") as mock_stop:
+        with patch.object(watcher, "start") as mock_start:
+            with patch.object(watcher, "stop") as mock_stop:
                 with watcher:
                     mock_start.assert_called_once()
                     assert watcher.is_running is True
@@ -311,7 +314,7 @@ class TestKnowledgeWatcher:
 
         # Should not start watching when disabled
         with patch.object(watcher.observer, "start") as mock_start:
-            result = watcher.start_watching()
+            result = watcher.start()
 
             assert result is False
             mock_start.assert_not_called()

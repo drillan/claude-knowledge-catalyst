@@ -121,7 +121,7 @@ class KnowledgeAnalytics:
             overview["content_distribution"][main_dir] += 1
 
             # Tag distribution
-            for tag in metadata.tags:
+            for tag in metadata.tech:
                 overview["tag_distribution"][tag] += 1
 
             # Status and confidence (quality renamed to confidence in metadata model)
@@ -240,7 +240,7 @@ class KnowledgeAnalytics:
             if metadata.title and metadata.title != "Untitled":
                 completeness["has_title"] += 1
 
-            if metadata.tags:
+            if metadata.tech:
                 completeness["has_tags"] += 1
 
             if metadata.type:
@@ -256,7 +256,7 @@ class KnowledgeAnalytics:
             complete_count = sum(
                 [
                     bool(metadata.title and metadata.title != "Untitled"),
-                    bool(metadata.tags),
+                    bool(metadata.tech),
                     bool(metadata.type),
                     bool(metadata.purpose),
                     bool(metadata.tech or metadata.domain),
@@ -438,8 +438,8 @@ class KnowledgeAnalytics:
         # Knowledge connections and relationships
         for file_path, metadata in knowledge_items:
             # Tag relationships
-            for i, tag1 in enumerate(metadata.tags):
-                for tag2 in metadata.tags[i + 1 :]:
+            for i, tag1 in enumerate(metadata.tech):
+                for tag2 in metadata.tech[i + 1 :]:
                     evolution["knowledge_connections"]["tag_relationships"][tag1].add(
                         tag2
                     )
@@ -455,14 +455,14 @@ class KnowledgeAnalytics:
                     {
                         "file": str(file_path),
                         "type": metadata.type,
-                        "tags": metadata.tags,
+                        "tags": metadata.tech,
                         "tech": metadata.tech,
                         "domain": metadata.domain,
                     }
                 )
 
             # Most connected topics (by tag frequency)
-            for tag in metadata.tags:
+            for tag in metadata.tech:
                 evolution["knowledge_connections"]["most_connected_topics"][tag] += 1
 
         # Convert defaultdicts and sets for serialization
