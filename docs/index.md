@@ -45,9 +45,10 @@ Claude Knowledge Catalyst は、以下の主要機能を提供します：
 - **双方向連携**: Claude Code開発とObsidian知識管理の完全統合
 - **構造化組織**: Obsidianの強力な機能を活用した知識体系化
 
-### 🤖 自動メタデータ強化システム
-- **自動分析**: コンテンツを解析してObsidian用メタデータを生成
-- **スマートタグ付け**: 手動分類負荷を軽減する多次元タグシステム
+### 🤖 YAKE統合による自動メタデータ強化システム
+- **高度キーワード抽出**: YAKE（Yet Another Keyword Extractor）による教師なしキーワード発見
+- **多言語対応**: 日本語、英語を含む7言語でのコンテンツ分析
+- **スマートタグ付け**: 信頼度スコアリング付きAIタグ提案
 - **証拠ベース分類**: 自動判定の根拠を明示した信頼性の高い組織化
 - **🔒 CLAUDE.md同期**: セキュアなセクションフィルタリングで機密情報を保護
 
@@ -97,6 +98,7 @@ getting-started/index
 
 user-guide/index
 user-guide/core-concepts
+user-guide/yake-integration
 user-guide/tag-architecture
 user-guide/obsidian-migration
 user-guide/claude-md-sync
@@ -118,6 +120,13 @@ project-info/index
 ```
 
 ## Latest Updates
+
+### v0.10.0 - YAKE Integration Release
+- 🚀 **YAKE Keyword Extraction**: Advanced unsupervised keyword extraction system
+- 🌍 **Multi-Language Support**: Japanese, English, and 5 additional languages
+- 🧪 **Enhanced Test Coverage**: 147 passing tests with 28.25% coverage for production stability
+- 🛠️ **Pure Tag-Centered Architecture**: Complete migration to tag-based metadata system
+- 🔧 **Improved Reliability**: Fixed all failing tests and enhanced system stability
 
 ### v0.9.2 - Beta Stability Release
 - 🧪 **Enhanced Test Suite**: Improved test reliability for stable beta release

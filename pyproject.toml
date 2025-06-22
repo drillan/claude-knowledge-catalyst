@@ -5,11 +5,11 @@ build-backend = "hatchling.build"
 [project]
 name = "claude-knowledge-catalyst"
 dynamic = ["version"]
-description = "Knowledge management catalyst for Claude Code development"
+description = "AI-powered knowledge management with YAKE keyword extraction for Claude Code development"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
-keywords = ["claude", "knowledge", "management", "obsidian", "ai", "development"]
+keywords = ["claude", "knowledge", "management", "obsidian", "ai", "development", "yake", "keyword-extraction", "nlp"]
 authors = [
     {name = "CKC Contributors"},
 ]

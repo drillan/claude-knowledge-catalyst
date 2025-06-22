@@ -9,6 +9,9 @@ Claude Knowledge Catalystの実践的な使用方法とベストプラクティ�
 :caption: User Guide
 
 core-concepts
+yake-integration
+tag-architecture
+obsidian-migration
 claude-md-sync
 ```
 
@@ -18,6 +21,15 @@ claude-md-sync
 
 ### [Core Concepts](core-concepts.md)
 CKCの中核となる概念と設計思想について詳しく説明します。
+
+### [YAKE統合](yake-integration.md) 🆕
+高度なキーワード抽出による自動タグ生成と多言語対応の詳細。
+
+### [Tag Architecture](tag-architecture.md)
+多次元タグシステムによる知識組織化戦略。
+
+### [Obsidian Migration](obsidian-migration.md)
+既存ObsidianボルトのCKC対応移行ガイド。
 
 ### [CLAUDE.md同期](claude-md-sync.md)
 CLAUDE.mdファイルをObsidianに同期する機能の詳細な使用方法とセキュリティ設定。
@@ -33,12 +45,19 @@ CLAUDE.mdファイルをObsidianに同期する機能の詳細な使用方法と
 
 ## Quick Navigation
 
-::::{grid} 2
+::::{grid} 3
 :::{grid-item-card} 🎯 Core Concepts
 :link: core-concepts
 :link-type: doc
 
 CKCの基本的な概念と仕組みを理解
+:::
+
+:::{grid-item-card} 🚀 YAKE統合 🆕
+:link: yake-integration
+:link-type: doc
+
+高度なキーワード抽出による自動タグ生成
 :::
 
 :::{grid-item-card} 🔒 CLAUDE.md同期

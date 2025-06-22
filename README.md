@@ -1,4 +1,4 @@
-# Claude Knowledge Catalyst (CKC) v0.9.2
+# Claude Knowledge Catalyst (CKC) v0.10.0
 
 **Claude Code ⇄ Obsidian Seamless Integration System**
 
@@ -20,9 +20,10 @@ Automatically synchronize insights from Claude Code development processes with O
 - **Bidirectional Integration**: Complete integration between Claude Code development and Obsidian knowledge management
 - **Structured Organization**: Systematize knowledge using Obsidian's powerful features
 
-### 🤖 Automated Metadata Enhancement
-- **Automatic Analysis**: Analyze content and generate metadata for Obsidian
-- **Smart Tagging**: Multi-dimensional tag system that reduces manual classification overhead
+### 🤖 Automated Metadata Enhancement with YAKE Integration
+- **Advanced Keyword Extraction**: YAKE (Yet Another Keyword Extractor) for unsupervised keyword discovery
+- **Multi-Language Support**: English, Japanese, Spanish, French, German, Italian, Portuguese
+- **Smart Tagging**: AI-powered tag suggestions with confidence scoring
 - **Evidence-Based Classification**: Reliable organization with clear rationale for automated decisions
 
 ```yaml
@@ -56,7 +57,7 @@ obsidian-vault/
 
 ## 🎯 3-Minute Claude Code ⇄ Obsidian Integration Experience
 
-> **🚀 v0.9.2 Beta Stability**: Enhanced test coverage with 34 passing core tests ensures reliable basic functionality.
+> **🚀 v0.10.0 YAKE Integration**: Advanced keyword extraction with 147 passing tests and 28.25% test coverage ensures production stability.
 
 **Experience seamless integration:**
 
@@ -88,6 +89,12 @@ uv run ckc sync
 - **Structured Migration**: Optimization and structural enhancement of existing Obsidian vaults
 - **Dynamic Query Generation**: Automatic generation of Obsidian dataview queries
 - **Knowledge Discovery**: Cross-project search of Claude Code development insights within Obsidian
+
+### 🚀 YAKE Keyword Extraction (New in v0.10.0)
+- **Unsupervised Learning**: Extract keywords without training data
+- **Multi-Language**: Automatic language detection and processing
+- **Confidence Scoring**: Filter high-quality keyword suggestions
+- **Technical Content**: Optimized for technical documentation and code
 
 ### 🔒 Secure CLAUDE.md Sync
 - **Privacy-First**: Section-level filtering for sensitive information

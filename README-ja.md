@@ -1,4 +1,4 @@
-# Claude Knowledge Catalyst (CKC) v0.9.2
+# Claude Knowledge Catalyst (CKC) v0.10.0
 
 **Claude Code ⇄ Obsidian シームレス統合システム**
 
@@ -20,9 +20,10 @@ Claude Code開発プロセスで生まれる知見を自動的にObsidianボル�
 - **双方向連携**: Claude Code開発とObsidian知識管理の完全統合
 - **構造化組織**: Obsidianの強力な機能を活用した知識体系化
 
-### 🤖 自動メタデータ強化
-- **自動分析**: コンテンツを解析してObsidian用メタデータを生成
-- **スマートタグ付け**: 手動分類負荷を軽減する多次元タグシステム
+### 🤖 YAKE統合による自動メタデータ強化
+- **高度キーワード抽出**: YAKE（Yet Another Keyword Extractor）による教師なしキーワード発見
+- **多言語対応**: 日本語、英語、スペイン語、フランス語、ドイツ語、イタリア語、ポルトガル語
+- **スマートタグ付け**: 信頼度スコアリング付きAIタグ提案
 - **証拠ベース分類**: 自動判定の根拠を明示した信頼性の高い組織化
 
 ```yaml

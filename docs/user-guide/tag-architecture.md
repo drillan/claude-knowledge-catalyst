@@ -170,41 +170,98 @@ token_estimate: 150               # 推定トークン数
 temperature: 0.7                  # 推奨温度設定
 ```
 
-## 自動分析プロセス
+## 自動分析プロセス（v0.10.0 YAKE統合強化）
 
-### 自動分析フロー
+### YAKE統合自動分析フロー
 
 ```mermaid
 graph TB
     A[.claude/ファイル作成] --> B[コンテンツ読み取り]
-    B --> C[前処理・正規化]
-    C --> D[自動分析エンジン]
-    D --> E[7次元分類]
-    E --> F[信頼度評価]
-    F --> G[メタデータ生成]
-    G --> H[Obsidian配置決定]
-    H --> I[同期実行]
+    B --> C[言語検出・前処理]
+    C --> D[YAKEキーワード抽出]
+    D --> E[従来の自動分析エンジン]
+    E --> F[ハイブリッド分析統合]
+    F --> G[7次元分類強化]
+    G --> H[信頼度評価]
+    H --> I[メタデータ生成]
+    I --> J[Obsidian配置決定]
+    J --> K[同期実行]
+    
+    style D fill:#e1f5fe
+    style F fill:#e8f5e8
 ```
 
-### 分析根拠の透明性
+### YAKE統合による分析強化
+
+v0.10.0では、YAKE (Yet Another Keyword Extractor) により自動分析が大幅に強化されました：
+
+#### 1. 多言語対応分析
+```yaml
+# 日本語技術文書の自動分析例
+content: |
+  # FastAPIの認証システム実装
+  JWTトークンベースの認証を実装します。
+  OAuth2スキーマとセキュリティスコープを使用。
+
+# YAKE抽出キーワード
+yake_keywords: ["FastAPI", "認証システム", "JWT", "OAuth2", "セキュリティ"]
+
+# 統合分析結果
+type: concept
+tech: [fastapi, jwt, oauth2]
+domain: [web-dev, backend, security]
+complexity: intermediate
+confidence: high
+```
+
+#### 2. キーワード品質評価
+```yaml
+# キーワード信頼度スコアリング
+extracted_keywords:
+  - keyword: "FastAPI"
+    confidence: 0.95
+    relevance: "high"
+  - keyword: "認証"
+    confidence: 0.89
+    relevance: "high"
+  - keyword: "実装"
+    confidence: 0.72
+    relevance: "medium"
+```
+
+### YAKE統合分析根拠の透明性
 
 ```bash
 $ uv run ckc classify .claude/react_component.md --show-evidence
 
-分析結果:
-├── type: code (信頼度: 94%)
-│   └── 根拠: "```jsx", "export default", "コンポーネント"
-├── tech: [react, typescript, jsx] (信頼度: 96%)
-│   └── 根拠: "React.useState", "TypeScript", "JSX構文"
-├── domain: [web-dev, frontend] (信頼度: 92%)
-│   └── 根拠: "UI component", "ブラウザ", "フロントエンド"
-├── team: [frontend, fullstack] (信頼度: 89%)
-│   └── 根拠: React技術、UI開発
-├── complexity: intermediate (信頼度: 85%)
-│   └── 根拠: TypeScript使用、カスタムhooks
-└── confidence: high (信頼度: 91%)
-    └── 根拠: 明確な技術指標、構造化されたコード
+YAKE統合分析結果:
+├── 言語検出: English (信頼度: high)
+│   └── 根拠: 英語キーワード、技術用語パターン
+├── YAKE抽出キーワード:
+│   ├── "React component" (スコア: 0.05, 関連度: high)
+│   ├── "TypeScript" (スコア: 0.08, 関連度: high)
+│   ├── "useState hook" (スコア: 0.12, 関連度: medium)
+│   └── "JSX syntax" (スコア: 0.15, 関連度: medium)
+├── type: code (信頼度: high) ⬆️
+│   └── 根拠: "```jsx", "export default", YAKE["component", "syntax"]
+├── tech: [react, typescript, jsx] (信頼度: high) ⬆️
+│   └── 根拠: "React.useState", YAKE["TypeScript", "JSX"], パターンマッチ
+├── domain: [web-dev, frontend] (信頼度: high) ⬆️
+│   └── 根拠: YAKE["component", "browser"], "フロントエンド"
+├── team: [frontend, fullstack] (信頼度: high) ⬆️
+│   └── 根拠: React技術、YAKE UI関連キーワード
+├── complexity: intermediate (信頼度: medium) ⬆️
+│   └── 根拠: TypeScript使用、YAKE["advanced hooks"], カスタムロジック
+└── confidence: high ⬆️
+    └── 根拠: YAKE高品質キーワード、明確な技術指標、構造化コード
 ```
+
+#### YAKE統合による分析強化
+
+- **🔍 キーワード品質**: 技術特化用語の精密抽出
+- **🌍 多言語対応**: 日本語技術文書の正確な分析
+- **📊 信頼度向上**: より確実な自動分類
+- **🎯 分析根拠**: キーワード+パターンマッチングの複合分析
 
 ## Obsidian統合での活用
 
@@ -280,14 +337,30 @@ tags:
     security_level: ["public", "internal", "confidential"]
 ```
 
-### 分析の調整
+### 分析の調整（YAKE統合設定）
 
 ```yaml
-# 自動分析設定
+# 自動分析設定（v0.10.0強化）
 ai:
   auto_classification: true
   confidence_threshold: 0.75
   evidence_tracking: true
+  yake_enabled: true  # YAKE統合有効化
+  
+  # YAKE設定詳細
+  yake_config:
+    max_ngram_size: 3
+    deduplication_threshold: 0.7
+    max_keywords: 20
+    confidence_threshold: 0.5
+    supported_languages:
+      japanese: "ja"
+      english: "en"
+      spanish: "es"
+      french: "fr"
+      german: "de"
+      italian: "it"
+      portuguese: "pt"
   
   # 特定次元の重み調整
   dimension_weights:
@@ -295,6 +368,7 @@ ai:
     tech: 0.9
     domain: 0.8
     complexity: 0.7
+    yake_keywords: 0.8  # YAKEキーワードの重み
 ```
 
 ## ベストプラクティス
@@ -335,18 +409,30 @@ custom_tags: [enterprise, scalability]  # プロジェクト特化タグ
 ---
 ```
 
-## まとめ
+## まとめ（v0.10.0 YAKE統合強化）
 
-多次元タグシステムは、Claude Code ⇄ Obsidian統合の**副次的効果**として生まれる強力な機能です：
+多次元タグシステムは、Claude Code ⇄ Obsidian統合の**副次的効果**として生まれ、v0.10.0でYAKE統合により大幅に強化された機能です：
 
-### 主な価値
+### 主な価値（YAKE統合強化）
 - **手動分類負荷軽減**: 「どのカテゴリ？」の決定疲労解消
-- **知識発見強化**: Obsidian内での高度な横断検索
-- **分析透明性**: 分析根拠の明示による信頼性確保
+- **多言語知識発見**: 日本語・英語含む7言語での高度な横断検索
+- **分析透明性**: YAKE+パターンマッチング分析根拠の明示
+- **キーワード品質**: 技術特化用語の精密抽出による信頼性向上
+
+### v0.10.0での進化
+- **🧠 AI強化**: YAKE教師なし学習による自動キーワード抽出
+- **🌍 多言語対応**: 日本語技術文書の正確な自動分析
+- **📊 分析強化**: キーワード+パターンマッチングの複合分析
+- **🔍 発見力強化**: 関連性の高いキーワードによる知識発見
 
 ### 統合との関係
 - **主目標**: Claude Code ⇄ Obsidian シームレス統合
-- **副次効果**: 自動多次元タグによる組織化
-- **結果**: 手動負荷なしの構造化知識管理
+- **副次効果**: YAKE統合自動多次元タグによる組織化
+- **結果**: より精密で手動負荷なしの構造化知識管理
 
-このタグアーキテクチャにより、開発者は分類作業に時間を取られることなく、Claude Code開発に集中しながら、Obsidianで高度に組織化された知識を自動蓄積できます。
+このYAKE統合タグアーキテクチャにより、開発者は分類作業に全く時間を取られることなく、Claude Code開発に集中しながら、Obsidianで多言語対応・高精度に組織化された知識を自動蓄積できます。
+
+### 関連ドキュメント
+- [YAKE統合詳細ガイド](yake-integration) - 技術仕様と使用方法
+- [Core Concepts](core-concepts) - CKCの基本概念
+- [Obsidian Migration](obsidian-migration) - 既存ボルトの移行
