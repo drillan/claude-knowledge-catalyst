@@ -46,10 +46,10 @@ version: '1.0'
 - **言語**: Python 3.11+
 - **パッケージ管理**: uv (uvを使用した現代的なPython依存関係管理)
 - **設定管理**: Pydantic（バリデーション付きデータモデル）
-- **CLI**: Click + Rich（美しいコマンドラインインターフェース）
+- **CLI**: Typer + Rich（美しいコマンドラインインターフェース）
 - **ファイル監視**: Watchdog（デバウンス機能付きファイルシステム監視）
-- **AI分類**: YAKE + SmartContentClassifier（ハイブリッド分類システム）
-- **NLP**: YAKE>=0.4.8, langdetect>=1.0.9, unidecode>=1.3.0
+- **AI/ML**: YAKE (Yet Another Keyword Extractor) - 教師なしキーワード抽出
+- **多言語対応**: langdetect, unidecode（自動言語検出と文字正規化）
 
 ### 核となる機能
 1. **自動同期**: `.claude/`ディレクトリを監視してリアルタイム同期

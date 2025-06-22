@@ -78,6 +78,11 @@ uv tree
 # 全体的なコード品質チェック（よく使用）
 uv run ruff check src/ tests/ && uv run ruff format src/ tests/ && uv run mypy src/
 
+# YAKE統合後のテスト実行パターン
+uv run pytest tests/test_yake_extractor.py -v
+uv run pytest tests/test_ai_smart_classifier.py -v
+uv run pytest --tb=short  # 147 tests passing確認
+
 # 段階的チェック
 uv run ruff check src/ tests/     # リンティング
 uv run ruff format src/ tests/    # フォーマット
@@ -437,4 +442,101 @@ uv run ckc config init --force
 
 # 設定の復元（必要に応じて）
 cp ckc_config.yaml.backup ckc_config.yaml
+```
+
+## YAKE統合開発パターン (v0.10.0+)
+
+### YAKE機能のテスト
+```bash
+# YAKE抽出器の個別テスト
+uv run pytest tests/test_yake_extractor.py::TestYAKEKeywordExtractor::test_extract_keywords_english -v
+
+# 多言語対応テスト
+uv run pytest tests/test_yake_extractor.py::TestYAKEKeywordExtractor::test_extract_keywords_japanese -v
+
+# SmartClassifier統合テスト
+uv run pytest tests/test_ai_smart_classifier.py::TestSmartContentClassifier::test_enhance_metadata -v
+
+# YAKE統合全体テスト
+uv run pytest tests/test_yake_extractor.py tests/test_ai_smart_classifier.py -v
+```
+
+### YAKE設定の調整パターン
+```python
+# ckc_config.yaml でのYAKE設定カスタマイズ例
+ai_classification:
+  yake_enabled: true
+  yake_config:
+    max_ngram_size: 3           # 技術用語(1-3語)に最適
+    deduplication_threshold: 0.7 # 重複排除閾値
+    max_keywords: 20            # 抽出上限
+    confidence_threshold: 0.5   # 品質フィルタ
+    supported_languages:
+      japanese: "ja"
+      english: "en"
+```
+
+### YAKE統合デバッグパターン
+```bash
+# YAKE抽出の確認（開発時）
+uv run python -c "
+from claude_knowledge_catalyst.ai.yake_extractor import YAKEKeywordExtractor
+extractor = YAKEKeywordExtractor()
+result = extractor.extract_keywords('FastAPIの認証システム実装', 'ja')
+print([k.text for k in result])
+"
+
+# SmartClassifier統合確認
+uv run python -c "
+from claude_knowledge_catalyst.ai.smart_classifier import SmartContentClassifier
+classifier = SmartContentClassifier(enable_yake=True)
+suggestions = classifier.generate_tag_suggestions('FastAPI JWT authentication')
+print([s.suggested_value for s in suggestions])
+"
+```
+
+### リリース準備パターン (v0.10.0での知見)
+```bash
+# 1. フィーチャーブランチでの開発
+git checkout -b feature/yake-integration
+# ... 開発作業 ...
+
+# 2. テスト全体実行と確認
+uv run pytest --tb=short
+# 期待: 147 passed, X skipped, 0 failures
+
+# 3. 不要ファイルクリーンアップ
+rm -rf demo/ comparison-test/ migration-test/ coverage.json
+git add .gitignore  # 除外パターン追加
+
+# 4. ドキュメント整合性確認
+# - README.md: バージョン更新
+# - CHANGELOG.md: 新機能記載
+# - docs/: 新機能ガイド追加
+
+# 5. mainマージとタグ作成
+git checkout main
+git merge feature/yake-integration
+git tag -a v0.10.0 -m "Release v0.10.0: YAKE Integration"
+
+# 6. 最終テスト
+uv run pytest --tb=short  # 147 passed確認
+```
+
+### YAKE統合時の一般的な問題と解決
+```bash
+# 問題1: numpy.float64型エラー
+# 解決: float()変換を追加
+score_float = float(score) if not isinstance(score, (int, float)) else score
+
+# 問題2: tuple unpacking順序エラー  
+# 確認: YAKEは(text, score)でなく(score, text)を返す場合がある
+keywords = yake_extractor.extract_keywords(text)
+for keyword, score in keywords:  # 順序要確認
+
+# 問題3: 言語検出失敗
+# 解決: フォールバック機構
+detected_lang = language or self.language_detector.detect_language(content)
+if detected_lang not in self.config.supported_languages:
+    detected_lang = 'en'  # デフォルト
 ```

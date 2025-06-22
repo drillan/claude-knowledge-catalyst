@@ -1,0 +1,69 @@
+auto_commit: false
+auto_sync: true
+git_integration: true
+hybrid_structure:
+  auto_classification: true
+  auto_enhancement: true
+  custom_numbering: null
+  custom_structure: null
+  enabled: true
+  numbering_system: ten_step
+  structure_validation: true
+  structure_version: hybrid_v1
+migration:
+  auto_detect: true
+  backup_before: true
+  mixed_format_warning: true
+  notify_level: recommended
+project_name: ''
+project_root: /home/driller/repo/claude-knowledge-catalyst/demo/ckc_project
+sync_targets:
+- enabled: true
+  metadata: {}
+  name: enhanced-vault
+  path: /home/driller/repo/claude-knowledge-catalyst/demo/enhanced_ckc_vault
+  type: obsidian
+tags:
+  category_tags:
+  - prompt
+  - code
+  - concept
+  - resource
+  - project_log
+  claude_tags:
+  - opus
+  - sonnet
+  - haiku
+  quality_tags:
+  - high
+  - medium
+  - low
+  - experimental
+  status_tags:
+  - draft
+  - tested
+  - production
+  - deprecated
+  tech_tags:
+  - python
+  - javascript
+  - react
+  - nodejs
+template_path: /home/driller/repo/claude-knowledge-catalyst/demo/ckc_project/templates
+version: '2.0'
+watch:
+  claude_md_patterns:
+  - CLAUDE.md
+  - .claude/CLAUDE.md
+  claude_md_sections_exclude: []
+  debounce_seconds: 1.0
+  file_patterns:
+  - '*.md'
+  - '*.txt'
+  ignore_patterns:
+  - .git
+  - __pycache__
+  - '*.pyc'
+  include_claude_md: false
+  watch_paths:
+  - .claude

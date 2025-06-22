@@ -173,16 +173,24 @@ test_vault/
 .claude/debug/
 .claude/temp/
 .claude/*_vault/ckc_config.yaml
-.claude/settings.local.json
 
 # CKC development and testing artifacts
 .claude_backup_migration_*/
 comparison-test/
 migration-test/
-demo/
 coverage.json
 tests/*.backup
 *.backup
+
+# Demo artifacts to exclude (but include demo scripts)
+demo/my_project/
+demo/my_vault/
+demo/obsidian_vault/
+demo/enhanced_ckc_vault/
+demo/ckc_project/
+demo/frontend_team/
+demo/backend_team/
+demo/shared_vault/
 
 # Publications and articles
 publications/
