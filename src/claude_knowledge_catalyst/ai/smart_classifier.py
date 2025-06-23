@@ -57,10 +57,15 @@ class SmartContentClassifier:
             self._initialize_yake()
 
     def _initialize_yake(self) -> None:
-        """Initialize YAKE keyword extractor."""
+        """Initialize YAKE keyword extractor with optimized configuration."""
         try:
             yake_config = YAKEConfig(
-                max_ngram_size=2, top_keywords=10, confidence_threshold=0.2
+                max_ngram_size=2,  # Optimized for performance
+                top_keywords=8,    # Reduced for efficiency
+                confidence_threshold=0.3,  # Higher threshold for better quality
+                enable_content_filtering=True,
+                max_content_length=3000,  # Limit for UI responsiveness
+                cache_size=300    # Smaller cache for memory efficiency
             )
             self.yake_extractor = YAKEKeywordExtractor(yake_config)
         except Exception:
@@ -109,19 +114,26 @@ class SmartContentClassifier:
             Enhanced classification results.
         """
         try:
+            # Skip YAKE for very short content to save processing
+            if len(content.strip()) < 50:
+                return pattern_results
+                
             # Extract keywords using YAKE
             yake_keywords = self.yake_extractor.extract_keywords(content)
-            keyword_texts = [kw.text.lower() for kw in yake_keywords]
+            if not yake_keywords:  # Early return if no keywords found
+                return pattern_results
+                
+            keyword_texts = [kw.text.lower() for kw in yake_keywords[:5]]  # Limit to top 5 for efficiency
 
             # Enhance existing results with YAKE confidence
             enhanced_results = []
             for result in pattern_results:
                 enhanced_result = result
 
-                # Boost confidence if YAKE found related keywords
+                # Boost confidence if YAKE found related keywords (optimized check)
+                result_value_lower = result.suggested_value.lower()
                 if any(
-                    keyword in result.suggested_value.lower()
-                    or result.suggested_value.lower() in keyword
+                    keyword in result_value_lower or result_value_lower in keyword
                     for keyword in keyword_texts
                 ):
                     enhanced_result.confidence = min(0.95, result.confidence + 0.1)

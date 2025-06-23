@@ -22,17 +22,19 @@ class TestYAKEConfig:
         """Test default configuration values."""
         config = YAKEConfig()
 
-        assert config.max_ngram_size == 3
+        assert config.max_ngram_size == 2  # Optimized default
         assert config.deduplication_threshold == 0.7
-        assert config.top_keywords == 15
+        assert config.top_keywords == 10  # Optimized default
         assert config.language_auto_detect is True
         assert "en" in config.supported_languages
         assert "ja" in config.supported_languages
         assert config.min_keyword_length == 2
-        assert config.max_keyword_length == 50
-        assert config.cache_size == 1000
+        assert config.max_keyword_length == 30  # Optimized default
+        assert config.cache_size == 500  # Optimized default
         assert config.enable_normalization is True
-        assert config.confidence_threshold == 0.1
+        assert config.confidence_threshold == 0.2  # Optimized default
+        assert config.enable_content_filtering is True  # New optimization
+        assert config.max_content_length == 5000  # New optimization
 
     def test_custom_config(self):
         """Test custom configuration."""

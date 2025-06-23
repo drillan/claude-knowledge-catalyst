@@ -14,7 +14,9 @@
       "Bash(git log:*)",
       "Bash(shellcheck:*)",
       "Bash(rg:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(uv run:*)",
+      "Bash(ls:*)"
     ],
     "deny": [
       "Bash(rm -rf:*)",

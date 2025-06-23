@@ -22,16 +22,18 @@ logger = logging.getLogger(__name__)
 class YAKEConfig:
     """Configuration for YAKE keyword extraction."""
 
-    max_ngram_size: int = 3
+    max_ngram_size: int = 2  # Reduced from 3 for better performance
     deduplication_threshold: float = 0.7
-    top_keywords: int = 15
+    top_keywords: int = 10  # Reduced from 15 for better performance
     language_auto_detect: bool = True
     supported_languages: list[str] = field(default_factory=lambda: ["en", "ja"])
     min_keyword_length: int = 2
-    max_keyword_length: int = 50
-    cache_size: int = 1000
+    max_keyword_length: int = 30  # Reduced from 50 for memory efficiency
+    cache_size: int = 500  # Reduced from 1000 for memory efficiency
     enable_normalization: bool = True
-    confidence_threshold: float = 0.1
+    confidence_threshold: float = 0.2  # Increased for better filtering
+    enable_content_filtering: bool = True  # New: Enable pre-filtering for large content
+    max_content_length: int = 5000  # New: Limit content length for processing
 
 
 class Keyword(NamedTuple):
@@ -44,12 +46,12 @@ class Keyword(NamedTuple):
 
 
 class LanguageDetector:
-    """Language detection with caching."""
+    """Language detection with optimized caching."""
 
-    def __init__(self):
-        self._cache: dict[str, str] = {}
+    def __init__(self, cache_size: int = 200):
+        self._cache_size = cache_size
 
-    @lru_cache(maxsize=500)
+    @lru_cache(maxsize=200)  # Reduced cache size for memory efficiency
     def detect_language(self, text: str) -> str:
         """Detect the primary language of the text."""
         if not YAKE_AVAILABLE:
@@ -176,7 +178,7 @@ class YAKEKeywordExtractor:
     def extract_keywords(
         self, content: str, language: str | None = None
     ) -> list[Keyword]:
-        """Extract keywords from content using YAKE."""
+        """Extract keywords from content using YAKE with optimized processing."""
         if not YAKE_AVAILABLE:
             logger.warning("YAKE not available, returning empty keyword list")
             return []
@@ -185,9 +187,17 @@ class YAKEKeywordExtractor:
             return []
 
         try:
-            # Detect language if not provided
+            # Pre-filter content for performance
+            if self.config.enable_content_filtering:
+                content = self._prefilter_content(content)
+                if len(content) < self.config.min_keyword_length:
+                    return []
+
+            # Detect language if not provided (with content hash for caching)
             if language is None and self.config.language_auto_detect:
-                language = self.language_detector.detect_language(content)
+                # Use first 500 chars for language detection to reduce cache memory
+                detection_sample = content[:500]
+                language = self.language_detector.detect_language(detection_sample)
 
             language = language or "en"
 
@@ -234,6 +244,34 @@ class YAKEKeywordExtractor:
             logger.debug(f"Using English extractor as fallback for: {language}")
 
         return extractor
+
+    def _prefilter_content(self, content: str) -> str:
+        """Pre-filter content for optimal YAKE processing."""
+        # Limit content length for performance
+        if len(content) > self.config.max_content_length:
+            # Take first and last portions to preserve important content
+            half_limit = self.config.max_content_length // 2
+            content = content[:half_limit] + content[-half_limit:]
+        
+        # Remove excessive code blocks that add noise
+        import re
+        
+        # Limit consecutive code blocks 
+        content = re.sub(r'(```[\s\S]*?```\s*){3,}', 
+                        lambda m: '```\n[Multiple code blocks truncated for performance]\n```\n', 
+                        content)
+        
+        # Remove very long lines that are likely data/logs
+        lines = content.split('\n')
+        filtered_lines = []
+        for line in lines:
+            if len(line) > 200:
+                # Keep first 100 chars of long lines
+                filtered_lines.append(line[:100] + '...')
+            else:
+                filtered_lines.append(line)
+        
+        return '\n'.join(filtered_lines)
 
     def _process_keywords(
         self, raw_keywords: list[tuple[str, float]], language: str

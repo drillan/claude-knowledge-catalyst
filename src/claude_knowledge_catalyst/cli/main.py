@@ -7,7 +7,7 @@ from typing import Any
 
 import typer
 from rich.console import Console
-from rich.prompt import Confirm
+from rich.prompt import Confirm, Prompt
 from rich.table import Table
 
 from .. import __version__
@@ -23,6 +23,22 @@ from .interactive import (
     quick_tag_wizard,
 )
 from .smart_sync import migrate_to_tag_centered_cli, smart_sync_command
+
+
+def get_config() -> CKCConfig:
+    """Get or create configuration."""
+    try:
+        return load_config()
+    except Exception:
+        # Create default config if none exists
+        config = CKCConfig()
+        config.project_root = Path.cwd()
+        return config
+
+
+def get_metadata_manager() -> MetadataManager:
+    """Get metadata manager instance."""
+    return MetadataManager()
 
 
 def version_callback(value: bool) -> None:
@@ -2290,6 +2306,318 @@ def migrate(
         console.print(
             "Your files are safely backed up. You can restore from backup if needed."
         )
+
+
+@app.command()
+def wizard() -> None:
+    """Interactive setup wizard for new users."""
+    console.print("[bold blue]🧙 Claude Knowledge Catalyst Setup Wizard[/bold blue]")
+    console.print("Let's get you started with a fully configured knowledge management system!\n")
+    
+    # Check current directory
+    current_dir = Path.cwd()
+    console.print(f"[dim]Current directory: {current_dir}[/dim]")
+    
+    # Step 1: Project detection
+    console.print("\n[bold]Step 1: Project Detection[/bold]")
+    
+    claude_dir = current_dir / ".claude"
+    config_file = current_dir / "ckc_config.yaml"
+    
+    if config_file.exists():
+        console.print("[yellow]⚠️ Existing configuration detected![/yellow]")
+        if not Confirm.ask("Do you want to reconfigure?", default=False):
+            console.print("[green]Setup cancelled. Your existing configuration is preserved.[/green]")
+            return
+    
+    # Step 2: Initialize project
+    console.print("\n[bold]Step 2: Project Initialization[/bold]")
+    
+    project_name = Prompt.ask(
+        "Project name", 
+        default=current_dir.name,
+        show_default=True
+    )
+    
+    # Initialize with force to overwrite existing
+    with console.status("Initializing project..."):
+        config = get_config()
+        config.project_root = current_dir
+        config.project_name = project_name
+        config.auto_sync = True
+        
+        # Create .claude directory
+        claude_dir.mkdir(exist_ok=True)
+        
+        # Save configuration
+        config.save_to_file(config_file)
+    
+    console.print("[green]✅ Project initialized successfully![/green]")
+    
+    # Step 3: Vault setup
+    console.print("\n[bold]Step 3: Knowledge Vault Setup[/bold]")
+    
+    if Confirm.ask("Do you want to connect an Obsidian vault?", default=True):
+        while True:
+            vault_path = Prompt.ask("Obsidian vault path (absolute or relative)")
+            vault_path_obj = Path(vault_path).expanduser().resolve()
+            
+            if vault_path_obj.exists():
+                vault_name = Prompt.ask("Vault name", default="my-vault", show_default=True)
+                
+                # Add vault to configuration
+                sync_target = SyncTarget(
+                    name=vault_name,
+                    type="obsidian", 
+                    path=vault_path_obj,
+                    enabled=True
+                )
+                config.add_sync_target(sync_target)
+                config.save_to_file(config_file)
+                
+                # Initialize vault structure
+                try:
+                    metadata_manager = get_metadata_manager()
+                    vault_manager = ObsidianVaultManager(vault_path_obj, metadata_manager)
+                    vault_manager.initialize_vault()
+                    console.print(f"[green]✅ Vault '{vault_name}' configured and initialized![/green]")
+                except Exception as e:
+                    console.print(f"[yellow]⚠️ Vault configured but initialization had issues: {e}[/yellow]")
+                break
+            else:
+                console.print(f"[red]❌ Path does not exist: {vault_path_obj}[/red]")
+                if not Confirm.ask("Try again?", default=True):
+                    break
+    
+    # Step 4: Sample content
+    console.print("\n[bold]Step 4: Sample Content Creation[/bold]")
+    
+    if Confirm.ask("Create sample knowledge files?", default=True):
+        sample_files = [
+            ("python_tips.md", """# Python Development Tips
+
+## Virtual Environments
+```bash
+python -m venv myenv
+source myenv/bin/activate  # Linux/Mac
+myenv\\Scripts\\activate    # Windows
+```
+
+## Package Management
+```bash
+pip install requests pandas
+pip freeze > requirements.txt
+```
+
+Tags: python, development, tips, beginner
+"""),
+            ("git_workflow.md", """# Git Workflow Best Practices
+
+## Feature Branch Workflow
+```bash
+git checkout -b feature/new-feature
+git add .
+git commit -m "Add new feature"
+git push origin feature/new-feature
+```
+
+## Useful Commands
+```bash
+git status
+git log --oneline
+git diff HEAD~1
+```
+
+Tags: git, version-control, workflow, best-practices
+"""),
+        ]
+        
+        for filename, content in sample_files:
+            file_path = claude_dir / filename
+            file_path.write_text(content)
+            console.print(f"[green]📄 Created: {filename}[/green]")
+    
+    # Step 5: First sync
+    console.print("\n[bold]Step 5: Initial Synchronization[/bold]")
+    
+    if config.sync_targets and Confirm.ask("Perform initial sync?", default=True):
+        with console.status("Synchronizing knowledge files..."):
+            try:
+                # Perform sync
+                metadata_manager = get_metadata_manager()
+                for target in config.get_enabled_sync_targets():
+                    vault_manager = ObsidianVaultManager(target.path, metadata_manager)
+                    vault_manager.sync_directory(claude_dir)
+                console.print("[green]✅ Initial sync completed![/green]")
+            except Exception as e:
+                console.print(f"[yellow]⚠️ Sync had issues: {e}[/yellow]")
+    
+    # Step 6: Next steps
+    console.print("\n[bold green]🎉 Setup Complete![/bold green]")
+    console.print("\n[bold]Next Steps:[/bold]")
+    console.print("1. [bold]ckc status[/bold] - Check your project status")
+    console.print("2. [bold]ckc analyze[/bold] - Analyze your knowledge files")
+    console.print("3. [bold]ckc sync[/bold] - Sync changes to vault")
+    console.print("4. [bold]ckc search python[/bold] - Search your knowledge")
+    console.print("5. [bold]ckc watch[/bold] - Enable automatic syncing")
+    
+    console.print(f"\n[dim]Configuration saved to: {config_file}[/dim]")
+    console.print("[green]Happy knowledge managing! 📚✨[/green]")
+
+
+@app.command()
+def diagnose() -> None:
+    """Run comprehensive system diagnostics."""
+    console.print("[bold blue]🔍 Claude Knowledge Catalyst Diagnostics[/bold blue]")
+    console.print("Checking system health and configuration...\n")
+    
+    issues = []
+    warnings = []
+    config = None
+    md_files = []
+    claude_dir = Path.cwd() / ".claude"
+    
+    # Check 1: Configuration
+    console.print("[bold]1. Configuration Check[/bold]")
+    try:
+        config = load_config()
+        console.print(f"[green]✅ Configuration loaded: {config.project_name}[/green]")
+        
+        if not config.sync_targets:
+            warnings.append("No sync targets configured")
+        else:
+            console.print(f"[green]✅ {len(config.sync_targets)} sync targets configured[/green]")
+            
+        if not config.project_root.exists():
+            issues.append(f"Project root does not exist: {config.project_root}")
+        else:
+            console.print(f"[green]✅ Project root exists: {config.project_root}[/green]")
+            
+    except Exception as e:
+        issues.append(f"Configuration error: {e}")
+    
+    # Check 2: Dependencies
+    console.print("\n[bold]2. Dependency Check[/bold]")
+    
+    # Check YAKE availability
+    try:
+        from ..ai.yake_extractor import YAKE_AVAILABLE
+        if YAKE_AVAILABLE:
+            console.print("[green]✅ YAKE keyword extraction available[/green]")
+        else:
+            warnings.append("YAKE dependencies not available (optional)")
+    except ImportError:
+        warnings.append("YAKE module not available")
+    
+    # Check 3: Directory Structure
+    console.print("\n[bold]3. Directory Structure[/bold]")
+    
+    if claude_dir.exists():
+        console.print(f"[green]✅ .claude directory exists[/green]")
+        
+        # Count files
+        md_files = list(claude_dir.rglob("*.md"))
+        console.print(f"[green]✅ Found {len(md_files)} markdown files[/green]")
+        
+        if len(md_files) == 0:
+            warnings.append("No knowledge files found in .claude directory")
+    else:
+        issues.append(".claude directory does not exist")
+    
+    # Check 4: Sync Targets
+    console.print("\n[bold]4. Sync Target Health[/bold]")
+    
+    try:
+        config = load_config()
+        for target in config.sync_targets:
+            if target.path.exists():
+                console.print(f"[green]✅ {target.name}: Path exists ({target.path})[/green]")
+                
+                # Check vault structure for Obsidian
+                if target.type == "obsidian":
+                    expected_dirs = ["_system", "_attachments", "inbox", "active", "archive", "knowledge"]
+                    missing_dirs = [d for d in expected_dirs if not (target.path / d).exists()]
+                    if missing_dirs:
+                        warnings.append(f"{target.name}: Missing vault directories: {', '.join(missing_dirs)}")
+                    else:
+                        console.print(f"[green]✅ {target.name}: Vault structure complete[/green]")
+            else:
+                issues.append(f"{target.name}: Path does not exist ({target.path})")
+    except Exception as e:
+        issues.append(f"Could not check sync targets: {e}")
+    
+    # Check 5: Performance
+    console.print("\n[bold]5. Performance Check[/bold]")
+    
+    try:
+        # Test metadata extraction
+        if claude_dir.exists() and md_files:
+            test_file = md_files[0]
+            start_time = datetime.now()
+            
+            metadata_manager = get_metadata_manager()
+            metadata_manager.extract_metadata_from_file(test_file)
+            
+            elapsed = (datetime.now() - start_time).total_seconds()
+            console.print(f"[green]✅ Metadata extraction: {elapsed:.3f}s[/green]")
+            
+            if elapsed > 2.0:
+                warnings.append(f"Slow metadata extraction ({elapsed:.1f}s)")
+        else:
+            warnings.append("No files available for performance testing")
+            
+    except Exception as e:
+        warnings.append(f"Performance test failed: {e}")
+    
+    # Check 6: Classification System
+    console.print("\n[bold]6. AI Classification System[/bold]")
+    
+    try:
+        classifier = SmartContentClassifier()
+        test_content = "import pandas as pd\nfrom fastapi import FastAPI"
+        results = classifier.classify_content(test_content)
+        
+        if results:
+            console.print(f"[green]✅ Classification working: {len(results)} results[/green]")
+        else:
+            warnings.append("Classification returned no results")
+            
+    except Exception as e:
+        warnings.append(f"Classification system error: {e}")
+    
+    # Summary
+    console.print("\n[bold]📋 Diagnostic Summary[/bold]")
+    
+    if not issues and not warnings:
+        console.print("[bold green]🎉 All systems healthy![/bold green]")
+        console.print("Your Claude Knowledge Catalyst installation is working perfectly.")
+    else:
+        if issues:
+            console.print(f"\n[bold red]❌ {len(issues)} Critical Issues:[/bold red]")
+            for issue in issues:
+                console.print(f"  • {issue}")
+                
+        if warnings:
+            console.print(f"\n[bold yellow]⚠️ {len(warnings)} Warnings:[/bold yellow]")
+            for warning in warnings:
+                console.print(f"  • {warning}")
+    
+    # Recommendations
+    console.print("\n[bold]💡 Recommendations:[/bold]")
+    
+    if issues:
+        console.print("1. Fix critical issues first using [bold]ckc wizard[/bold]")
+        console.print("2. Check configuration with [bold]ckc status[/bold]")
+    
+    if config and not config.sync_targets:
+        console.print("1. Add a knowledge vault with [bold]ckc add <name> <path>[/bold]")
+    
+    if len(md_files) == 0:
+        console.print("1. Create knowledge files in .claude/ directory")
+        console.print("2. Use [bold]ckc wizard[/bold] to create sample files")
+    
+    console.print("3. Run [bold]ckc sync[/bold] to sync your knowledge")
+    console.print("4. Use [bold]ckc watch[/bold] for automatic syncing")
 
 
 def main() -> None:
