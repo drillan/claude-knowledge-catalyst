@@ -1,6 +1,5 @@
 """Tests for knowledge analytics functionality."""
 
-import json
 import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -137,9 +136,7 @@ Please help debug this code issue.
             mock_items = [
                 (
                     vault_path / "knowledge" / "file1.md",
-                    KnowledgeMetadata(
-                        title="Test 1", tech=["python"], type="concept"
-                    ),
+                    KnowledgeMetadata(title="Test 1", tech=["python"], type="concept"),
                 ),
                 (
                     vault_path / "knowledge" / "file2.md",
@@ -165,9 +162,18 @@ Please help debug this code issue.
         """Test tag analysis functionality."""
         vault_path = analytics.vault_path
         mock_items = [
-            (vault_path / "knowledge" / "f1.md", KnowledgeMetadata(title="File 1", tech=["python", "programming"])),
-            (vault_path / "knowledge" / "f2.md", KnowledgeMetadata(title="File 2", tech=["python", "advanced"])),
-            (vault_path / "knowledge" / "f3.md", KnowledgeMetadata(title="File 3", tech=["javascript", "programming"])),
+            (
+                vault_path / "knowledge" / "f1.md",
+                KnowledgeMetadata(title="File 1", tech=["python", "programming"]),
+            ),
+            (
+                vault_path / "knowledge" / "f2.md",
+                KnowledgeMetadata(title="File 2", tech=["python", "advanced"]),
+            ),
+            (
+                vault_path / "knowledge" / "f3.md",
+                KnowledgeMetadata(title="File 3", tech=["javascript", "programming"]),
+            ),
         ]
 
         overview = analytics._generate_overview(mock_items)
@@ -181,10 +187,22 @@ Please help debug this code issue.
         """Test category distribution analysis."""
         vault_path = analytics.vault_path
         mock_items = [
-            (vault_path / "knowledge" / "f1.md", KnowledgeMetadata(title="File 1", type="concept")),
-            (vault_path / "knowledge" / "f2.md", KnowledgeMetadata(title="File 2", type="concept")),
-            (vault_path / "knowledge" / "f3.md", KnowledgeMetadata(title="File 3", type="prompt")),
-            (vault_path / "knowledge" / "f4.md", KnowledgeMetadata(title="File 4", type="code")),
+            (
+                vault_path / "knowledge" / "f1.md",
+                KnowledgeMetadata(title="File 1", type="concept"),
+            ),
+            (
+                vault_path / "knowledge" / "f2.md",
+                KnowledgeMetadata(title="File 2", type="concept"),
+            ),
+            (
+                vault_path / "knowledge" / "f3.md",
+                KnowledgeMetadata(title="File 3", type="prompt"),
+            ),
+            (
+                vault_path / "knowledge" / "f4.md",
+                KnowledgeMetadata(title="File 4", type="code"),
+            ),
         ]
 
         content_analysis = analytics._analyze_content_distribution(mock_items)
@@ -198,10 +216,22 @@ Please help debug this code issue.
         """Test success rate analysis."""
         vault_path = analytics.vault_path
         mock_items = [
-            (vault_path / "knowledge" / "f1.md", KnowledgeMetadata(title="File 1", success_rate=90)),
-            (vault_path / "knowledge" / "f2.md", KnowledgeMetadata(title="File 2", success_rate=85)),
-            (vault_path / "knowledge" / "f3.md", KnowledgeMetadata(title="File 3", success_rate=95)),
-            (vault_path / "knowledge" / "f4.md", KnowledgeMetadata(title="File 4")),  # No success rate
+            (
+                vault_path / "knowledge" / "f1.md",
+                KnowledgeMetadata(title="File 1", success_rate=90),
+            ),
+            (
+                vault_path / "knowledge" / "f2.md",
+                KnowledgeMetadata(title="File 2", success_rate=85),
+            ),
+            (
+                vault_path / "knowledge" / "f3.md",
+                KnowledgeMetadata(title="File 3", success_rate=95),
+            ),
+            (
+                vault_path / "knowledge" / "f4.md",
+                KnowledgeMetadata(title="File 4"),
+            ),  # No success rate
         ]
 
         content_analysis = analytics._analyze_content_distribution(mock_items)
@@ -225,10 +255,22 @@ Please help debug this code issue.
         vault_path = analytics.vault_path
 
         mock_items = [
-            (vault_path / "knowledge" / "f1.md", KnowledgeMetadata(title="File 1", created=now.isoformat())),
-            (vault_path / "knowledge" / "f2.md", KnowledgeMetadata(title="File 2", created=yesterday.isoformat())),
-            (vault_path / "knowledge" / "f3.md", KnowledgeMetadata(title="File 3", created=week_ago.isoformat())),
-            (vault_path / "knowledge" / "f4.md", KnowledgeMetadata(title="File 4")),  # No creation date
+            (
+                vault_path / "knowledge" / "f1.md",
+                KnowledgeMetadata(title="File 1", created=now.isoformat()),
+            ),
+            (
+                vault_path / "knowledge" / "f2.md",
+                KnowledgeMetadata(title="File 2", created=yesterday.isoformat()),
+            ),
+            (
+                vault_path / "knowledge" / "f3.md",
+                KnowledgeMetadata(title="File 3", created=week_ago.isoformat()),
+            ),
+            (
+                vault_path / "knowledge" / "f4.md",
+                KnowledgeMetadata(title="File 4"),
+            ),  # No creation date
         ]
 
         usage_patterns = analytics._analyze_usage_patterns(mock_items)
@@ -296,9 +338,18 @@ Please help debug this code issue.
         """Test knowledge gaps identification through evolution analysis."""
         vault_path = analytics.vault_path
         mock_items = [
-            (vault_path / "knowledge" / "f1.md", KnowledgeMetadata(title="File 1", tech=["python", "basic"])),
-            (vault_path / "knowledge" / "f2.md", KnowledgeMetadata(title="File 2", tech=["python", "basic"])),
-            (vault_path / "knowledge" / "f3.md", KnowledgeMetadata(title="File 3", tech=["javascript", "advanced"])),
+            (
+                vault_path / "knowledge" / "f1.md",
+                KnowledgeMetadata(title="File 1", tech=["python", "basic"]),
+            ),
+            (
+                vault_path / "knowledge" / "f2.md",
+                KnowledgeMetadata(title="File 2", tech=["python", "basic"]),
+            ),
+            (
+                vault_path / "knowledge" / "f3.md",
+                KnowledgeMetadata(title="File 3", tech=["javascript", "advanced"]),
+            ),
         ]
 
         evolution = analytics._analyze_knowledge_evolution(mock_items)
@@ -312,9 +363,18 @@ Please help debug this code issue.
         """Test performance metrics through quality analysis."""
         vault_path = analytics.vault_path
         mock_items = [
-            (vault_path / "knowledge" / "f1.md", KnowledgeMetadata(title="File 1", success_rate=90, usage_count=10)),
-            (vault_path / "knowledge" / "f2.md", KnowledgeMetadata(title="File 2", success_rate=80, usage_count=5)),
-            (vault_path / "knowledge" / "f3.md", KnowledgeMetadata(title="File 3", success_rate=95, usage_count=15)),
+            (
+                vault_path / "knowledge" / "f1.md",
+                KnowledgeMetadata(title="File 1", success_rate=90, usage_count=10),
+            ),
+            (
+                vault_path / "knowledge" / "f2.md",
+                KnowledgeMetadata(title="File 2", success_rate=80, usage_count=5),
+            ),
+            (
+                vault_path / "knowledge" / "f3.md",
+                KnowledgeMetadata(title="File 3", success_rate=95, usage_count=15),
+            ),
         ]
 
         quality_metrics = analytics._analyze_quality_metrics(mock_items)
@@ -328,8 +388,14 @@ Please help debug this code issue.
         """Test JSON report export through comprehensive report generation."""
         # Test the actual export functionality through comprehensive report
         mock_items = [
-            (temp_vault_path / "knowledge" / "f1.md", KnowledgeMetadata(title="File 1", type="concept")),
-            (temp_vault_path / "knowledge" / "f2.md", KnowledgeMetadata(title="File 2", type="prompt")),
+            (
+                temp_vault_path / "knowledge" / "f1.md",
+                KnowledgeMetadata(title="File 1", type="concept"),
+            ),
+            (
+                temp_vault_path / "knowledge" / "f2.md",
+                KnowledgeMetadata(title="File 2", type="prompt"),
+            ),
         ]
 
         with patch.object(analytics, "_collect_knowledge_items") as mock_collect:
@@ -348,24 +414,24 @@ Please help debug this code issue.
         """Test analytics caching mechanism through direct cache testing."""
         # Test the cache directly by setting cache timestamp and data
         from datetime import datetime, timedelta
-        
+
         vault_path = analytics.vault_path
         test_items = [
             (vault_path / "knowledge" / "f1.md", KnowledgeMetadata(title="Test"))
         ]
-        
+
         # Test cached behavior
         analytics._cache["knowledge_items"] = test_items
         analytics._cache_timestamp = datetime.now()
-        
+
         # Should return cached items
         cached_items = analytics._collect_knowledge_items()
         assert len(cached_items) == 1
         assert cached_items[0][1].title == "Test"
-        
+
         # Test expired cache behavior - should clear and use empty result
         analytics._cache_timestamp = datetime.now() - timedelta(hours=2)
-        
+
         # Verify cache is working by checking internal state
         assert analytics._cache["knowledge_items"] == test_items
 
@@ -373,9 +439,18 @@ Please help debug this code issue.
         """Test data preparation for visualizations through report generation."""
         vault_path = analytics.vault_path
         mock_items = [
-            (vault_path / "knowledge" / "f1.md", KnowledgeMetadata(title="File 1", tech=["python"], type="concept")),
-            (vault_path / "knowledge" / "f2.md", KnowledgeMetadata(title="File 2", tech=["api"], type="prompt")),
-            (vault_path / "knowledge" / "f3.md", KnowledgeMetadata(title="File 3", tech=["debug"], type="code")),
+            (
+                vault_path / "knowledge" / "f1.md",
+                KnowledgeMetadata(title="File 1", tech=["python"], type="concept"),
+            ),
+            (
+                vault_path / "knowledge" / "f2.md",
+                KnowledgeMetadata(title="File 2", tech=["api"], type="prompt"),
+            ),
+            (
+                vault_path / "knowledge" / "f3.md",
+                KnowledgeMetadata(title="File 3", tech=["debug"], type="code"),
+            ),
         ]
 
         # Test through the comprehensive report which contains visualization data
@@ -570,7 +645,9 @@ class TestAnalyticsErrorHandling:
                 report = analytics.generate_comprehensive_report()
 
                 assert report["report_sections"]["overview"]["total_files"] == 0
-                assert isinstance(report["report_sections"]["overview"]["content_distribution"], dict)
+                assert isinstance(
+                    report["report_sections"]["overview"]["content_distribution"], dict
+                )
 
     def test_malformed_metadata_handling(self, analytics):
         """Test handling of malformed metadata."""

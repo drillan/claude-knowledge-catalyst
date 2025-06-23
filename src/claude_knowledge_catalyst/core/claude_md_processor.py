@@ -134,10 +134,10 @@ class ClaudeMdProcessor:
         Returns:
             Dictionary with extracted metadata
         """
-        metadata = {}
+        metadata: dict[str, Any] = {}
 
         # Count sections
-        sections = [
+        sections: list[str] = [
             line.strip() for line in content.split("\n") if line.strip().startswith("#")
         ]
         metadata["section_count"] = len(sections)

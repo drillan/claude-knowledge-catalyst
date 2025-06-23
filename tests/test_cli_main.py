@@ -461,20 +461,22 @@ class TestCLIAdvancedCommands:
 
     @patch("claude_knowledge_catalyst.cli.main.load_config")
     @patch("claude_knowledge_catalyst.cli.main.MetadataManager")
-    def test_analyze_command_basic(self, mock_metadata_manager, mock_load_config, cli_runner, temp_project_dir):
+    def test_analyze_command_basic(
+        self, mock_metadata_manager, mock_load_config, cli_runner, temp_project_dir
+    ):
         """Test analyze command basic functionality."""
         # Setup mocks
         mock_config = Mock(spec=CKCConfig)
         mock_config.project_root = temp_project_dir
         mock_load_config.return_value = mock_config
-        
+
         mock_manager = Mock()
         mock_metadata_manager.return_value = mock_manager
 
         # Create .claude directory
         claude_dir = temp_project_dir / ".claude"
         claude_dir.mkdir()
-        
+
         result = cli_runner.invoke(app, ["analyze"])
         # Should handle analyze command (may exit with various codes based on content)
         assert result.exit_code in [0, 1, 2]  # 2 for argument validation errors
@@ -492,13 +494,15 @@ class TestCLIAdvancedCommands:
         claude_dir.mkdir()
         test_file = claude_dir / "test.md"
         test_file.write_text("# Test Content\nThis is a test file with python content.")
-        
+
         result = cli_runner.invoke(app, ["search", "python"])
         # Should handle search command
         assert result.exit_code in [0, 1]
 
     @patch("claude_knowledge_catalyst.cli.main.load_config")
-    def test_status_command_detailed(self, mock_load_config, cli_runner, temp_project_dir):
+    def test_status_command_detailed(
+        self, mock_load_config, cli_runner, temp_project_dir
+    ):
         """Test status command with detailed output."""
         # Setup mocks with more realistic config
         mock_config = Mock(spec=CKCConfig)
@@ -506,7 +510,12 @@ class TestCLIAdvancedCommands:
         mock_config.project_name = "test-project"
         mock_config.auto_sync = True
         mock_config.sync_targets = [
-            SyncTarget(name="test-vault", type="obsidian", path=temp_project_dir / "vault", enabled=True)
+            SyncTarget(
+                name="test-vault",
+                type="obsidian",
+                path=temp_project_dir / "vault",
+                enabled=True,
+            )
         ]
         mock_config.get_enabled_sync_targets.return_value = mock_config.sync_targets
         mock_load_config.return_value = mock_config
@@ -514,7 +523,7 @@ class TestCLIAdvancedCommands:
         # Create project structure
         claude_dir = temp_project_dir / ".claude"
         claude_dir.mkdir()
-        
+
         result = cli_runner.invoke(app, ["status"])
         assert result.exit_code in [0, 1]
         # Should handle status command gracefully
@@ -522,9 +531,11 @@ class TestCLIAdvancedCommands:
             # Verify expected output elements when successful
             assert len(result.stdout) > 0
 
-    @patch("claude_knowledge_catalyst.cli.main.load_config") 
+    @patch("claude_knowledge_catalyst.cli.main.load_config")
     @patch("claude_knowledge_catalyst.cli.main.ObsidianVaultManager")
-    def test_sync_command_with_target(self, mock_vault_manager, mock_load_config, cli_runner, temp_project_dir):
+    def test_sync_command_with_target(
+        self, mock_vault_manager, mock_load_config, cli_runner, temp_project_dir
+    ):
         """Test sync command with specific target."""
         # Setup mocks
         mock_config = Mock(spec=CKCConfig)
@@ -532,7 +543,9 @@ class TestCLIAdvancedCommands:
         vault_path = temp_project_dir / "vault"
         vault_path.mkdir()
         mock_config.sync_targets = [
-            SyncTarget(name="test-vault", type="obsidian", path=vault_path, enabled=True)
+            SyncTarget(
+                name="test-vault", type="obsidian", path=vault_path, enabled=True
+            )
         ]
         mock_config.get_enabled_sync_targets.return_value = mock_config.sync_targets
         mock_load_config.return_value = mock_config
@@ -546,20 +559,19 @@ class TestCLIAdvancedCommands:
         claude_dir.mkdir()
         test_file = claude_dir / "test.md"
         test_file.write_text("# Test Content")
-        
-        result = cli_runner.invoke(
-            app, 
-            ["sync", "--target", "test-vault"]
-        )
+
+        result = cli_runner.invoke(app, ["sync", "--target", "test-vault"])
         assert result.exit_code in [0, 1]
 
     @patch("claude_knowledge_catalyst.cli.main.load_config")
-    def test_init_command_with_existing_config(self, mock_load_config, cli_runner, temp_project_dir):
+    def test_init_command_with_existing_config(
+        self, mock_load_config, cli_runner, temp_project_dir
+    ):
         """Test init command when config already exists."""
         # Create existing config file
         config_path = temp_project_dir / "ckc_config.yaml"
         config_path.write_text("project_name: existing-project\nauto_sync: true\n")
-        
+
         result = cli_runner.invoke(app, ["init"])
         # Should handle existing config gracefully
         assert result.exit_code in [0, 1]
@@ -567,25 +579,32 @@ class TestCLIAdvancedCommands:
     @patch("claude_knowledge_catalyst.cli.main.get_config")
     @patch("claude_knowledge_catalyst.cli.main.get_metadata_manager")
     @patch("claude_knowledge_catalyst.cli.main.ObsidianVaultManager")
-    def test_add_command_basic(self, mock_vault_manager, mock_metadata_manager, mock_get_config, cli_runner, temp_project_dir):
+    def test_add_command_basic(
+        self,
+        mock_vault_manager,
+        mock_metadata_manager,
+        mock_get_config,
+        cli_runner,
+        temp_project_dir,
+    ):
         """Test add command basic functionality."""
         # Setup mocks
         mock_config = Mock(spec=CKCConfig)
         mock_config.add_sync_target = Mock()
         mock_config.save_to_file = Mock()
         mock_get_config.return_value = mock_config
-        
+
         mock_manager = Mock()
         mock_metadata_manager.return_value = mock_manager
-        
+
         mock_vault = Mock()
         mock_vault.initialize_vault.return_value = True
         mock_vault_manager.return_value = mock_vault
-        
+
         # Create test vault directory
         vault_path = temp_project_dir / "test_vault"
         vault_path.mkdir()
-        
+
         result = cli_runner.invoke(app, ["add", "test-vault", str(vault_path)])
         # Should handle add command (may exit with various codes)
         assert result.exit_code in [0, 1, 2]
@@ -596,15 +615,22 @@ class TestCLIAdvancedCommands:
         # Setup mocks
         mock_config = Mock(spec=CKCConfig)
         mock_config.sync_targets = [
-            SyncTarget(name="test-vault", type="obsidian", path=temp_project_dir / "vault", enabled=True)
+            SyncTarget(
+                name="test-vault",
+                type="obsidian",
+                path=temp_project_dir / "vault",
+                enabled=True,
+            )
         ]
         mock_load_config.return_value = mock_config
-        
+
         result = cli_runner.invoke(app, ["sync", "list"])
         assert result.exit_code in [0, 1, 2]  # 2 for argument validation errors
 
     @patch("claude_knowledge_catalyst.cli.main.load_config")
-    def test_analyze_files_command(self, mock_load_config, cli_runner, temp_project_dir):
+    def test_analyze_files_command(
+        self, mock_load_config, cli_runner, temp_project_dir
+    ):
         """Test analyze files command."""
         # Setup mocks
         mock_config = Mock(spec=CKCConfig)
@@ -616,7 +642,7 @@ class TestCLIAdvancedCommands:
         claude_dir.mkdir()
         test_file = claude_dir / "test.md"
         test_file.write_text("# Test Content\nSome test content.")
-        
+
         result = cli_runner.invoke(app, ["analyze", "files", str(test_file)])
         assert result.exit_code in [0, 1, 2]
 
@@ -627,7 +653,7 @@ class TestCLIAdvancedCommands:
         mock_config = Mock(spec=CKCConfig)
         mock_config.get_enabled_sync_targets.return_value = []
         mock_get_config.return_value = mock_config
-        
+
         result = cli_runner.invoke(app, ["sync"])
         assert result.exit_code in [0, 1]
 
@@ -636,9 +662,11 @@ class TestCLIAdvancedCommands:
         """Test sync command with non-existent target."""
         # Setup mock config with different targets
         mock_config = Mock(spec=CKCConfig)
-        mock_target = SyncTarget(name="other-vault", type="obsidian", path=Path("/tmp"), enabled=True)
+        mock_target = SyncTarget(
+            name="other-vault", type="obsidian", path=Path("/tmp"), enabled=True
+        )
         mock_config.get_enabled_sync_targets.return_value = [mock_target]
         mock_get_config.return_value = mock_config
-        
+
         result = cli_runner.invoke(app, ["sync", "--target", "non-existent"])
         assert result.exit_code in [0, 1]

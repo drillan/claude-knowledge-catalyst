@@ -1,10 +1,7 @@
 """Tests for Obsidian vault synchronization functionality."""
 
-import pytest
-
-# Obsidian sync tests - core functionality testing  
+# Obsidian sync tests - core functionality testing
 # Re-enabled for improved test coverage and quality assurance
-
 import tempfile
 from pathlib import Path
 from unittest.mock import Mock, patch
@@ -110,9 +107,14 @@ This is a test file.
 
         # Setup metadata
         metadata = KnowledgeMetadata(
-            title="Test File", tags=["test", "example"], type="prompt", status="production"
+            title="Test File",
+            tags=["test", "example"],
+            type="prompt",
+            status="production",
         )
-        vault_manager.metadata_manager.extract_metadata_from_file.return_value = metadata
+        vault_manager.metadata_manager.extract_metadata_from_file.return_value = (
+            metadata
+        )
 
         # Initialize vault structure
         temp_vault_path.mkdir(parents=True, exist_ok=True)
@@ -143,7 +145,9 @@ tags: ["inbox", "unprocessed"]
 
         # Setup metadata with inbox tags
         metadata = KnowledgeMetadata(title="Inbox File", tags=["inbox", "unprocessed"])
-        vault_manager.metadata_manager.extract_metadata_from_file.return_value = metadata
+        vault_manager.metadata_manager.extract_metadata_from_file.return_value = (
+            metadata
+        )
 
         # Initialize vault structure
         temp_vault_path.mkdir(parents=True, exist_ok=True)
@@ -163,26 +167,38 @@ tags: ["inbox", "unprocessed"]
         # This functionality is handled internally by _determine_target_path based on status
         # Testing with actual metadata objects instead
         metadata_production = KnowledgeMetadata(title="Production", status="production")
-        target_path = vault_manager._determine_target_path(metadata_production, Path("test.md"), None)
+        target_path = vault_manager._determine_target_path(
+            metadata_production, Path("test.md"), None
+        )
         assert "knowledge" in str(target_path)
-        
+
         metadata_draft = KnowledgeMetadata(title="Draft", status="draft")
-        target_path = vault_manager._determine_target_path(metadata_draft, Path("test.md"), None)
+        target_path = vault_manager._determine_target_path(
+            metadata_draft, Path("test.md"), None
+        )
         assert "inbox" in str(target_path)
 
     def test_get_target_directory_by_tags(self, vault_manager):
         """Test target directory determination by status (tag-centered architecture)."""
         # Test status-based placement (actual implementation)
         metadata_draft = KnowledgeMetadata(title="Draft Item", status="draft")
-        target_path = vault_manager._determine_target_path(metadata_draft, Path("test.md"), None)
+        target_path = vault_manager._determine_target_path(
+            metadata_draft, Path("test.md"), None
+        )
         assert "inbox" in str(target_path)
 
-        metadata_deprecated = KnowledgeMetadata(title="Archive Item", status="deprecated")
-        target_path = vault_manager._determine_target_path(metadata_deprecated, Path("test.md"), None)
+        metadata_deprecated = KnowledgeMetadata(
+            title="Archive Item", status="deprecated"
+        )
+        target_path = vault_manager._determine_target_path(
+            metadata_deprecated, Path("test.md"), None
+        )
         assert "archive" in str(target_path)
 
         metadata_tested = KnowledgeMetadata(title="Active Item", status="tested")
-        target_path = vault_manager._determine_target_path(metadata_tested, Path("test.md"), None)
+        target_path = vault_manager._determine_target_path(
+            metadata_tested, Path("test.md"), None
+        )
         assert "knowledge" in str(target_path)
 
     def test_create_directory_structure(self, vault_manager, temp_vault_path):
@@ -202,11 +218,11 @@ tags: ["inbox", "unprocessed"]
         """Test vault structure validation via initialize_vault."""
         # Test initialization creates proper structure
         temp_vault_path.mkdir(parents=True, exist_ok=True)
-        
+
         # Initialize should create the structure
         result = vault_manager.initialize_vault()
         assert result is True
-        
+
         # Check that directories were created
         for dir_name in vault_manager.vault_structure.keys():
             assert (temp_vault_path / dir_name).exists()
@@ -232,7 +248,7 @@ tags: ["inbox", "unprocessed"]
         assert "knowledge" in stats
         assert "inbox" in stats
         assert stats["knowledge"] >= 2  # 2 files in knowledge dir
-        assert stats["inbox"] >= 1     # 1 file in inbox dir
+        assert stats["inbox"] >= 1  # 1 file in inbox dir
 
     def test_sync_target_integration(self, vault_manager):
         """Test integration with SyncTarget configuration."""
@@ -248,7 +264,7 @@ tags: ["inbox", "unprocessed"]
 
         # Test sync target integration - check that paths match
         assert str(vault_manager.vault_path) == str(sync_target.path)
-        
+
         # Test that vault can be initialized
         result = vault_manager.initialize_vault()
         assert result is True
@@ -269,7 +285,9 @@ tags: ["inbox", "unprocessed"]
         source_file.write_text(content)
 
         metadata = KnowledgeMetadata(title="Test File")
-        vault_manager.metadata_manager.extract_metadata_from_file.return_value = metadata
+        vault_manager.metadata_manager.extract_metadata_from_file.return_value = (
+            metadata
+        )
 
         # Initialize vault
         temp_vault_path.mkdir(parents=True, exist_ok=True)
@@ -313,8 +331,8 @@ class TestObsidianVaultManagerErrorHandling:
         """Test handling of metadata extraction errors."""
         temp_vault_path = tmp_path / "test_vault"
         vault_manager.vault_path = temp_vault_path
-        vault_manager.metadata_manager.extract_metadata_from_file.side_effect = Exception(
-            "Metadata error"
+        vault_manager.metadata_manager.extract_metadata_from_file.side_effect = (
+            Exception("Metadata error")
         )
 
         source_file = temp_vault_path.parent / "test.md"

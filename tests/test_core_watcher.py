@@ -157,11 +157,11 @@ class TestKnowledgeFileEventHandler:
                 # Configure mocks
                 mock_process.return_value = "# Mock CLAUDE.md content"
                 mock_metadata.return_value = {"is_claude_md": True}
-                
+
                 # Test the event handler processes CLAUDE.md files
                 # This is a smoke test to ensure no crashes
                 event_handler._handle_file_event("modified", claude_file)
-                
+
                 # The actual integration with watcher is tested implicitly
                 assert True  # Basic smoke test - ensures no exceptions
 
@@ -172,7 +172,7 @@ class TestKnowledgeFileEventHandler:
         # Test that the event handler processes the file without crashing
         # This is a smoke test - actual metadata extraction is tested elsewhere
         event_handler._handle_file_event("created", test_file)
-        
+
         # Verify the test completes without exceptions
         assert True
 
@@ -268,9 +268,9 @@ class TestKnowledgeWatcher:
 
         # Simulate file event
         test_file = temp_watch_dir / "test.md"
-        
+
         # Mock file existence and update methods to avoid complex dependencies
-        with patch.object(watcher, '_update_file_metadata') as mock_update:
+        with patch.object(watcher, "_update_file_metadata") as mock_update:
             watcher._handle_file_change("created", test_file)
 
         assert len(callback_results) == 1
@@ -301,7 +301,7 @@ class TestKnowledgeWatcher:
         # Only first callback should have been triggered initially
         assert len(results1) == 1
         assert results1[0] == ("modified", test_file)
-        
+
         # Only second callback should have been triggered after replacement
         assert len(results2) == 1
         assert results2[0] == ("created", test_file)
@@ -312,14 +312,17 @@ class TestKnowledgeWatcher:
         # Test watcher can be stopped (effectively disabling it)
         watch_config = WatchConfig(paths=[temp_watch_dir])
         watcher = KnowledgeWatcher(watch_config, metadata_manager)
-        
+
         # Start watcher
         with patch.object(watcher.observer, "start"):
             watcher.start()
             assert watcher.is_running is True
-            
+
             # Stop watcher (disable functionality)
-            with patch.object(watcher.observer, "stop"), patch.object(watcher.observer, "join"):
+            with (
+                patch.object(watcher.observer, "stop"),
+                patch.object(watcher.observer, "join"),
+            ):
                 watcher.stop()
                 assert watcher.is_running is False
 
@@ -329,8 +332,8 @@ class TestKnowledgeWatcher:
             ("document.md", True),
             ("README.md", True),
             ("test.txt", True),  # txt is in patterns now according to config
-            ("temp.tmp", False),  # Not in patterns and no ignore for .tmp  
-            ("test.py", False),   # Not in patterns
+            ("temp.tmp", False),  # Not in patterns and no ignore for .tmp
+            ("test.py", False),  # Not in patterns
         ],
     )
     def test_file_filtering(self, watcher, temp_watch_dir, file_name, should_watch):
@@ -400,7 +403,9 @@ class TestKnowledgeWatcherIntegration:
     def test_claude_md_file_detection(self, temp_project_dir):
         """Test specific handling of CLAUDE.md files."""
         watch_config = WatchConfig(
-            watch_paths=[temp_project_dir], file_patterns=["*.md"], include_claude_md=True
+            watch_paths=[temp_project_dir],
+            file_patterns=["*.md"],
+            include_claude_md=True,
         )
         metadata_manager = Mock(spec=MetadataManager)
 

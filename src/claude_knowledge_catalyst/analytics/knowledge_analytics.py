@@ -47,7 +47,7 @@ class KnowledgeAnalytics:
         # Collect all knowledge items with error handling
         try:
             knowledge_items = self._collect_knowledge_items()
-        except (FileNotFoundError, PermissionError) as e:
+        except (FileNotFoundError, PermissionError):
             # Handle missing files gracefully
             knowledge_items = []
             # Could log warning here in the future
@@ -121,9 +121,9 @@ class KnowledgeAnalytics:
 
         for file_path, metadata in knowledge_items:
             # Skip invalid metadata
-            if not metadata or not hasattr(metadata, 'tech'):
+            if not metadata or not hasattr(metadata, "tech"):
                 continue
-                
+
             # Content distribution by directory
             relative_path = file_path.relative_to(self.vault_path)
             main_dir = str(relative_path.parts[0]) if relative_path.parts else "root"
@@ -135,17 +135,17 @@ class KnowledgeAnalytics:
                     overview["tag_distribution"][tag] += 1
 
             # Status and confidence (quality renamed to confidence in metadata model)
-            if hasattr(metadata, 'status') and metadata.status:
+            if hasattr(metadata, "status") and metadata.status:
                 overview["status_distribution"][metadata.status] += 1
-            if hasattr(metadata, 'confidence') and metadata.confidence:
+            if hasattr(metadata, "confidence") and metadata.confidence:
                 overview["quality_distribution"][metadata.confidence] += 1
 
             # Timeline analysis
             try:
-                if hasattr(metadata, 'created') and metadata.created:
+                if hasattr(metadata, "created") and metadata.created:
                     created_month = metadata.created.strftime("%Y-%m")
                     overview["creation_timeline"][created_month] += 1
-                if hasattr(metadata, 'updated') and metadata.updated:
+                if hasattr(metadata, "updated") and metadata.updated:
                     updated_month = metadata.updated.strftime("%Y-%m")
                     overview["update_timeline"][updated_month] += 1
             except (AttributeError, ValueError):
@@ -180,9 +180,9 @@ class KnowledgeAnalytics:
 
         for file_path, metadata in knowledge_items:
             # Skip invalid metadata
-            if not metadata or not hasattr(metadata, 'type'):
+            if not metadata or not hasattr(metadata, "type"):
                 continue
-                
+
             # Content type analysis (pure tag system)
             if metadata.type:
                 analysis["category_distribution"][metadata.type] += 1
@@ -256,35 +256,46 @@ class KnowledgeAnalytics:
 
         for file_path, metadata in knowledge_items:
             # Skip invalid metadata
-            if not metadata or not hasattr(metadata, 'title'):
+            if not metadata or not hasattr(metadata, "title"):
                 continue
-                
+
             # Metadata completeness
             completeness = metrics["metadata_completeness"]
 
-            if hasattr(metadata, 'title') and metadata.title and metadata.title != "Untitled":
+            if (
+                hasattr(metadata, "title")
+                and metadata.title
+                and metadata.title != "Untitled"
+            ):
                 completeness["has_title"] += 1
 
-            if hasattr(metadata, 'tech') and metadata.tech:
+            if hasattr(metadata, "tech") and metadata.tech:
                 completeness["has_tags"] += 1
 
-            if hasattr(metadata, 'type') and metadata.type:
+            if hasattr(metadata, "type") and metadata.type:
                 completeness["has_category"] += 1
 
-            if hasattr(metadata, 'purpose') and metadata.purpose:
+            if hasattr(metadata, "purpose") and metadata.purpose:
                 completeness["has_purpose"] += 1
 
-            if hasattr(metadata, 'confidence') and metadata.confidence:
+            if hasattr(metadata, "confidence") and metadata.confidence:
                 completeness["has_quality_rating"] += 1
 
             # Complete metadata (has most fields)
             complete_count = sum(
                 [
-                    bool(hasattr(metadata, 'title') and metadata.title and metadata.title != "Untitled"),
-                    bool(hasattr(metadata, 'tech') and metadata.tech),
-                    bool(hasattr(metadata, 'type') and metadata.type),
-                    bool(hasattr(metadata, 'purpose') and metadata.purpose),
-                    bool((hasattr(metadata, 'tech') and metadata.tech) or (hasattr(metadata, 'domain') and metadata.domain)),
+                    bool(
+                        hasattr(metadata, "title")
+                        and metadata.title
+                        and metadata.title != "Untitled"
+                    ),
+                    bool(hasattr(metadata, "tech") and metadata.tech),
+                    bool(hasattr(metadata, "type") and metadata.type),
+                    bool(hasattr(metadata, "purpose") and metadata.purpose),
+                    bool(
+                        (hasattr(metadata, "tech") and metadata.tech)
+                        or (hasattr(metadata, "domain") and metadata.domain)
+                    ),
                 ]
             )
 
@@ -293,7 +304,7 @@ class KnowledgeAnalytics:
 
             # Quality indicators (using confidence attribute)
             quality_indicators = metrics["content_quality_indicators"]
-            if hasattr(metadata, 'confidence') and metadata.confidence:
+            if hasattr(metadata, "confidence") and metadata.confidence:
                 if metadata.confidence == "high":
                     quality_indicators["high_quality"] += 1
                 elif metadata.confidence == "medium":
@@ -305,16 +316,16 @@ class KnowledgeAnalytics:
 
             # Validation metrics
             validation = metrics["validation_metrics"]
-            if hasattr(metadata, 'success_rate') and metadata.success_rate is not None:
+            if hasattr(metadata, "success_rate") and metadata.success_rate is not None:
                 validation["files_with_success_rate"] += 1
                 success_rates.append(metadata.success_rate)
 
-            if hasattr(metadata, 'confidence') and metadata.confidence:
+            if hasattr(metadata, "confidence") and metadata.confidence:
                 validation["confidence_distribution"][metadata.confidence] += 1
 
             # Maintenance metrics
             maintenance = metrics["maintenance_metrics"]
-            if hasattr(metadata, 'updated') and metadata.updated:
+            if hasattr(metadata, "updated") and metadata.updated:
                 days_since_update = (now - metadata.updated).days
 
                 if days_since_update <= 30:
@@ -369,14 +380,18 @@ class KnowledgeAnalytics:
 
         for file_path, metadata in knowledge_items:
             # Skip invalid metadata
-            if not metadata or not hasattr(metadata, 'created'):
+            if not metadata or not hasattr(metadata, "created"):
                 continue
-                
+
             # Creation patterns
-            if hasattr(metadata, 'created') and metadata.created:
+            if hasattr(metadata, "created") and metadata.created:
                 created = metadata.created
-                patterns["creation_patterns"]["by_month"][created.strftime("%Y-%m")] += 1
-                patterns["creation_patterns"]["by_day_of_week"][created.strftime("%A")] += 1
+                patterns["creation_patterns"]["by_month"][
+                    created.strftime("%Y-%m")
+                ] += 1
+                patterns["creation_patterns"]["by_day_of_week"][
+                    created.strftime("%A")
+                ] += 1
                 patterns["creation_patterns"]["by_hour"][created.hour] += 1
 
                 # Content lifecycle
@@ -391,25 +406,31 @@ class KnowledgeAnalytics:
                     patterns["content_lifecycle"]["archived_content"] += 1
 
             # Update patterns
-            if hasattr(metadata, 'updated') and metadata.updated:
+            if hasattr(metadata, "updated") and metadata.updated:
                 updated = metadata.updated
                 patterns["update_patterns"]["by_month"][updated.strftime("%Y-%m")] += 1
-                
+
                 # Update intervals
-                if hasattr(metadata, 'created') and metadata.created:
+                if hasattr(metadata, "created") and metadata.created:
                     update_interval = (updated - metadata.created).days
                     if update_interval > 0:
-                        patterns["update_patterns"]["update_intervals"].append(update_interval)
+                        patterns["update_patterns"]["update_intervals"].append(
+                            update_interval
+                        )
 
             # Update frequency (if we have version history)
-            if hasattr(metadata, 'version') and metadata.version and metadata.version != "1.0":
+            if (
+                hasattr(metadata, "version")
+                and metadata.version
+                and metadata.version != "1.0"
+            ):
                 patterns["update_patterns"]["frequent_updaters"][str(file_path)] += 1
 
             # Collaboration patterns
-            if hasattr(metadata, 'author') and metadata.author:
+            if hasattr(metadata, "author") and metadata.author:
                 patterns["collaboration_patterns"]["authors"][metadata.author] += 1
 
-            if hasattr(metadata, 'projects') and metadata.projects:
+            if hasattr(metadata, "projects") and metadata.projects:
                 for project in metadata.projects:
                     patterns["collaboration_patterns"]["projects"][project] += 1
 
@@ -448,9 +469,9 @@ class KnowledgeAnalytics:
         # Filter out invalid metadata and sort by creation date for growth analysis
         valid_items = []
         for file_path, metadata in knowledge_items:
-            if metadata and hasattr(metadata, 'created') and metadata.created:
+            if metadata and hasattr(metadata, "created") and metadata.created:
                 valid_items.append((file_path, metadata))
-        
+
         sorted_items = sorted(valid_items, key=lambda x: x[1].created)
 
         # Calculate growth rates
@@ -466,11 +487,11 @@ class KnowledgeAnalytics:
 
         # Monthly growth and category distribution
         for file_path, metadata in sorted_items:
-            if hasattr(metadata, 'created') and metadata.created:
+            if hasattr(metadata, "created") and metadata.created:
                 month = metadata.created.strftime("%Y-%m")
                 evolution["knowledge_growth"]["monthly_growth"][month] += 1
 
-                if hasattr(metadata, 'type') and metadata.type:
+                if hasattr(metadata, "type") and metadata.type:
                     evolution["knowledge_growth"]["category_growth"][metadata.type][
                         month
                     ] += 1
@@ -480,34 +501,36 @@ class KnowledgeAnalytics:
             # Skip invalid metadata
             if not metadata:
                 continue
-                
+
             # Tag relationships
-            if hasattr(metadata, 'tech') and metadata.tech:
+            if hasattr(metadata, "tech") and metadata.tech:
                 for i, tag1 in enumerate(metadata.tech):
                     for tag2 in metadata.tech[i + 1 :]:
-                        evolution["knowledge_connections"]["tag_relationships"][tag1].add(
-                            tag2
-                        )
-                        evolution["knowledge_connections"]["tag_relationships"][tag2].add(
+                        evolution["knowledge_connections"]["tag_relationships"][
                             tag1
-                        )
+                        ].add(tag2)
+                        evolution["knowledge_connections"]["tag_relationships"][
+                            tag2
+                        ].add(tag1)
 
                 # Most connected topics (by tag frequency)
                 for tag in metadata.tech:
-                    evolution["knowledge_connections"]["most_connected_topics"][tag] += 1
+                    evolution["knowledge_connections"]["most_connected_topics"][
+                        tag
+                    ] += 1
 
             # Project connections
-            if hasattr(metadata, 'projects') and metadata.projects:
+            if hasattr(metadata, "projects") and metadata.projects:
                 for project in metadata.projects:
                     evolution["knowledge_connections"]["project_knowledge_map"][
                         project
                     ].append(
                         {
                             "file": str(file_path),
-                            "type": getattr(metadata, 'type', None),
-                            "tags": getattr(metadata, 'tech', []),
-                            "tech": getattr(metadata, 'tech', []),
-                            "domain": getattr(metadata, 'domain', []),
+                            "type": getattr(metadata, "type", None),
+                            "tags": getattr(metadata, "tech", []),
+                            "tech": getattr(metadata, "tech", []),
+                            "domain": getattr(metadata, "domain", []),
                         }
                     )
 
@@ -550,10 +573,19 @@ class KnowledgeAnalytics:
 
         # Analyze current state with null safety
         total_files = len(knowledge_items)
-        files_without_tags = sum(1 for _, m in knowledge_items if m and hasattr(m, 'tech') and not m.tech)
-        files_without_category = sum(1 for _, m in knowledge_items if m and hasattr(m, 'type') and not m.type)
+        files_without_tags = sum(
+            1 for _, m in knowledge_items if m and hasattr(m, "tech") and not m.tech
+        )
+        files_without_category = sum(
+            1 for _, m in knowledge_items if m and hasattr(m, "type") and not m.type
+        )
         outdated_files = sum(
-            1 for _, m in knowledge_items if m and hasattr(m, 'updated') and m.updated and (datetime.now() - m.updated).days > 180
+            1
+            for _, m in knowledge_items
+            if m
+            and hasattr(m, "updated")
+            and m.updated
+            and (datetime.now() - m.updated).days > 180
         )
 
         # Generate specific recommendations
@@ -595,7 +627,9 @@ class KnowledgeAnalytics:
 
         # Quality-based recommendations with null safety
         high_quality_files = sum(
-            1 for _, m in knowledge_items if m and hasattr(m, 'confidence') and m.confidence == "high"
+            1
+            for _, m in knowledge_items
+            if m and hasattr(m, "confidence") and m.confidence == "high"
         )
         if high_quality_files < total_files * 0.3:
             recommendations.append(

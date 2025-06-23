@@ -440,7 +440,10 @@ class InteractiveTagManager:
                 f"\n[cyan]{field_name}[/cyan] [dim](current: {current_value})[/dim]"
             )
             console.print(
-                f"[dim]Valid options: {', '.join(valid_values[:5])}{'...' if len(valid_values) > 5 else ''}[/dim]"
+                (
+                    f"[dim]Valid options: {', '.join(valid_values[:5])}"
+                    f"{'...' if len(valid_values) > 5 else ''}[/dim]"
+                )
             )
 
         value = Prompt.ask(f"New {field_name}", default=current_value)
@@ -462,12 +465,18 @@ class InteractiveTagManager:
     ) -> list[str] | None:
         """Prompt for list field values."""
         console.print(
-            f"\n[cyan]{field_name}[/cyan] [dim](current: {', '.join(current_values) if current_values else 'none'})[/dim]"
+            (
+                f"\n[cyan]{field_name}[/cyan] [dim](current: "
+                f"{', '.join(current_values) if current_values else 'none'})[/dim]"
+            )
         )
 
         if valid_values:
             console.print(
-                f"[dim]Valid options: {', '.join(valid_values[:8])}{'...' if len(valid_values) > 8 else ''}[/dim]"
+                (
+                    f"[dim]Valid options: {', '.join(valid_values[:8])}"
+                    f"{'...' if len(valid_values) > 8 else ''}[/dim]"
+                )
             )
 
         console.print(
@@ -489,7 +498,10 @@ class InteractiveTagManager:
             invalid_values = [v for v in new_values if v not in valid_values]
             if invalid_values:
                 console.print(
-                    f"[yellow]Warning: Non-standard values: {', '.join(invalid_values)}[/yellow]"
+                    (
+                        f"[yellow]Warning: Non-standard values: "
+                        f"{', '.join(invalid_values)}[/yellow]"
+                    )
                 )
                 if not Confirm.ask("[yellow]Continue anyway?[/yellow]"):
                     return None

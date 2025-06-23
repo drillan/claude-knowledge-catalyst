@@ -36,7 +36,7 @@ class QueryCondition:
 class ObsidianQueryBuilder:
     """Builder for Obsidian queries optimized for tag-centered system."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.conditions: list[QueryCondition] = []
         self.sort_field: str | None = None
         self.sort_ascending: bool = True
@@ -419,7 +419,6 @@ def generate_obsidian_queries_file() -> str:
             .build(),
             "DevOps Tools": ObsidianQueryBuilder()
             .team("devops")
-            .type(["code", "resource"])
             .build(),
         },
         "Status & Workflow": {
@@ -485,7 +484,7 @@ def generate_obsidian_queries_file() -> str:
             "```query",
             ObsidianQueryBuilder()
             .type("concept")
-            .complexity(["advanced", "expert"])
+            .complexity("advanced")
             .confidence("high")
             .domain(["machine-learning", "research"])
             .build(),

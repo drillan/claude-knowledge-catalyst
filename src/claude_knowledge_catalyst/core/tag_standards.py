@@ -1,6 +1,7 @@
 """Tag standards and best practices for pure tag-centered system."""
 
 from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
@@ -17,7 +18,7 @@ class TagStandard:
 class TagStandardsManager:
     """Manages tag standards and validation for pure tag-centered system."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.standards = self._initialize_standards()
 
     def _initialize_standards(self) -> dict[str, TagStandard]:
@@ -258,14 +259,20 @@ class TagStandardsManager:
         # Check maximum selections
         if len(values) > standard.max_selections:
             errors.append(
-                f"Too many values for '{tag_type}' (max: {standard.max_selections}, got: {len(values)})"
+                (
+                    f"Too many values for '{tag_type}' "
+                    f"(max: {standard.max_selections}, got: {len(values)})"
+                )
             )
 
         # Validate individual values
         for value in values:
             if value not in standard.valid_values:
                 errors.append(
-                    f"Invalid value '{value}' for tag '{tag_type}'. Valid values: {standard.valid_values[:10]}..."
+                    (
+                        f"Invalid value '{value}' for tag '{tag_type}'. "
+                        f"Valid values: {standard.valid_values[:10]}..."
+                    )
                 )
 
         return len(errors) == 0, errors
@@ -353,7 +360,7 @@ class TagStandardsManager:
         return matches[:10]  # Limit to 10 results
 
     def validate_metadata_tags(
-        self, metadata_dict: dict[str, any]
+        self, metadata_dict: dict[str, Any]
     ) -> tuple[bool, list[str]]:
         """Validate all tags in metadata dictionary.
 
@@ -381,7 +388,7 @@ class TagStandardsManager:
         return is_valid, all_errors
 
     def get_tag_statistics(
-        self, metadata_list: list[dict[str, any]]
+        self, metadata_list: list[dict[str, Any]]
     ) -> dict[str, dict[str, int]]:
         """Generate statistics about tag usage.
 
@@ -391,7 +398,7 @@ class TagStandardsManager:
         Returns:
             Statistics dictionary by tag type
         """
-        stats = {}
+        stats: dict[str, dict[str, int]] = {}
 
         for tag_type in self.standards.keys():
             stats[tag_type] = {}
@@ -416,13 +423,22 @@ class TagStandardsManager:
         lines = [
             "# Pure Tag-Centered System: Tag Standards",
             "",
-            "This document defines the standardized tag system for the revolutionary tag-centered knowledge management approach.",
+            (
+                "This document defines the standardized tag system for the "
+                "revolutionary tag-centered knowledge management approach."
+            ),
             "",
             "## Core Principles",
             "",
-            "1. **State-based Classification**: Files are organized by status (draft/tested/production/deprecated) rather than content type",
+            (
+                "1. **State-based Classification**: Files are organized by status "
+                "(draft/tested/production/deprecated) rather than content type"
+            ),
             "2. **Multi-layered Tags**: Rich metadata through multiple tag dimensions",
-            "3. **Cognitive Load Reduction**: No complex directory hierarchies to navigate",
+            (
+                "3. **Cognitive Load Reduction**: No complex directory hierarchies "
+                "to navigate"
+            ),
             "4. **Dynamic Organization**: Tags enable flexible views and queries",
             "",
             "## Tag Categories",

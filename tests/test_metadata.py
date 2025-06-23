@@ -6,8 +6,6 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 
-import pytest
-
 from claude_knowledge_catalyst.core.metadata import KnowledgeMetadata, MetadataManager
 
 
@@ -136,9 +134,11 @@ def hello():
             inferred_tech = self.manager._infer_tech_tags(content)
             inferred_domain = self.manager._infer_domain_tags(content)
             all_inferred = inferred_tech + inferred_domain
-            
+
             for tag in expected_tags:
-                assert tag in all_inferred, f"Expected tag '{tag}' not found in {all_inferred} for content: {content}"
+                assert tag in all_inferred, (
+                    f"Expected tag '{tag}' not found in {all_inferred} for content: {content}"
+                )
 
     def test_metadata_template_creation(self):
         """Test metadata template creation."""
@@ -176,7 +176,9 @@ def hello():
         # Should suggest new tags not in existing_tags
         assert "python" not in suggestions.get("tech", [])  # Already exists
         assert isinstance(suggestions, dict)  # Returns dict of suggestions
-        assert "tech" in suggestions or "domain" in suggestions  # Should have some suggestions
+        assert (
+            "tech" in suggestions or "domain" in suggestions
+        )  # Should have some suggestions
 
     def test_update_file_metadata(self):
         """Test updating metadata in files."""

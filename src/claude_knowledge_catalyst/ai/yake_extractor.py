@@ -252,26 +252,28 @@ class YAKEKeywordExtractor:
             # Take first and last portions to preserve important content
             half_limit = self.config.max_content_length // 2
             content = content[:half_limit] + content[-half_limit:]
-        
+
         # Remove excessive code blocks that add noise
         import re
-        
-        # Limit consecutive code blocks 
-        content = re.sub(r'(```[\s\S]*?```\s*){3,}', 
-                        lambda m: '```\n[Multiple code blocks truncated for performance]\n```\n', 
-                        content)
-        
+
+        # Limit consecutive code blocks
+        content = re.sub(
+            r"(```[\s\S]*?```\s*){3,}",
+            lambda m: "```\n[Multiple code blocks truncated for performance]\n```\n",
+            content,
+        )
+
         # Remove very long lines that are likely data/logs
-        lines = content.split('\n')
+        lines = content.split("\n")
         filtered_lines = []
         for line in lines:
             if len(line) > 200:
                 # Keep first 100 chars of long lines
-                filtered_lines.append(line[:100] + '...')
+                filtered_lines.append(line[:100] + "...")
             else:
                 filtered_lines.append(line)
-        
-        return '\n'.join(filtered_lines)
+
+        return "\n".join(filtered_lines)
 
     def _process_keywords(
         self, raw_keywords: list[tuple[str, float]], language: str

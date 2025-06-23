@@ -180,7 +180,7 @@ class AIKnowledgeAssistant:
                 {
                     "type": "structure",
                     "priority": "medium",
-                    "suggestion": "Add headings to improve content structure and readability",
+                    "suggestion": "Add headings to improve content structure",
                     "action": "Consider adding # Main Heading and ## Sub Headings",
                 }
             )
@@ -198,7 +198,7 @@ class AIKnowledgeAssistant:
                 {
                     "type": "structure",
                     "priority": "medium",
-                    "suggestion": "Add a comprehensive introduction to explain the content purpose",
+                    "suggestion": "Add introduction to explain content purpose",
                     "action": "Write 1-2 sentences explaining what this content covers",
                 }
             )
@@ -251,7 +251,10 @@ class AIKnowledgeAssistant:
                     "type": "metadata",
                     "priority": "medium",
                     "suggestion": "Add more tags for better discoverability",
-                    "action": f"Current tags: {metadata.tags}. Consider adding 2-3 more relevant tags",
+                    "action": (
+                        f"Current tags: {metadata.tags}. "
+                        "Consider adding 2-3 more relevant tags"
+                    ),
                 }
             )
 
@@ -264,7 +267,10 @@ class AIKnowledgeAssistant:
                         "type": "metadata",
                         "priority": "medium",
                         "suggestion": f"Assign content type: {suggested_type[0]}",
-                        "action": f"Add type: {suggested_type[0]} based on content analysis",
+                        "action": (
+                            f"Add type: {suggested_type[0]} "
+                            "based on content analysis"
+                        ),
                     }
                 )
 
@@ -307,7 +313,10 @@ class AIKnowledgeAssistant:
                     "type": "quality",
                     "priority": "medium",
                     "suggestion": "Expand content for better comprehensiveness",
-                    "action": "Current content is quite brief. Consider adding more detail and context",
+                    "action": (
+                        "Current content is quite brief. "
+                        "Consider adding more detail and context"
+                    ),
                 }
             )
         elif word_count > 2000:
@@ -316,7 +325,10 @@ class AIKnowledgeAssistant:
                     "type": "quality",
                     "priority": "low",
                     "suggestion": "Consider breaking into smaller, focused pieces",
-                    "action": "Content is extensive. Consider splitting into multiple focused documents",
+                    "action": (
+                        "Content is extensive. "
+                        "Consider splitting into multiple focused documents"
+                    ),
                 }
             )
 
@@ -347,7 +359,9 @@ class AIKnowledgeAssistant:
                 {
                     "type": "connection",
                     "priority": "low",
-                    "suggestion": f"Consider linking to {len(similar_files)} related files",
+                    "suggestion": (
+                        f"Consider linking to {len(similar_files)} related files"
+                    ),
                     "action": f"Related content: {', '.join(similar_files[:3])}",
                 }
             )
@@ -360,7 +374,9 @@ class AIKnowledgeAssistant:
                     "type": "connection",
                     "priority": "low",
                     "suggestion": "Add cross-references to related concepts",
-                    "action": f"Consider referencing: {', '.join(potential_references[:3])}",
+                    "action": (
+                        f"Consider referencing: {', '.join(potential_references[:3])}"
+                    ),
                 }
             )
 
@@ -437,8 +453,14 @@ class AIKnowledgeAssistant:
                     {
                         "type": "organization",
                         "priority": "medium",
-                        "suggestion": f"Directory '{overloaded_dirs[0]}' has too many files ({max_files})",
-                        "action": "Consider creating subdirectories to better organize content",
+                        "suggestion": (
+                            f"Directory '{overloaded_dirs[0]}' has too many files "
+                            f"({max_files})"
+                        ),
+                        "action": (
+                            "Consider creating subdirectories to better "
+                            "organize content"
+                        ),
                     }
                 )
 
@@ -450,7 +472,10 @@ class AIKnowledgeAssistant:
                     "type": "organization",
                     "priority": "high",
                     "suggestion": f"{orphaned_count} files lack proper organization",
-                    "action": "Add tags and categories to orphaned files for better organization",
+                    "action": (
+                        "Add tags and categories to orphaned files for "
+                        "better organization"
+                    ),
                 }
             )
 
@@ -471,7 +496,9 @@ class AIKnowledgeAssistant:
                 {
                     "type": "consolidation",
                     "priority": "low",
-                    "suggestion": f"Consider consolidating similar tags: {similar_tags[:3]}",
+                    "suggestion": (
+                        f"Consider consolidating similar tags: {similar_tags[:3]}"
+                    ),
                     "action": "Review tag taxonomy and merge similar concepts",
                 }
             )
@@ -485,8 +512,12 @@ class AIKnowledgeAssistant:
                 {
                     "type": "consolidation",
                     "priority": "low",
-                    "suggestion": f"Categories with only 1 file: {underused_categories[:3]}",
-                    "action": "Consider merging underused categories or expanding content",
+                    "suggestion": (
+                        f"Categories with only 1 file: {underused_categories[:3]}"
+                    ),
+                    "action": (
+                        "Consider merging underused categories or expanding content"
+                    ),
                 }
             )
 
@@ -515,7 +546,9 @@ class AIKnowledgeAssistant:
                 {
                     "type": "gap",
                     "priority": "medium",
-                    "suggestion": f"Consider adding content for: {missing_concepts[:2]}",
+                    "suggestion": (
+                        f"Consider adding content for: {missing_concepts[:2]}"
+                    ),
                     "action": "Create foundational content for common knowledge areas",
                 }
             )
@@ -528,7 +561,9 @@ class AIKnowledgeAssistant:
                     "type": "gap",
                     "priority": "low",
                     "suggestion": "Consider adding code examples to complement prompts",
-                    "action": "Balance prompt content with practical code implementations",
+                    "action": (
+                        "Balance prompt content with practical code implementations"
+                    ),
                 }
             )
 

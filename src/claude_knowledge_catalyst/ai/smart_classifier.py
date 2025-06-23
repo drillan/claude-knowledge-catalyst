@@ -61,11 +61,11 @@ class SmartContentClassifier:
         try:
             yake_config = YAKEConfig(
                 max_ngram_size=2,  # Optimized for performance
-                top_keywords=8,    # Reduced for efficiency
+                top_keywords=8,  # Reduced for efficiency
                 confidence_threshold=0.3,  # Higher threshold for better quality
                 enable_content_filtering=True,
                 max_content_length=3000,  # Limit for UI responsiveness
-                cache_size=300    # Smaller cache for memory efficiency
+                cache_size=300,  # Smaller cache for memory efficiency
             )
             self.yake_extractor = YAKEKeywordExtractor(yake_config)
         except Exception:
@@ -117,13 +117,15 @@ class SmartContentClassifier:
             # Skip YAKE for very short content to save processing
             if len(content.strip()) < 50:
                 return pattern_results
-                
+
             # Extract keywords using YAKE
             yake_keywords = self.yake_extractor.extract_keywords(content)
             if not yake_keywords:  # Early return if no keywords found
                 return pattern_results
-                
-            keyword_texts = [kw.text.lower() for kw in yake_keywords[:5]]  # Limit to top 5 for efficiency
+
+            keyword_texts = [
+                kw.text.lower() for kw in yake_keywords[:5]
+            ]  # Limit to top 5 for efficiency
 
             # Enhance existing results with YAKE confidence
             enhanced_results = []

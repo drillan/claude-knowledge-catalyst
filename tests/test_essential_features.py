@@ -247,46 +247,52 @@ git pull origin main
 
     def test_complete_readme_cli_workflow_e2e(self, workspace, cli_runner):
         """Test the complete README CLI workflow using actual CLI commands.
-        
+
         This is the comprehensive E2E test that validates the exact README workflow:
         1. ckc init
-        2. ckc add my-vault /path/to/obsidian/vault  
+        2. ckc add my-vault /path/to/obsidian/vault
         3. ckc sync
         """
         project_path = workspace["project"]
         vault_path = workspace["vault"]
         claude_dir = workspace["claude_dir"]
-        
+
         # Handle case where current directory may not exist
         try:
             original_cwd = os.getcwd()
         except (FileNotFoundError, OSError):
             original_cwd = Path(__file__).parent.parent.absolute()
             os.chdir(original_cwd)
-        
+
         try:
             # Change to project directory for CLI commands
             os.chdir(project_path)
-            
+
             # Step 1: Initialize project (ckc init)
             with patch("pathlib.Path.cwd", return_value=project_path):
                 init_result = cli_runner.invoke(app, ["init", "--force"])
-            
+
             # Should create configuration
             config_path = project_path / "ckc_config.yaml"
             assert config_path.exists(), "ckc init should create config file"
             assert claude_dir.exists(), "ckc init should create .claude directory"
-            
+
             # Verify config content
             config = CKCConfig.load_from_file(config_path)
             assert config.project_root == project_path
-            
+
             # Step 2: Add Obsidian vault (ckc add my-vault /path/to/vault)
             with (
                 patch("pathlib.Path.cwd", return_value=project_path),
-                patch("claude_knowledge_catalyst.cli.main.get_config") as mock_get_config,
-                patch("claude_knowledge_catalyst.cli.main.get_metadata_manager") as mock_metadata,
-                patch("claude_knowledge_catalyst.cli.main.ObsidianVaultManager") as mock_vault_manager
+                patch(
+                    "claude_knowledge_catalyst.cli.main.get_config"
+                ) as mock_get_config,
+                patch(
+                    "claude_knowledge_catalyst.cli.main.get_metadata_manager"
+                ) as mock_metadata,
+                patch(
+                    "claude_knowledge_catalyst.cli.main.ObsidianVaultManager"
+                ) as mock_vault_manager,
             ):
                 # Setup mocks for add command
                 mock_get_config.return_value = config
@@ -294,18 +300,22 @@ git pull origin main
                 mock_vault = ObsidianVaultManager(vault_path, MetadataManager())
                 mock_vault.initialize_vault = lambda: True
                 mock_vault_manager.return_value = mock_vault
-                
-                add_result = cli_runner.invoke(app, ["add", "my-vault", str(vault_path)])
-            
+
+                add_result = cli_runner.invoke(
+                    app, ["add", "my-vault", str(vault_path)]
+                )
+
             # Should succeed or provide meaningful feedback
-            assert add_result.exit_code in [0, 1], f"Add command failed: {add_result.stdout}"
-            
+            assert add_result.exit_code in [0, 1], (
+                f"Add command failed: {add_result.stdout}"
+            )
+
             if add_result.exit_code == 0:
                 # Verify vault was added to config
                 updated_config = CKCConfig.load_from_file(config_path)
                 vault_names = [target.name for target in updated_config.sync_targets]
                 assert "my-vault" in vault_names, "Should add vault to configuration"
-            
+
             # Step 3: Create sample content (as user would do)
             sample_content = """# Python FastAPI Development Guide
 
@@ -329,66 +339,99 @@ Tags: python, fastapi, web-development, api
 """
             sample_file = claude_dir / "fastapi_guide.md"
             sample_file.write_text(sample_content)
-            
+
             # Step 4: Sync content (ckc sync)
             with (
                 patch("pathlib.Path.cwd", return_value=project_path),
-                patch("claude_knowledge_catalyst.cli.main.get_config") as mock_get_config,
-                patch("claude_knowledge_catalyst.cli.main.get_metadata_manager") as mock_metadata,
-                patch("claude_knowledge_catalyst.cli.main.ObsidianVaultManager") as mock_vault_manager
+                patch(
+                    "claude_knowledge_catalyst.cli.main.get_config"
+                ) as mock_get_config,
+                patch(
+                    "claude_knowledge_catalyst.cli.main.get_metadata_manager"
+                ) as mock_metadata,
+                patch(
+                    "claude_knowledge_catalyst.cli.main.ObsidianVaultManager"
+                ) as mock_vault_manager,
             ):
                 # Setup mocks for sync
-                config.sync_targets = [SyncTarget(name="my-vault", type="obsidian", path=vault_path, enabled=True)]
+                config.sync_targets = [
+                    SyncTarget(
+                        name="my-vault", type="obsidian", path=vault_path, enabled=True
+                    )
+                ]
                 mock_get_config.return_value = config
                 mock_metadata.return_value = MetadataManager()
-                
+
                 # Mock vault manager with working sync
                 mock_vault = ObsidianVaultManager(vault_path, MetadataManager())
                 mock_vault.initialize_vault()
                 mock_vault.sync_directory = lambda x: True
                 mock_vault_manager.return_value = mock_vault
-                
+
                 sync_result = cli_runner.invoke(app, ["sync"])
-            
+
             # Should sync successfully or provide clear feedback
-            assert sync_result.exit_code in [0, 1], f"Sync command failed: {sync_result.stdout}"
-            
+            assert sync_result.exit_code in [0, 1], (
+                f"Sync command failed: {sync_result.stdout}"
+            )
+
             # Step 5: Verify the complete workflow results
             # Check that vault structure was created
-            expected_dirs = ["_system", "_attachments", "inbox", "active", "archive", "knowledge"]
+            expected_dirs = [
+                "_system",
+                "_attachments",
+                "inbox",
+                "active",
+                "archive",
+                "knowledge",
+            ]
             for dir_name in expected_dirs:
                 vault_dir = vault_path / dir_name
-                assert vault_dir.exists(), f"Should create {dir_name} directory in vault"
-            
+                assert vault_dir.exists(), (
+                    f"Should create {dir_name} directory in vault"
+                )
+
             # Step 6: Test status command shows project state
             with patch("pathlib.Path.cwd", return_value=project_path):
                 status_result = cli_runner.invoke(app, ["status"])
-            
+
             # Should provide project status
             assert status_result.exit_code in [0, 1], "Status command should work"
-            
+
             # Step 7: Verify end-to-end data flow
             # Content should be processable by metadata extraction
-            metadata_manager = MetadataManager() 
+            metadata_manager = MetadataManager()
             metadata = metadata_manager.extract_metadata_from_file(sample_file)
             assert metadata.title == "Python FastAPI Development Guide"
-            
+
             # Content should be classifiable
             classifier = SmartContentClassifier()
             results = classifier.classify_content(sample_content, str(sample_file))
-            
+
             # Should detect relevant technologies and types
             tech_results = [r for r in results if r.tag_type == "tech"]
             type_results = [r for r in results if r.tag_type == "type"]
-            
+
             # Verify intelligent classification
-            python_detected = any("python" in r.suggested_value.lower() for r in tech_results)
-            api_detected = any(any(keyword in r.suggested_value.lower() for keyword in ["api", "fastapi"]) for r in tech_results)
-            code_detected = any("code" in r.suggested_value.lower() for r in type_results)
-            
-            assert python_detected or api_detected, "Should detect Python/API technology"
+            python_detected = any(
+                "python" in r.suggested_value.lower() for r in tech_results
+            )
+            api_detected = any(
+                any(
+                    keyword in r.suggested_value.lower()
+                    for keyword in ["api", "fastapi"]
+                )
+                for r in tech_results
+            )
+            code_detected = any(
+                "code" in r.suggested_value.lower() for r in type_results
+            )
+
+            assert python_detected or api_detected, (
+                "Should detect Python/API technology"
+            )
             assert code_detected, "Should detect code content type"
-            
+
         finally:
             # Restore original directory
             try:
