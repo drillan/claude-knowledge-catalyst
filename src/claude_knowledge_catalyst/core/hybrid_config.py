@@ -64,7 +64,7 @@ class HybridStructureConfig(BaseModel):
                 try:
                     return NumberingSystem(v.lower())
                 except ValueError:
-                    raise ValueError(f"Invalid numbering system: {v}")
+                    raise ValueError(f"Invalid numbering system: {v}") from None
             raise ValueError(f"Invalid numbering system type: {type(v)}")
         return v
 

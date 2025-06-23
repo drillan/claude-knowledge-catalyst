@@ -48,7 +48,7 @@ class InteractiveTagManager:
             )
         except Exception as e:
             console.print(f"[red]Error reading file: {e}[/red]")
-            raise typer.Exit(1)
+            raise typer.Exit(1) from e
 
         # Show file preview
         self._show_file_preview(content)

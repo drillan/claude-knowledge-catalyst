@@ -912,7 +912,9 @@ class SmartContentClassifier:
                 tag_type="complexity",
                 suggested_value=suggested_value,
                 confidence=ConfidenceLevel.LOW.value + 0.1,
-                reasoning=f"Length-based complexity estimation ({content_length} chars)",
+                reasoning=(
+                    f"Length-based complexity estimation ({content_length} chars)"
+                ),
                 evidence=[f"Content length: {content_length} characters"],
             )
 

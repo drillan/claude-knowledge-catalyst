@@ -64,9 +64,7 @@ def classify_file_intelligent(
         classifier = KnowledgeClassifier(config.hybrid_structure)
 
         # Create minimal metadata for classification
-        KnowledgeMetadata(
-            title=file_path.stem, category=None, tags=[]
-        )
+        KnowledgeMetadata(title=file_path.stem, category=None, tags=[])
 
         # Analyze content and determine classification
         classification = analyze_content_advanced(content, file_path, classifier)

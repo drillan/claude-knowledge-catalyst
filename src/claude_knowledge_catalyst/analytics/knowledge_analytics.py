@@ -486,7 +486,7 @@ class KnowledgeAnalytics:
                 )
 
         # Monthly growth and category distribution
-        for file_path, metadata in sorted_items:
+        for _file_path, metadata in sorted_items:
             if hasattr(metadata, "created") and metadata.created:
                 month = metadata.created.strftime("%Y-%m")
                 evolution["knowledge_growth"]["monthly_growth"][month] += 1

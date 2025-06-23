@@ -428,7 +428,7 @@ structure, completeness, and technical depth.
         )
 
         # Verify enhancement quality
-        for file_path, metadata in enhanced_files[:5]:  # Check first 5 files
+        for _file_path, metadata in enhanced_files[:5]:  # Check first 5 files
             assert metadata.title is not None
             assert len(metadata.tags) > 1  # Should have added tags
             assert hasattr(metadata, "complexity")  # Should have complexity assessment

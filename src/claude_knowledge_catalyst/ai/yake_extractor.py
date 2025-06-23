@@ -3,7 +3,6 @@
 import logging
 import re
 from dataclasses import dataclass, field
-from functools import lru_cache
 from typing import NamedTuple, Optional
 
 try:
@@ -50,18 +49,30 @@ class LanguageDetector:
 
     def __init__(self, cache_size: int = 200):
         self._cache_size = cache_size
+        self._language_cache = {}
 
-    @lru_cache(maxsize=200)  # Reduced cache size for memory efficiency
     def detect_language(self, text: str) -> str:
         """Detect the primary language of the text."""
         if not YAKE_AVAILABLE:
             return "en"
 
+        # Check cache first
+        if text in self._language_cache:
+            return self._language_cache[text]
+
+        # Manage cache size
+        if len(self._language_cache) >= self._cache_size:
+            # Remove oldest entry (simple FIFO)
+            oldest_key = next(iter(self._language_cache))
+            del self._language_cache[oldest_key]
+
         try:
             # Clean text for better detection
             clean_text = self._clean_for_detection(text)
             if len(clean_text) < 10:
-                return "en"  # Default for short text
+                result = "en"  # Default for short text
+                self._language_cache[text] = result
+                return result
 
             detected = langdetect.detect(clean_text)
 
@@ -77,11 +88,15 @@ class LanguageDetector:
                 "es": "es",
             }
 
-            return language_map.get(detected, "en")
+            result = language_map.get(detected, "en")
+            self._language_cache[text] = result
+            return result
 
         except Exception as e:
             logger.warning(f"Language detection failed: {e}")
-            return "en"
+            result = "en"
+            self._language_cache[text] = result
+            return result
 
     def _clean_for_detection(self, text: str) -> str:
         """Clean text for better language detection."""

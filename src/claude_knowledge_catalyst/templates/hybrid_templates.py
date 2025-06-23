@@ -172,7 +172,11 @@ author: "{context.get("author", "Unknown")}"
 
 **Hypothesis**: {context.get("hypothesis", "State your hypothesis here")}
 
-**Expected Outcome**: {context.get("expected_outcome", "Describe what you expect to learn or achieve")}
+**Expected Outcome**: {
+            context.get(
+                "expected_outcome", "Describe what you expect to learn or achieve"
+            )
+        }
 
 ## 🎯 Objective
 
@@ -324,7 +328,9 @@ deadline: "{context.get("deadline", "TBD")}"
 
 ### Phase 4: Delivery
 - **Duration**: {context.get("phase4_duration", "TBD")}
-- **Deliverables**: {context.get("phase4_deliverables", "Final delivery and documentation")}
+- **Deliverables**: {
+            context.get("phase4_deliverables", "Final delivery and documentation")
+        }
 
 ## 🔧 Technical Approach
 
@@ -524,7 +530,9 @@ impact_scope: "{context.get("impact_scope", "high")}"
 {context.get("essential_insight", "The most important insight or lesson learned")}
 
 ### Universal Principles
-1. **Principle 1**: {context.get("principle1", "Fundamental principle that applies broadly")}
+1. **Principle 1**: {
+            context.get("principle1", "Fundamental principle that applies broadly")
+        }
 2. **Principle 2**: {context.get("principle2", "Secondary but important principle")}
 3. **Principle 3**: {context.get("principle3", "Supporting principle")}
 
@@ -535,10 +543,14 @@ impact_scope: "{context.get("impact_scope", "high")}"
 
 ### Risk Mitigation
 - **Major Risk**: {context.get("major_risk", "Key risk this wisdom helps avoid")}
-- **Prevention Strategy**: {context.get("prevention_strategy", "How to prevent this risk")}
+- **Prevention Strategy**: {
+            context.get("prevention_strategy", "How to prevent this risk")
+        }
 
 ### Opportunity Recognition
-- **Pattern**: {context.get("opportunity_pattern", "Patterns that indicate opportunities")}
+- **Pattern**: {
+            context.get("opportunity_pattern", "Patterns that indicate opportunities")
+        }
 - **Action**: {context.get("opportunity_action", "How to capitalize on these patterns")}
 
 ## 📈 Evolution Journey
@@ -547,7 +559,9 @@ impact_scope: "{context.get("impact_scope", "high")}"
 {context.get("origin_story", "How this wisdom was discovered or developed")}
 
 ### Key Milestones
-- **Milestone 1**: {context.get("milestone1", "First major breakthrough or realization")}
+- **Milestone 1**: {
+            context.get("milestone1", "First major breakthrough or realization")
+        }
 - **Milestone 2**: {context.get("milestone2", "Refinement or validation")}
 - **Milestone 3**: {context.get("milestone3", "Maturation and broad application")}
 
@@ -557,7 +571,9 @@ impact_scope: "{context.get("impact_scope", "high")}"
 ## 🔍 Evidence Base
 
 ### Successful Applications
-1. **Case 1**: {context.get("case1", "Specific example where this wisdom proved valuable")}
+1. **Case 1**: {
+            context.get("case1", "Specific example where this wisdom proved valuable")
+        }
 2. **Case 2**: {context.get("case2", "Additional validation case")}
 3. **Case 3**: {context.get("case3", "Third example of successful application")}
 
@@ -578,7 +594,9 @@ impact_scope: "{context.get("impact_scope", "high")}"
 {context.get("advanced_application", "How experts can leverage this wisdom")}
 
 ### Integration Strategies
-- **Strategy 1**: {context.get("integration1", "How to integrate with existing processes")}
+- **Strategy 1**: {
+            context.get("integration1", "How to integrate with existing processes")
+        }
 - **Strategy 2**: {context.get("integration2", "Alternative integration approach")}
 
 ## ⚠️ Wisdom Boundaries
@@ -645,13 +663,29 @@ impact_scope: "{context.get("impact_scope", "high")}"
 - **自動整理**: {context.get("auto_organization", "有効")}
 
 ## 📝 使用方法
-{context.get("usage_guide", f"このディレクトリは{tier}層に分類されており、{context.get('purpose', '知識管理')}に使用されます。")}
+{
+            context.get(
+                "usage_guide",
+                f"このディレクトリは{tier}層に分類されており、"
+                f"{context.get('purpose', '知識管理')}に使用されます。",
+            )
+        }
 
 ## 📁 構造
-{context.get("structure_info", "```" + chr(10) + "(ディレクトリ構造をここに記述)" + chr(10) + "```")}
+{
+            context.get(
+                "structure_info",
+                "```" + chr(10) + "(ディレクトリ構造をここに記述)" + chr(10) + "```",
+            )
+        }
 
 ## 🔗 関連リンク
-{context.get("related_links", "- [[関連ディレクトリ1]]" + chr(10) + "- [[関連ディレクトリ2]]")}
+{
+            context.get(
+                "related_links",
+                "- [[関連ディレクトリ1]]" + chr(10) + "- [[関連ディレクトリ2]]",
+            )
+        }
 
 ---
 *このREADMEは自動生成されました - {context.get("main_directory", directory_name)}*

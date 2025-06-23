@@ -96,7 +96,7 @@ def get_config(config_path: Path | None = None) -> CKCConfig:
             _metadata_manager = MetadataManager()
         except Exception as e:
             console.print(f"[red]Error loading configuration: {e}[/red]")
-            raise typer.Exit(1)
+            raise typer.Exit(1) from e
 
     return _config
 
@@ -447,7 +447,8 @@ def status() -> None:
             "verbose",
         ]:
             console.print(
-                "[yellow]Migration Status:[/yellow] [yellow]Files found but no frontmatter detected[/yellow]"
+                "[yellow]Migration Status:[/yellow] "
+                "[yellow]Files found but no frontmatter detected[/yellow]"
             )
             console.print(f"  • Total files: {migration_info['total_files']} files")
             console.print(
@@ -535,7 +536,7 @@ def analyze(
 
     except Exception as e:
         console.print(f"[red]✗[/red] Error analyzing file: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command()
@@ -773,7 +774,8 @@ def smart_sync(
             console.print(f"  • Legacy format files: {migration_info['legacy_count']}")
             console.print(f"  • Modern format files: {migration_info['modern_count']}")
             console.print(
-                "  • Migration benefits: Enhanced search, AI classification, multi-dimensional tags"
+                "  • Migration benefits: Enhanced search, AI classification, "
+                "multi-dimensional tags"
             )
             console.print("")
             console.print(
@@ -856,7 +858,8 @@ def migrate(
 
     if not dry_run:
         console.print(
-            "[yellow]⚠️  This will create a new directory structure and migrate files.[/yellow]"
+            "[yellow]⚠️  This will create a new directory structure and "
+            "migrate files.[/yellow]"
         )
         console.print("[yellow]   Original files will be copied (not moved).[/yellow]")
         if not typer.confirm("Proceed with migration?"):
@@ -871,7 +874,8 @@ def migrate(
 
         if result["errors"]:
             console.print(
-                f"\n[yellow]⚠️  Migration completed with {len(result['errors'])} errors[/yellow]"
+                f"\n[yellow]⚠️  Migration completed with "
+                f"{len(result['errors'])} errors[/yellow]"
             )
             console.print("Check the migration report for details.")
         else:
@@ -890,7 +894,7 @@ def migrate(
 
     except Exception as e:
         console.print(f"[red]✗[/red] Migration failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command()
@@ -1076,7 +1080,7 @@ def search(
     table.add_column("Domain", style="magenta")
     table.add_column("Updated", style="dim")
 
-    for file_path, metadata in results:
+    for _file_path, metadata in results:
         tech_str = ", ".join(metadata.tech[:2]) + (
             "..." if len(metadata.tech) > 2 else ""
         )
@@ -1262,7 +1266,8 @@ def tags(
             for tag_name, standard in standards.standards.items():
                 required_indicator = "[red]*[/red]" if standard.required else ""
                 console.print(
-                    f"[cyan]{tag_name}{required_indicator}[/cyan]: {standard.description}"
+                    f"[cyan]{tag_name}{required_indicator}[/cyan]: "
+                    f"{standard.description}"
                 )
                 console.print(f"  Max selections: {standard.max_selections}")
                 console.print(
@@ -1351,7 +1356,7 @@ def tags(
 
         except Exception as e:
             console.print(f"[red]Error validating file: {e}[/red]")
-            raise typer.Exit(1)
+            raise typer.Exit(1) from e
 
     elif action == "suggest":
         if not file_path:
@@ -1397,7 +1402,7 @@ def tags(
 
         except Exception as e:
             console.print(f"[red]Error analyzing file: {e}[/red]")
-            raise typer.Exit(1)
+            raise typer.Exit(1) from e
 
     else:
         console.print(f"[red]Unknown action: {action}[/red]")
@@ -1443,7 +1448,7 @@ def interactive(
             interactive_manager.guided_file_tagging(file_path_obj)
         except Exception as e:
             console.print(f"[red]Error during interactive tagging: {e}[/red]")
-            raise typer.Exit(1)
+            raise typer.Exit(1) from e
 
     elif action == "wizard":
         quick_tag_wizard()
@@ -1665,7 +1670,10 @@ def quick_commands(
                 try:
                     metadata = metadata_manager.extract_metadata_from_file(md_file)
                     # Simple matching for quick search
-                    searchable = f"{metadata.title} {' '.join(metadata.tech)} {' '.join(metadata.domain)} {' '.join(metadata.tags)}".lower()
+                    searchable = (
+                        f"{metadata.title} {' '.join(metadata.tech)} "
+                        f"{' '.join(metadata.domain)} {' '.join(metadata.tags)}"
+                    ).lower()
                     if query.lower() in searchable:
                         results.append((md_file, metadata))
                 except Exception:
@@ -1673,7 +1681,7 @@ def quick_commands(
 
         if results:
             console.print(f"\n[green]Found {len(results)} results:[/green]")
-            for file_path, metadata in results[:10]:  # Limit to 10 results
+            for _file_path, metadata in results[:10]:  # Limit to 10 results
                 console.print(
                     f"  📄 {metadata.title} ({metadata.type}, {metadata.status})"
                 )
@@ -1908,7 +1916,8 @@ def _run_batch_classification(
 
             except Exception as e:
                 console.print(
-                    f"[red]Error applying classifications to {file_path.name}: {e}[/red]"
+                    f"[red]Error applying classifications to {file_path.name}: "
+                    f"{e}[/red]"
                 )
 
     # Show summary
@@ -2050,7 +2059,8 @@ def _display_batch_summary(summary: dict, total_files: int, applied_count: int) 
     console.print("\n[cyan]Confidence Distribution:[/cyan]")
     conf_dist = summary["confidence_distribution"]
     console.print(
-        f"  High: {conf_dist['high']}, Medium: {conf_dist['medium']}, Low: {conf_dist['low']}"
+        f"  High: {conf_dist['high']}, Medium: {conf_dist['medium']}, "
+        f"Low: {conf_dist['low']}"
     )
 
 
@@ -2106,9 +2116,12 @@ def _interactive_apply_classifications(
 
     console.print("\n[cyan]Select suggestions to apply:[/cyan]")
 
-    for _i, classification in enumerate(classifications[:8]):  # Limit to 8 for usability
+    for _i, classification in enumerate(classifications[:8]):  # Limit to 8
         confidence_str = f"{classification.confidence:.0%}"
-        suggestion_text = f"{classification.tag_type}: {classification.suggested_value} ({confidence_str})"
+        suggestion_text = (
+            f"{classification.tag_type}: {classification.suggested_value} "
+            f"({confidence_str})"
+        )
 
         if Confirm.ask(f"  Apply '{suggestion_text}'?"):
             tag_type = classification.tag_type
@@ -2297,7 +2310,8 @@ def migrate(
         console.print(f"• Files migrated: {len(files_to_migrate)}")
         console.print("• Enhanced with Pure Tag-Centered Architecture")
         console.print(
-            "• Ready for advanced search: [bold]ckc search --tech python --domain ai-systems[/bold]"
+            "• Ready for advanced search: "
+            "[bold]ckc search --tech python --domain ai-systems[/bold]"
         )
 
     except Exception as e:
@@ -2329,7 +2343,8 @@ def wizard() -> None:
         console.print("[yellow]⚠️ Existing configuration detected![/yellow]")
         if not Confirm.ask("Do you want to reconfigure?", default=False):
             console.print(
-                "[green]Setup cancelled. Your existing configuration is preserved.[/green]"
+                "[green]Setup cancelled. Your existing configuration is "
+                "preserved.[/green]"
             )
             return
 
@@ -2383,11 +2398,13 @@ def wizard() -> None:
                     )
                     vault_manager.initialize_vault()
                     console.print(
-                        f"[green]✅ Vault '{vault_name}' configured and initialized![/green]"
+                        f"[green]✅ Vault '{vault_name}' configured and "
+                        f"initialized![/green]"
                     )
                 except Exception as e:
                     console.print(
-                        f"[yellow]⚠️ Vault configured but initialization had issues: {e}[/yellow]"
+                        f"[yellow]⚠️ Vault configured but initialization had "
+                        f"issues: {e}[/yellow]"
                     )
                 break
             else:
@@ -2567,7 +2584,8 @@ def diagnose() -> None:
                     ]
                     if missing_dirs:
                         warnings.append(
-                            f"{target.name}: Missing vault directories: {', '.join(missing_dirs)}"
+                            f"{target.name}: Missing vault directories: "
+                            f"{', '.join(missing_dirs)}"
                         )
                     else:
                         console.print(

@@ -443,9 +443,7 @@ if __name__ == "__main__":
         with patch.object(
             tag_manager.metadata_manager, "extract_metadata_from_file"
         ) as mock_extract:
-            with patch.object(
-                tag_manager.metadata_manager, "update_file_metadata"
-            ):
+            with patch.object(tag_manager.metadata_manager, "update_file_metadata"):
                 from claude_knowledge_catalyst.core.metadata import KnowledgeMetadata
 
                 mock_metadata = KnowledgeMetadata(title="test")

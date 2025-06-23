@@ -253,7 +253,8 @@ class SmartContentClassifier:
                 confidence=confidence,
                 reasoning=f"Content analysis suggests {complexity} complexity level",
                 evidence=[
-                    f"Advanced indicators: {advanced_count}, Beginner indicators: {beginner_count}"
+                    f"Advanced indicators: {advanced_count}, "
+                    f"Beginner indicators: {beginner_count}"
                 ],
             )
         ]

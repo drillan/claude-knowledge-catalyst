@@ -1,6 +1,5 @@
 """Pattern loading and management for content classification."""
 
-from functools import cache
 from pathlib import Path
 from typing import Any
 
@@ -22,32 +21,44 @@ class PatternLoader:
         else:
             self.patterns_dir = Path(patterns_dir)
 
-    @cache
+        # Manual caching to avoid B019 warnings
+        self._tech_patterns_cache = None
+        self._domain_patterns_cache = None
+        self._content_patterns_cache = None
+
     def load_tech_patterns(self) -> dict[str, dict[str, list[str]]]:
         """Load technology detection patterns.
 
         Returns:
             Dictionary of technology patterns with confidence levels.
         """
-        return self._load_pattern_file("tech_patterns.yaml")
+        if self._tech_patterns_cache is None:
+            self._tech_patterns_cache = self._load_pattern_file("tech_patterns.yaml")
+        return self._tech_patterns_cache
 
-    @cache
     def load_domain_patterns(self) -> dict[str, dict[str, list[str]]]:
         """Load domain classification patterns.
 
         Returns:
             Dictionary of domain patterns with confidence levels.
         """
-        return self._load_pattern_file("domain_patterns.yaml")
+        if self._domain_patterns_cache is None:
+            self._domain_patterns_cache = self._load_pattern_file(
+                "domain_patterns.yaml"
+            )
+        return self._domain_patterns_cache
 
-    @cache
     def load_content_patterns(self) -> dict[str, dict[str, list[str]]]:
         """Load content type patterns.
 
         Returns:
             Dictionary of content type patterns with confidence levels.
         """
-        return self._load_pattern_file("content_patterns.yaml")
+        if self._content_patterns_cache is None:
+            self._content_patterns_cache = self._load_pattern_file(
+                "content_patterns.yaml"
+            )
+        return self._content_patterns_cache
 
     def _load_pattern_file(self, filename: str) -> dict[str, dict[str, list[str]]]:
         """Load patterns from a YAML file.
@@ -76,7 +87,7 @@ class PatternLoader:
             return patterns
 
         except yaml.YAMLError as e:
-            raise yaml.YAMLError(f"Error parsing {filename}: {e}")
+            raise yaml.YAMLError(f"Error parsing {filename}: {e}") from e
 
     def _validate_patterns(self, patterns: dict[str, Any], filename: str) -> None:
         """Validate that patterns have the expected structure.
