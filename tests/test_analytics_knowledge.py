@@ -678,7 +678,7 @@ class TestAnalyticsErrorHandling:
 
                 # Should handle file system errors gracefully
                 try:
-                    report = analytics.generate_comprehensive_report()
+                    analytics.generate_comprehensive_report()
                     # If it doesn't raise, that's good
                     assert True
                 except FileNotFoundError:

@@ -96,7 +96,8 @@ class PatternLoader:
         for pattern_name, pattern_data in patterns.items():
             if not isinstance(pattern_data, dict):
                 raise ValueError(
-                    f"Invalid pattern {pattern_name} in {filename}: must be a dictionary"
+                    f"Invalid pattern {pattern_name} in {filename}: "
+                    f"must be a dictionary"
                 )
 
             # Check for required confidence levels
@@ -104,7 +105,8 @@ class PatternLoader:
             for level in required_levels:
                 if level not in pattern_data:
                     raise ValueError(
-                        f"Pattern {pattern_name} in {filename} missing required level: {level}"
+                        f"Pattern {pattern_name} in {filename} missing required level: "
+                        f"{level}"
                     )
 
                 if not isinstance(pattern_data[level], list):

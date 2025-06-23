@@ -1,6 +1,5 @@
 """Tests for core tag standards functionality."""
 
-
 from claude_knowledge_catalyst.core.tag_standards import (
     TagStandard,
     TagStandardsManager,

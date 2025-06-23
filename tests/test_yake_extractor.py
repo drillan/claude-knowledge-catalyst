@@ -81,7 +81,7 @@ class TestLanguageDetector:
         def hello():
             print("Hello World")
         ```
-        
+
         This is a sample text with `inline code` and URLs https://example.com
         that should be cleaned for better language detection.
         """
@@ -151,16 +151,16 @@ class TestYAKEKeywordExtractor:
         """Sample technical content for testing."""
         return """
         # Machine Learning Pipeline
-        
+
         This document describes a machine learning pipeline using Python and scikit-learn.
         The pipeline includes data preprocessing, feature extraction, model training, and evaluation.
-        
+
         ## Key Components
         - Data validation and cleaning
         - Feature engineering with pandas
         - Model selection and hyperparameter tuning
         - Performance evaluation metrics
-        
+
         The implementation uses modern DevOps practices including CI/CD, containerization with Docker,
         and deployment to cloud infrastructure.
         """
@@ -170,10 +170,10 @@ class TestYAKEKeywordExtractor:
         """Sample Japanese technical content."""
         return """
         機械学習アルゴリズム
-        
+
         この文書では、Pythonを使用した機械学習の実装について説明します。
         データ分析、特徴量エンジニアリング、モデル学習の各段階を含みます。
-        
+
         主要な技術：
         - データ前処理とクリーニング
         - scikit-learnを用いたモデル構築

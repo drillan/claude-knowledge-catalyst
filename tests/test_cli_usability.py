@@ -347,7 +347,7 @@ import sys
 
 def main():
     print("Hello World")
-    
+
 if __name__ == "__main__":
     main()
 """)
@@ -445,7 +445,7 @@ if __name__ == "__main__":
         ) as mock_extract:
             with patch.object(
                 tag_manager.metadata_manager, "update_file_metadata"
-            ) as mock_update:
+            ):
                 from claude_knowledge_catalyst.core.metadata import KnowledgeMetadata
 
                 mock_metadata = KnowledgeMetadata(title="test")

@@ -292,7 +292,7 @@ class YAKEKeywordExtractor:
                 continue
 
             # Filter by score (lower is better in YAKE) - ensure score is numeric
-            score_float = float(score) if not isinstance(score, (int, float)) else score
+            score_float = float(score) if not isinstance(score, int | float) else score
             if score_float > (1.0 - self.config.confidence_threshold):
                 continue
 

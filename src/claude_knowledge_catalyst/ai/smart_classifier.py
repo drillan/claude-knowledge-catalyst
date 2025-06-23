@@ -275,7 +275,8 @@ class SmartContentClassifier:
                 confidence=confidence,
                 reasoning=f"Content analysis suggests {complexity} complexity level",
                 evidence=[
-                    f"Advanced indicators: {advanced_count}, Beginner indicators: {beginner_count}"
+                    f"Advanced indicators: {advanced_count}, "
+                    f"Beginner indicators: {beginner_count}"
                 ],
             )
         ]
@@ -351,7 +352,9 @@ class SmartContentClassifier:
     def _deduplicate_results(
         self, results: list[ClassificationResult]
     ) -> list[ClassificationResult]:
-        """Remove duplicate results, keeping the highest confidence for each tag type + value.
+        """Remove duplicate results, keeping the highest confidence.
+
+        For each tag type + value combination.
 
         Args:
             results: List of classification results.

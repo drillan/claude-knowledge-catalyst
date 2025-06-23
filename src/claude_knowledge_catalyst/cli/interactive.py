@@ -440,10 +440,8 @@ class InteractiveTagManager:
                 f"\n[cyan]{field_name}[/cyan] [dim](current: {current_value})[/dim]"
             )
             console.print(
-                (
-                    f"[dim]Valid options: {', '.join(valid_values[:5])}"
-                    f"{'...' if len(valid_values) > 5 else ''}[/dim]"
-                )
+                f"[dim]Valid options: {', '.join(valid_values[:5])}"
+                f"{'...' if len(valid_values) > 5 else ''}[/dim]"
             )
 
         value = Prompt.ask(f"New {field_name}", default=current_value)
@@ -465,18 +463,14 @@ class InteractiveTagManager:
     ) -> list[str] | None:
         """Prompt for list field values."""
         console.print(
-            (
-                f"\n[cyan]{field_name}[/cyan] [dim](current: "
-                f"{', '.join(current_values) if current_values else 'none'})[/dim]"
-            )
+            f"\n[cyan]{field_name}[/cyan] [dim](current: "
+            f"{', '.join(current_values) if current_values else 'none'})[/dim]"
         )
 
         if valid_values:
             console.print(
-                (
-                    f"[dim]Valid options: {', '.join(valid_values[:8])}"
-                    f"{'...' if len(valid_values) > 8 else ''}[/dim]"
-                )
+                f"[dim]Valid options: {', '.join(valid_values[:8])}"
+                f"{'...' if len(valid_values) > 8 else ''}[/dim]"
             )
 
         console.print(
@@ -498,10 +492,8 @@ class InteractiveTagManager:
             invalid_values = [v for v in new_values if v not in valid_values]
             if invalid_values:
                 console.print(
-                    (
-                        f"[yellow]Warning: Non-standard values: "
-                        f"{', '.join(invalid_values)}[/yellow]"
-                    )
+                    f"[yellow]Warning: Non-standard values: "
+                    f"{', '.join(invalid_values)}[/yellow]"
                 )
                 if not Confirm.ask("[yellow]Continue anyway?[/yellow]"):
                     return None
@@ -701,30 +693,11 @@ def quick_tag_wizard() -> None:
         return
 
     # Create basic metadata
-    from datetime import datetime
-
-    metadata_dict = {
-        "title": file_path.stem.replace("_", " ").replace("-", " ").title(),
-        "created": datetime.now(),
-        "updated": datetime.now(),
-        "version": "1.0",
-        "type": content_type,
-        "status": status,
-        "tech": [],
-        "domain": [],
-        "team": [],
-        "projects": [],
-        "claude_model": [],
-        "claude_feature": [],
-        "tags": [],
-    }
-
-    metadata = KnowledgeMetadata(**metadata_dict)
 
     # Interactive enhancement
     metadata_manager = MetadataManager()
     interactive_manager = InteractiveTagManager(metadata_manager)
 
-    enhanced_metadata = interactive_manager.guided_file_tagging(file_path)
+    interactive_manager.guided_file_tagging(file_path)
 
     console.print(f"\n[green]✅ Quick tagging completed for {file_path.name}![/green]")

@@ -268,8 +268,7 @@ class AIKnowledgeAssistant:
                         "priority": "medium",
                         "suggestion": f"Assign content type: {suggested_type[0]}",
                         "action": (
-                            f"Add type: {suggested_type[0]} "
-                            "based on content analysis"
+                            f"Add type: {suggested_type[0]} based on content analysis"
                         ),
                     }
                 )

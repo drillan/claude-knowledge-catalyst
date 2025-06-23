@@ -254,7 +254,7 @@ class KnowledgeAnalytics:
         success_rates = []
         now = datetime.now()
 
-        for file_path, metadata in knowledge_items:
+        for _file_path, metadata in knowledge_items:
             # Skip invalid metadata
             if not metadata or not hasattr(metadata, "title"):
                 continue

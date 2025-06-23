@@ -136,17 +136,17 @@ Focus on constructive feedback that helps improve the code while maintaining its
         """Test complexity classification for complex content."""
         complex_content = f"""
         # Advanced Python Patterns
-        
+
         {sample_python_content}
-        
+
         ## Design Patterns Implementation
-        
+
         This demonstrates several advanced concepts:
         - Recursive algorithms
         - Performance optimization techniques
         - Error handling strategies
         - Asynchronous programming patterns
-        
+
         The implementation uses metaclasses, decorators, and context managers
         to provide a robust, scalable solution.
         """
@@ -255,18 +255,18 @@ Focus on constructive feedback that helps improve the code while maintaining its
         """Test content with multiple technologies."""
         mixed_content = """
         # Full Stack Application
-        
+
         ## Backend (Python)
         ```python
         from flask import Flask
         app = Flask(__name__)
         ```
-        
+
         ## Frontend (JavaScript)
         ```javascript
         const api = fetch('/api/data');
         ```
-        
+
         ## Database (SQL)
         ```sql
         SELECT * FROM users;
@@ -425,12 +425,12 @@ class TestYAKEIntegration:
             import pandas as pd
             import numpy as np
             from sklearn.model_selection import train_test_split
-            
+
             # Data preprocessing
             data = pd.read_csv('dataset.csv')
             X = data.drop('target', axis=1)
             y = data['target']
-            
+
             return train_test_split(X, y, test_size=0.2)
         """
 
@@ -467,22 +467,22 @@ class TestYAKEIntegration:
     def test_enhanced_metadata_with_yake(self, classifier):
         """Test metadata enhancement with YAKE integration."""
         content = """# API Development with FastAPI
-        
+
         ```python
         from fastapi import FastAPI
         from pydantic import BaseModel
-        
+
         app = FastAPI()
-        
+
         class Item(BaseModel):
             name: str
             description: str
-        
+
         @app.post("/items/")
         async def create_item(item: Item):
             return {"message": "Item created", "item": item}
         ```
-        
+
         This demonstrates REST API development patterns with automatic validation.
         """
 
@@ -520,7 +520,7 @@ class TestYAKEIntegration:
             assert python_result.confidence >= ConfidenceLevel.HIGH.value
 
             # Should mention YAKE in evidence
-            evidence_text = " ".join(python_result.evidence)
+            " ".join(python_result.evidence)
             # Note: This might not always trigger if YAKE doesn't extract 'python' as a keyword
             # but the confidence should still be boosted by the clear patterns
 
@@ -554,16 +554,16 @@ class TestClassifierIntegration:
         """Test integration with KnowledgeMetadata."""
         content = """
         # API Design Best Practices
-        
+
         ```python
         from fastapi import FastAPI
         app = FastAPI()
-        
+
         @app.get("/users")
         def get_users():
             return {"users": []}
         ```
-        
+
         This demonstrates REST API design patterns.
         """
 
@@ -663,35 +663,35 @@ class TestHybridClassificationSystem:
     def test_comprehensive_content_analysis(self, classifier):
         """Test comprehensive analysis of complex content."""
         complex_content = """# Advanced React TypeScript Application
-        
+
         This project demonstrates modern web development practices using:
-        
+
         ## Technologies
         - React 18 with TypeScript
         - Next.js for server-side rendering
         - Tailwind CSS for styling
         - Jest and React Testing Library for testing
-        
+
         ## Features
         - Component-based architecture
         - State management with Redux Toolkit
         - API integration with Axios
         - Performance optimization techniques
-        
+
         ```typescript
         interface UserProps {
             id: string;
             name: string;
             email: string;
         }
-        
+
         const UserComponent: React.FC<UserProps> = ({ id, name, email }) => {
             const [loading, setLoading] = useState(false);
-            
+
             useEffect(() => {
                 fetchUserData(id);
             }, [id]);
-            
+
             return (
                 <div className="user-card">
                     <h2>{name}</h2>
@@ -700,7 +700,7 @@ class TestHybridClassificationSystem:
             );
         };
         ```
-        
+
         This implementation follows React best practices and TypeScript conventions.
         """
 

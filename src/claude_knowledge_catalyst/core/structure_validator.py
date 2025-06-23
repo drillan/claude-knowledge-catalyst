@@ -105,7 +105,7 @@ class StructureValidator:
 
         # Validate system directories
         if "system_dirs" in expected_structure:
-            for dir_name, description in expected_structure["system_dirs"].items():
+            for dir_name, _description in expected_structure["system_dirs"].items():
                 dir_path = self.vault_path / dir_name
 
                 if not dir_path.exists():
@@ -117,7 +117,7 @@ class StructureValidator:
 
         # Validate core directories
         if "core_dirs" in expected_structure:
-            for dir_name, description in expected_structure["core_dirs"].items():
+            for dir_name, _description in expected_structure["core_dirs"].items():
                 dir_path = self.vault_path / dir_name
 
                 if not dir_path.exists():
@@ -129,7 +129,7 @@ class StructureValidator:
 
         # Validate auxiliary directories
         if "auxiliary_dirs" in expected_structure:
-            for dir_name, description in expected_structure["auxiliary_dirs"].items():
+            for dir_name, _description in expected_structure["auxiliary_dirs"].items():
                 dir_path = self.vault_path / dir_name
 
                 if not dir_path.exists():
@@ -181,7 +181,7 @@ class StructureValidator:
             else:  # Intermediate number
                 # Check if it's appropriately positioned
                 lower_base = (number // 10) * 10
-                upper_base = lower_base + 10
+                lower_base + 10
 
                 if lower_base not in actual_numbers:
                     result.add_warning(

@@ -184,16 +184,16 @@ author: "{context.get("author", "Unknown")}"
 {context.get("methodology", "Describe your experimental approach")}
 
 ### Variables
-- **Independent**: 
-- **Dependent**: 
-- **Controls**: 
+- **Independent**:
+- **Dependent**:
+- **Controls**:
 
 ## 📊 Data Collection
 
 ### Metrics to Track
-- 
-- 
-- 
+-
+-
+-
 
 ### Collection Method
 {context.get("collection_method", "How will you collect and measure data?")}
@@ -214,39 +214,39 @@ author: "{context.get("author", "Unknown")}"
 *Document results as experiment progresses*
 
 ### Observations
-- 
+-
 
 ### Data
-- 
+-
 
 ### Insights
-- 
+-
 
 ## 🎯 Conclusions
 
 *To be filled after experiment completion*
 
 ### Success Criteria Met
-- [ ] 
-- [ ] 
-- [ ] 
+- [ ]
+- [ ]
+- [ ]
 
 ### Key Learnings
-- 
+-
 
 ### Next Steps
-- 
+-
 
 ### Promotion Candidates
 *Mark items ready for promotion to 10_Projects*
-- [ ] 
-- [ ] 
+- [ ]
+- [ ]
 
 ---
 
-**Experiment Status**: In Progress | Completed | Abandoned  
-**Last Updated**: {context["current_date"]}  
-**Directory**: {context.get("main_directory", "00_Catalyst_Lab")}  
+**Experiment Status**: In Progress | Completed | Abandoned
+**Last Updated**: {context["current_date"]}
+**Directory**: {context.get("main_directory", "00_Catalyst_Lab")}
 **Structure**: {context.get("numbering_system", "ten_step")} system
 """
 
@@ -273,9 +273,9 @@ deadline: "{context.get("deadline", "TBD")}"
 
 ## 📋 Project Overview
 
-**Start Date**: {context["current_date"]}  
-**Target Completion**: {context.get("deadline", "TBD")}  
-**Priority**: {context.get("priority", "Medium")}  
+**Start Date**: {context["current_date"]}
+**Target Completion**: {context.get("deadline", "TBD")}
+**Priority**: {context.get("priority", "Medium")}
 **Phase**: Planning
 
 ## 🎯 Project Goals
@@ -367,9 +367,9 @@ deadline: "{context.get("deadline", "TBD")}"
 
 ---
 
-**Project Status**: Planning | In Progress | Testing | Complete | On Hold  
-**Last Updated**: {context["current_date"]}  
-**Directory**: {context.get("main_directory", "10_Projects")}  
+**Project Status**: Planning | In Progress | Testing | Complete | On Hold
+**Last Updated**: {context["current_date"]}
+**Directory**: {context.get("main_directory", "10_Projects")}
 **Next Review**: {context.get("next_review", "TBD")}
 """
 
@@ -395,8 +395,8 @@ complexity: "{context.get("complexity", "intermediate")}"
 
 ## 📋 Overview
 
-**Knowledge Type**: {context.get("knowledge_type", "General")}  
-**Complexity Level**: {context.get("complexity", "Intermediate")}  
+**Knowledge Type**: {context.get("knowledge_type", "General")}
+**Complexity Level**: {context.get("complexity", "Intermediate")}
 **Last Verified**: {context["current_date"]}
 
 ## 🎯 Key Concepts
@@ -485,9 +485,9 @@ def example_function():
 
 ---
 
-**Knowledge Status**: Draft | Reviewed | Validated | Expert-Level  
-**Last Updated**: {context["current_date"]}  
-**Directory**: {context.get("main_directory", "20_Knowledge_Base")}  
+**Knowledge Status**: Draft | Reviewed | Validated | Expert-Level
+**Last Updated**: {context["current_date"]}
+**Directory**: {context.get("main_directory", "20_Knowledge_Base")}
 **Verification Due**: {context.get("verification_due", "TBD")}
 """
 
@@ -513,9 +513,9 @@ impact_scope: "{context.get("impact_scope", "high")}"
 
 ## 🏆 Wisdom Summary
 
-**Maturity Level**: Mature  
-**Impact Scope**: {context.get("impact_scope", "High")}  
-**Distillation Date**: {context["current_date"]}  
+**Maturity Level**: Mature
+**Impact Scope**: {context.get("impact_scope", "High")}
+**Distillation Date**: {context["current_date"]}
 **Source Period**: {context.get("source_period", "Last 6 months")}
 
 ## 💎 Core Wisdom
@@ -616,9 +616,9 @@ impact_scope: "{context.get("impact_scope", "high")}"
 
 ---
 
-**Wisdom Status**: Distilled | Validated | Canonical | Transcendent  
-**Last Updated**: {context["current_date"]}  
-**Directory**: {context.get("main_directory", "30_Wisdom_Archive")}  
+**Wisdom Status**: Distilled | Validated | Canonical | Transcendent
+**Last Updated**: {context["current_date"]}
+**Directory**: {context.get("main_directory", "30_Wisdom_Archive")}
 **Next Review**: {context.get("next_review", "Annual")}
 """
 
@@ -654,8 +654,8 @@ impact_scope: "{context.get("impact_scope", "high")}"
 {context.get("related_links", "- [[関連ディレクトリ1]]" + chr(10) + "- [[関連ディレクトリ2]]")}
 
 ---
-*このREADMEは自動生成されました - {context.get("main_directory", directory_name)}*  
-*最終更新: {context["current_date"]}*  
+*このREADMEは自動生成されました - {context.get("main_directory", directory_name)}*
+*最終更新: {context["current_date"]}*
 *構造バージョン: {context.get("structure_version", "hybrid_v1")}*
 """
 

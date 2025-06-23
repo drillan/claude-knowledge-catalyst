@@ -223,7 +223,7 @@ class MigrationManager:
                 result.backup_path = self._create_backup()
 
             # Execute operations
-            for i, operation in enumerate(plan.operations):
+            for _i, operation in enumerate(plan.operations):
                 if dry_run:
                     console.print(
                         f"Would execute: {operation['type']} - {operation.get('source', operation.get('path', ''))}"

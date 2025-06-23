@@ -755,7 +755,7 @@ class SmartContentClassifier:
             "confidence_distribution": {"high": 0, "medium": 0, "low": 0},
         }
 
-        for file_path, classifications in results.items():
+        for _file_path, classifications in results.items():
             if classifications:
                 summary["files_with_suggestions"] += 1
 

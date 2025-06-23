@@ -279,7 +279,7 @@ class TestSyncOperations:
         """Test CKC sync with error handling."""
         with patch(
             "claude_knowledge_catalyst.cli.smart_sync.console.print"
-        ) as mock_print:
+        ):
             result = run_ckc_sync()
 
             # Should return a result dict even on errors
@@ -308,7 +308,7 @@ class TestSmartSyncCommand:
             "claude_knowledge_catalyst.cli.smart_sync.run_ckc_sync"
         ) as mock_sync:
             mock_sync.return_value = {"success": True}
-            result = smart_sync_command(mock_config, directory=".claude", dry_run=False)
+            smart_sync_command(mock_config, directory=".claude", dry_run=False)
 
             assert mock_scan.called
             assert mock_console_print.called
@@ -326,7 +326,7 @@ class TestSmartSyncCommand:
                 "claude_knowledge_catalyst.cli.smart_sync.scan_metadata_status"
             ) as mock_scan:
                 mock_scan.return_value = ([], [])
-                result = smart_sync_command(
+                smart_sync_command(
                     mock_config, directory=".claude", dry_run=True
                 )
 
@@ -345,9 +345,9 @@ class TestSmartSyncCommand:
 
         with patch(
             "claude_knowledge_catalyst.cli.smart_sync.console.print"
-        ) as mock_print:
+        ):
             try:
-                result = smart_sync_command(
+                smart_sync_command(
                     mock_config, directory=".claude", dry_run=False
                 )
                 # Should handle errors gracefully

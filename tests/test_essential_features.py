@@ -270,7 +270,7 @@ git pull origin main
 
             # Step 1: Initialize project (ckc init)
             with patch("pathlib.Path.cwd", return_value=project_path):
-                init_result = cli_runner.invoke(app, ["init", "--force"])
+                cli_runner.invoke(app, ["init", "--force"])
 
             # Should create configuration
             config_path = project_path / "ckc_config.yaml"
@@ -331,7 +331,7 @@ async def root():
 
 ## Key Features
 - Automatic API documentation
-- Type hints support  
+- Type hints support
 - High performance
 - Easy to use
 
@@ -536,7 +536,7 @@ class TestCoreFeatureReliability:
         # Load config back
         loaded_config = CKCConfig.load_from_file(config_path)
         assert loaded_config.project_name == "test-project"
-        assert loaded_config.auto_sync == True
+        assert loaded_config.auto_sync
 
     def test_metadata_extraction_robustness(self, test_env):
         """Test metadata extraction handles various content types."""

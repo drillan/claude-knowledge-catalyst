@@ -417,9 +417,7 @@ def generate_obsidian_queries_file() -> str:
             .team(["ml", "research"])
             .domain("machine-learning")
             .build(),
-            "DevOps Tools": ObsidianQueryBuilder()
-            .team("devops")
-            .build(),
+            "DevOps Tools": ObsidianQueryBuilder().team("devops").build(),
         },
         "Status & Workflow": {
             "Production Ready": ObsidianQueryBuilder().status("production").build(),

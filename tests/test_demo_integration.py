@@ -224,7 +224,7 @@ success_rate: 95
 Please help me run an effective daily standup. Ask each team member:
 
 1. What did you accomplish yesterday?
-2. What will you work on today? 
+2. What will you work on today?
 3. Are there any blockers or impediments?
 
 Keep responses focused and under 2 minutes per person.
@@ -350,7 +350,7 @@ status: "validated"
 
     def test_demo_status_functionality(self, demo_env):
         """Test status checking functionality (equivalent to 'ckc status')."""
-        project_path = demo_env.create_project("status_test")
+        demo_env.create_project("status_test")
         vault_path = demo_env.create_vault("status_test")
 
         # Setup basic configuration (use helper to avoid Path.cwd() issues)
@@ -412,7 +412,7 @@ class TestDemoQuickWorkflow:
     def test_quick_demo_diverse_content_classification(self, quick_demo_env):
         """Test quick demo with diverse content categories."""
         # Setup (equivalent to quick_demo.sh setup)
-        project_path = quick_demo_env.create_project("quick_test")
+        quick_demo_env.create_project("quick_test")
         vault_path = quick_demo_env.create_vault("test")
 
         # Initialize with hybrid structure (use helper to avoid Path.cwd() issues)
@@ -537,7 +537,7 @@ Effective knowledge management balances structure with flexibility, enabling tea
 
         # Verify different categories are represented
         all_files = []
-        for dir_path, files in vault_structure.items():
+        for _dir_path, files in vault_structure.items():
             all_files.extend(files)
 
         synced_md_files = [
@@ -575,8 +575,8 @@ class TestDemoMultiProject:
     def test_multi_team_vault_sharing(self, multi_demo_env):
         """Test multiple teams sharing a single vault."""
         # Setup (equivalent to multi_project_demo.sh)
-        frontend_path = multi_demo_env.create_project("frontend_team")
-        backend_path = multi_demo_env.create_project("backend_team")
+        multi_demo_env.create_project("frontend_team")
+        multi_demo_env.create_project("backend_team")
         shared_vault = multi_demo_env.create_vault("shared")
 
         # Create frontend team configuration
@@ -623,14 +623,14 @@ author: "Frontend Team Lead"
 const UserProfile = ({ userId }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     fetchUser(userId).then(setUser).finally(() => setLoading(false));
   }, [userId]);
-  
+
   if (loading) return <Spinner />;
   if (!user) return <ErrorMessage />;
-  
+
   return <div className="user-profile">{user.name}</div>;
 };
 ```
@@ -725,7 +725,7 @@ async def fetch_user_data(user_ids):
     \"\"\"Fetch multiple users concurrently.\"\"\"
     async with aiopg.create_pool(DATABASE_URL) as pool:
         tasks = [
-            fetch_single_user(pool, user_id) 
+            fetch_single_user(pool, user_id)
             for user_id in user_ids
         ]
         return await asyncio.gather(*tasks)
@@ -788,7 +788,7 @@ async def robust_api_call(session, url, retries=3):
 
         # Check that both teams' content exists
         all_files = []
-        for dir_path, files in vault_structure.items():
+        for _dir_path, files in vault_structure.items():
             all_files.extend(files)
 
         synced_files = [f for f in all_files if f.endswith(".md") and f != "README.md"]
@@ -820,7 +820,7 @@ async def robust_api_call(session, url, retries=3):
 
     def test_project_identification_methods(self, multi_demo_env):
         """Test different project identification methods."""
-        project_path = multi_demo_env.create_project("test_project")
+        multi_demo_env.create_project("test_project")
         vault_path = multi_demo_env.create_vault("test_project")
 
         # Method 1: Project metadata in frontmatter
@@ -1088,7 +1088,7 @@ class TestDemoErrorHandling:
 
     def test_demo_resilience_to_corrupted_content(self, error_demo_env):
         """Test demo resilience when encountering corrupted content."""
-        project_path = error_demo_env.create_project("error_test")
+        error_demo_env.create_project("error_test")
         vault_path = error_demo_env.create_vault("error_test")
 
         # Create content with various issues
@@ -1156,7 +1156,7 @@ category: "nonexistent_category_type"
 
     def test_demo_partial_vault_initialization(self, error_demo_env):
         """Test demo behavior with partially initialized vault."""
-        project_path = error_demo_env.create_project("partial_test")
+        error_demo_env.create_project("partial_test")
         vault_path = error_demo_env.create_vault("partial_test")
 
         # Pre-create some vault structure manually (simulating partial setup)
@@ -1336,7 +1336,7 @@ git pull origin main
     def test_readme_automatic_metadata_enhancement(self, readme_test_env):
         """Test the automatic metadata enhancement described in README."""
         project_name = "metadata-test-project"
-        project_path = readme_test_env.setup_demo_project(project_name)
+        readme_test_env.setup_demo_project(project_name)
 
         # Create content without frontmatter (zero-config)
         plain_content = """# FastAPI Authentication システム

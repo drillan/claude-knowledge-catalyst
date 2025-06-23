@@ -270,7 +270,7 @@ class TestKnowledgeWatcher:
         test_file = temp_watch_dir / "test.md"
 
         # Mock file existence and update methods to avoid complex dependencies
-        with patch.object(watcher, "_update_file_metadata") as mock_update:
+        with patch.object(watcher, "_update_file_metadata"):
             watcher._handle_file_change("created", test_file)
 
         assert len(callback_results) == 1

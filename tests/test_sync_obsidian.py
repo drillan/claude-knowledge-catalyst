@@ -316,7 +316,7 @@ class TestObsidianVaultManagerErrorHandling:
     def test_sync_file_with_invalid_source(self, vault_manager):
         """Test sync with non-existent source file."""
         invalid_file = Path("/non/existent/file.md")
-        metadata = KnowledgeMetadata(title="Test")
+        KnowledgeMetadata(title="Test")
 
         result = vault_manager.sync_file(invalid_file)
         assert result is False
@@ -339,7 +339,7 @@ class TestObsidianVaultManagerErrorHandling:
         source_file.parent.mkdir(exist_ok=True)
         source_file.write_text("# Test")
 
-        metadata = KnowledgeMetadata(title="Test")
+        KnowledgeMetadata(title="Test")
 
         result = vault_manager.sync_file(source_file)
         # Should handle gracefully

@@ -252,9 +252,9 @@ Test content for {filename}
 
         # Check hybrid structure defaults
         hybrid_structure = v2_data["hybrid_structure"]
-        assert hybrid_structure["enabled"] == False  # Conservative default
+        assert not hybrid_structure["enabled"]  # Conservative default
         assert hybrid_structure["numbering_system"] == "sequential"
-        assert hybrid_structure["legacy_support"] == True
+        assert hybrid_structure["legacy_support"]
 
     # End-to-end workflow integration test
     def test_end_to_end_workflow(self, temp_vault, hybrid_config):
@@ -311,9 +311,9 @@ Content for {filename}
 
         # 4. Check statistics
         structure_info = vault_manager.get_structure_info()
-        assert structure_info["hybrid_enabled"] == True
+        assert structure_info["hybrid_enabled"]
         assert structure_info["numbering_system"] == "ten_step"
-        assert structure_info["auto_classification"] == True
+        assert structure_info["auto_classification"]
 
 
 if __name__ == "__main__":

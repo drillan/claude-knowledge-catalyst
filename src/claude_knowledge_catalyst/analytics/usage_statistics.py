@@ -478,8 +478,8 @@ class UsageStatisticsCollector:
             score += consistency_score
 
         # Diversity score (using different features = better)
-        operation_types = set(op["operation"] for op in operations)
-        access_types = set(acc["access_type"] for acc in accesses)
+        operation_types = {op["operation"] for op in operations}
+        access_types = {acc["access_type"] for acc in accesses}
         diversity_score = min(
             20, (len(operation_types) + len(access_types)) * 2
         )  # Max 20 points

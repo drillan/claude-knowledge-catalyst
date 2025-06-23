@@ -259,20 +259,16 @@ class TagStandardsManager:
         # Check maximum selections
         if len(values) > standard.max_selections:
             errors.append(
-                (
-                    f"Too many values for '{tag_type}' "
-                    f"(max: {standard.max_selections}, got: {len(values)})"
-                )
+                f"Too many values for '{tag_type}' "
+                f"(max: {standard.max_selections}, got: {len(values)})"
             )
 
         # Validate individual values
         for value in values:
             if value not in standard.valid_values:
                 errors.append(
-                    (
-                        f"Invalid value '{value}' for tag '{tag_type}'. "
-                        f"Valid values: {standard.valid_values[:10]}..."
-                    )
+                    f"Invalid value '{value}' for tag '{tag_type}'. "
+                    f"Valid values: {standard.valid_values[:10]}..."
                 )
 
         return len(errors) == 0, errors
@@ -373,7 +369,7 @@ class TagStandardsManager:
         all_errors = []
         is_valid = True
 
-        for tag_type, standard in self.standards.items():
+        for tag_type, _standard in self.standards.items():
             if tag_type in metadata_dict:
                 values = metadata_dict[tag_type]
                 # Ensure it's a list

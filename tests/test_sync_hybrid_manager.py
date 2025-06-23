@@ -250,7 +250,6 @@ class TestHybridObsidianVaultManager:
         vault_path = tmp_path / "vault"
         vault_path.mkdir()
 
-
         metadata_manager = MetadataManager()
         manager = HybridObsidianVaultManager(vault_path, metadata_manager, mock_config)
 

@@ -37,7 +37,7 @@ class StructureManager:
         flattened = {}
 
         # Add all tier directories
-        for tier_name, tier_dirs in structure.items():
+        for _tier_name, tier_dirs in structure.items():
             for dir_name, description in tier_dirs.items():
                 flattened[dir_name] = description
 
@@ -58,7 +58,7 @@ class StructureManager:
         """Flatten custom structure into path -> description mapping."""
         flattened = {}
 
-        for tier_name, tier_dirs in self.config.custom_structure.items():
+        for _tier_name, tier_dirs in self.config.custom_structure.items():
             for dir_name, description in tier_dirs.items():
                 flattened[dir_name] = description
 
@@ -816,7 +816,7 @@ class HybridObsidianVaultManager(ObsidianVaultManager):
 このディレクトリは知識ベースの一部として、以下の構造に従って整理されています：
 
 - **Prompts/**: プロンプト関連知識
-- **Code_Snippets/**: コードスニペット集  
+- **Code_Snippets/**: コードスニペット集
 - **Concepts/**: AI・LLM関連概念
 - **Resources/**: 学習リソース・参考資料
 

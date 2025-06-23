@@ -63,7 +63,7 @@ purpose: "{purpose}"
 ## Usage Examples
 
 ### Example 1
-**Input:** 
+**Input:**
 ```
 [Example input]
 ```
@@ -74,10 +74,10 @@ purpose: "{purpose}"
 ```
 
 ## Notes
-- 
+-
 
 ## Related
-- 
+-
 
 ---
 *Generated with Pure Tag-Centered System*
@@ -127,10 +127,10 @@ purpose: "{purpose}"
 ```
 
 ## Notes
-- 
+-
 
 ## Dependencies
-- 
+-
 
 ---
 *Generated with Pure Tag-Centered System*
@@ -184,13 +184,13 @@ Steps and considerations.
 Alternative approach.
 
 ## Best Practices
-- 
+-
 
 ## Common Pitfalls
-- 
+-
 
 ## Related Concepts
-- 
+-
 
 ---
 *Generated with Pure Tag-Centered System*
@@ -230,25 +230,25 @@ purpose: "{purpose}"
 ## Resources
 
 ### Documentation
-- 
+-
 
 ### Tools
-- 
+-
 
 ### Libraries/Frameworks
-- 
+-
 
 ### Tutorials/Guides
-- 
+-
 
 ### Articles/Papers
-- 
+-
 
 ## Quick Reference
-- 
+-
 
 ## Notes
-- 
+-
 
 ---
 *Generated with Pure Tag-Centered System*
@@ -264,7 +264,7 @@ Welcome to your revolutionary tag-centered knowledge management system! This vau
 
 ```
 📁 _system/          # System files (templates, scripts, configurations)
-📁 _attachments/     # Binary files and attachments  
+📁 _attachments/     # Binary files and attachments
 📁 inbox/            # Draft content and unprocessed files
 📁 active/           # Currently relevant content
 📁 archive/          # Deprecated or outdated content
@@ -342,7 +342,7 @@ Use the templates in `_system/templates/` for consistent formatting:
 
 This system evolves with your needs:
 - Add new tags organically
-- Create custom queries for new workflows  
+- Create custom queries for new workflows
 - Let content naturally flow between states
 - Focus on creation, not organization
 
@@ -380,7 +380,7 @@ path:"{directory_name}/"
 ### By content type:
 ```query
 path:"{directory_name}/" type:prompt
-path:"{directory_name}/" type:code  
+path:"{directory_name}/" type:code
 path:"{directory_name}/" type:concept
 ```
 
@@ -407,7 +407,7 @@ This document contains pre-built queries for organizing and discovering content 
 ```query
 type:prompt
 ```
-```query  
+```query
 type:code
 ```
 ```query
@@ -417,7 +417,7 @@ type:concept
 type:resource
 ```
 
-### By Status  
+### By Status
 ```query
 status:draft
 ```

@@ -64,7 +64,7 @@ def classify_file_intelligent(
         classifier = KnowledgeClassifier(config.hybrid_structure)
 
         # Create minimal metadata for classification
-        minimal_metadata = KnowledgeMetadata(
+        KnowledgeMetadata(
             title=file_path.stem, category=None, tags=[]
         )
 
@@ -661,13 +661,13 @@ tags: [automation, best-practice, team-process]
 
 ```
 # 高成功率のAPI関連プロンプトを動的抽出
-TABLE success_rate, domains, updated 
-FROM #prompt AND #api-design AND #best-practice 
-WHERE success_rate > 80 
+TABLE success_rate, domains, updated
+FROM #prompt AND #api-design AND #best-practice
+WHERE success_rate > 80
 SORT success_rate DESC
 
 # プロジェクト横断でのコード関連知見
-LIST FROM (#code OR #prompt) AND #python 
+LIST FROM (#code OR #prompt) AND #python
 WHERE contains(string(tags), "automation")
 ```
 
@@ -879,7 +879,7 @@ tech: []
 domain: []
 
 # 品質指標
-success_rate: 
+success_rate:
 complexity: intermediate
 confidence: medium
 

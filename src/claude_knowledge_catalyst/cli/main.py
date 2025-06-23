@@ -49,10 +49,8 @@ def version_callback(value: bool) -> None:
             f"[bold blue]Claude Knowledge Catalyst (CKC)[/bold blue] v{__version__}"
         )
         console.print(
-            (
-                "[dim]A comprehensive knowledge management system for "
-                "Claude Code development insights.[/dim]"
-            )
+            "[dim]A comprehensive knowledge management system for "
+            "Claude Code development insights.[/dim]"
         )
         raise typer.Exit()
 
@@ -135,10 +133,8 @@ def init(
             existing_config = load_config(config_path)
             if existing_config.sync_targets:
                 console.print(
-                    (
-                        f"[dim]   Current sync targets: "
-                        f"{len(existing_config.sync_targets)} configured[/dim]"
-                    )
+                    f"[dim]   Current sync targets: "
+                    f"{len(existing_config.sync_targets)} configured[/dim]"
                 )
                 for target in existing_config.sync_targets:
                     status = (
@@ -422,10 +418,8 @@ def status() -> None:
     if config.migration.auto_detect and config.migration.notify_level != "silent":
         if migration_info["needs_migration"]:
             console.print(
-                (
-                    "[yellow]Migration Status:[/yellow] "
-                    "[yellow]⚠️  Mixed format detected[/yellow]"
-                )
+                "[yellow]Migration Status:[/yellow] "
+                "[yellow]⚠️  Mixed format detected[/yellow]"
             )
             console.print(f"  • Legacy format: {migration_info['legacy_count']} files")
             console.print(f"  • Modern format: {migration_info['modern_count']} files")
@@ -433,25 +427,19 @@ def status() -> None:
 
             if config.migration.notify_level in ["recommended", "verbose"]:
                 console.print(
-                    (
-                        "  [dim]💡 Upgrade to Pure Tag-Centered Architecture "
-                        "for enhanced features[/dim]"
-                    )
+                    "  [dim]💡 Upgrade to Pure Tag-Centered Architecture "
+                    "for enhanced features[/dim]"
                 )
                 if config.migration.notify_level == "verbose":
                     console.print(
-                        (
-                            "  [dim]Benefits: Multi-dimensional search, "
-                            "AI classification, success tracking[/dim]"
-                        )
+                        "  [dim]Benefits: Multi-dimensional search, "
+                        "AI classification, success tracking[/dim]"
                     )
 
         elif migration_info["modern_count"] > 0:
             console.print(
-                (
-                    "[green]Migration Status:[/green] "
-                    "[green]✓ Pure Tag-Centered Architecture[/green]"
-                )
+                "[green]Migration Status:[/green] "
+                "[green]✓ Pure Tag-Centered Architecture[/green]"
             )
             console.print(f"  • Modern format: {migration_info['modern_count']} files")
         elif migration_info["total_files"] > 0 and config.migration.notify_level in [
@@ -1491,7 +1479,6 @@ def enhance(
         ckc enhance -d /path/to/knowledge    # Enhance specific directory
         ckc enhance --min-confidence 0.8    # Higher confidence threshold
     """
-    config = get_config()
     metadata_manager = get_metadata_manager()
 
     dir_path = Path(directory).resolve()
@@ -1734,8 +1721,6 @@ def quick_commands(
         config = get_config()
 
         total_files = 0
-        type_counts = {}
-        status_counts = {}
 
         for target in config.get_enabled_sync_targets():
             vault_stats = {}
@@ -1804,7 +1789,7 @@ def classify(
         ckc classify --auto-apply --min-confidence 0.8  # Auto-apply high confidence
         ckc classify --format json               # JSON output for automation
     """
-    config = get_config()
+    get_config()
     metadata_manager = get_metadata_manager()
     classifier = SmartContentClassifier()
 
@@ -2121,7 +2106,7 @@ def _interactive_apply_classifications(
 
     console.print("\n[cyan]Select suggestions to apply:[/cyan]")
 
-    for i, classification in enumerate(classifications[:8]):  # Limit to 8 for usability
+    for _i, classification in enumerate(classifications[:8]):  # Limit to 8 for usability
         confidence_str = f"{classification.confidence:.0%}"
         suggestion_text = f"{classification.tag_type}: {classification.suggested_value} ({confidence_str})"
 

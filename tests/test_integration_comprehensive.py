@@ -445,7 +445,7 @@ Content specific to project 2.
 
         # Generate analytics
         analytics = KnowledgeAnalytics(workspace["vault"], config)
-        analytics_report = analytics.generate_comprehensive_report()
+        analytics.generate_comprehensive_report()
 
         # Use analytics insights for AI recommendations
         ai_assistant = AIKnowledgeAssistant(workspace["vault"], config)
@@ -760,7 +760,7 @@ Content with various elements for testing.
 
     def _validate_quality_metrics(self, enhanced_files):
         """Validate quality of enhanced metadata."""
-        for file_path, metadata in enhanced_files:
+        for _file_path, metadata in enhanced_files:
             # Check required fields exist
             assert metadata.title is not None
             assert metadata.created is not None

@@ -211,7 +211,7 @@ class ConfigMigrationManager:
 
     def _log_migration(self, from_version: str, to_version: str, config_path: Path):
         """Log migration details."""
-        log_entry = {
+        {
             "timestamp": datetime.now().isoformat(),
             "config_path": str(config_path),
             "from_version": from_version,
@@ -235,7 +235,7 @@ class ConfigMigrationManager:
 
 🚀 新機能を試すには:
   uv run ckc structure --help
-  
+
 💡 ハイブリッド構造を有効にする:
   uv run ckc init --structure hybrid
         """)
