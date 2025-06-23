@@ -1,0 +1,142 @@
+# Content type classification patterns for SmartContentClassifier
+# Patterns to identify the nature and type of content
+
+prompt:
+  high_confidence:
+    - "claude"
+    - "gpt"
+    - "ai assistant"
+    - "prompt:"
+    - "ask the ai"
+  medium_confidence:
+    - "prompt"
+    - "generate"
+    - "ai"
+  keywords:
+    - "instruction"
+    - "query"
+    - "request"
+    - "question"
+
+code:
+  high_confidence:
+    - "```"
+    - "def "
+    - "function"
+    - "class "
+    - "import "
+    - "const "
+  medium_confidence:
+    - "code"
+    - "script"
+    - "program"
+  keywords:
+    - "algorithm"
+    - "implementation"
+    - "refactor"
+    - "debug"
+    - "optimize"
+
+concept:
+  high_confidence:
+    - "concept"
+    - "principle"
+    - "theory"
+    - "methodology"
+    - "best practice"
+  medium_confidence:
+    - "approach"
+    - "pattern"
+    - "strategy"
+  keywords:
+    - "architecture"
+    - "design"
+    - "framework"
+    - "paradigm"
+    - "philosophy"
+
+resource:
+  high_confidence:
+    - "documentation"
+    - "reference"
+    - "guide"
+    - "tutorial"
+    - "cheat sheet"
+  medium_confidence:
+    - "resource"
+    - "link"
+    - "tool"
+  keywords:
+    - "manual"
+    - "handbook"
+    - "wiki"
+    - "bookmark"
+    - "collection"
+
+project_log:
+  high_confidence:
+    - "project log"
+    - "development log"
+    - "progress update"
+    - "milestone"
+  medium_confidence:
+    - "log"
+    - "update"
+    - "progress"
+  keywords:
+    - "status"
+    - "timeline"
+    - "deliverable"
+    - "retrospective"
+    - "review"
+
+improvement:
+  high_confidence:
+    - "improvement"
+    - "optimization"
+    - "enhancement"
+    - "refactoring"
+  medium_confidence:
+    - "better"
+    - "optimize"
+    - "enhance"
+  keywords:
+    - "performance"
+    - "efficiency"
+    - "quality"
+    - "maintainability"
+    - "scalability"
+
+troubleshooting:
+  high_confidence:
+    - "troubleshooting"
+    - "bug fix"
+    - "error resolution"
+    - "debugging"
+  medium_confidence:
+    - "problem"
+    - "issue"
+    - "error"
+  keywords:
+    - "stack trace"
+    - "exception"
+    - "crash"
+    - "failure"
+    - "solution"
+
+research:
+  high_confidence:
+    - "research"
+    - "investigation"
+    - "analysis"
+    - "study"
+  medium_confidence:
+    - "explore"
+    - "evaluate"
+    - "compare"
+  keywords:
+    - "findings"
+    - "conclusion"
+    - "hypothesis"
+    - "experiment"
+    - "observation"

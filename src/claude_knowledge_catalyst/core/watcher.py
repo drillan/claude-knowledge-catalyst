@@ -8,9 +8,9 @@ from typing import Any
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
 
+from .claude_md_processor import ClaudeMdProcessor
 from .config import WatchConfig
 from .metadata import MetadataManager
-from .claude_md_processor import ClaudeMdProcessor
 
 
 class KnowledgeFileEventHandler(FileSystemEventHandler):
@@ -219,29 +219,34 @@ class KnowledgeWatcher:
 
         try:
             # Check if this is a CLAUDE.md file
-            is_claude_md = (file_path.name == "CLAUDE.md" and 
-                          self.watch_config.include_claude_md)
-            
+            is_claude_md = (
+                file_path.name == "CLAUDE.md" and self.watch_config.include_claude_md
+            )
+
             if is_claude_md:
                 # Use specialized CLAUDE.md metadata
-                claude_metadata = self.claude_md_processor.get_metadata_for_claude_md(file_path)
+                claude_metadata = self.claude_md_processor.get_metadata_for_claude_md(
+                    file_path
+                )
                 # Extract standard metadata and merge
                 metadata = self.metadata_manager.extract_metadata_from_file(file_path)
-                
+
                 # Update timestamp
                 from datetime import datetime
+
                 metadata.updated = datetime.now()
-                
+
                 # Add CLAUDE.md specific metadata
                 for key, value in claude_metadata.items():
                     setattr(metadata, key, value)
-                    
+
             else:
                 # Extract current metadata for regular files
                 metadata = self.metadata_manager.extract_metadata_from_file(file_path)
 
                 # Update timestamp
                 from datetime import datetime
+
                 metadata.updated = datetime.now()
 
             # Update metadata in file
@@ -291,6 +296,15 @@ class KnowledgeWatcher:
             "ignore_patterns": self.watch_config.ignore_patterns,
             "debounce_seconds": self.watch_config.debounce_seconds,
         }
+
+    def __enter__(self) -> "KnowledgeWatcher":
+        """Context manager entry."""
+        self.start()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Context manager exit."""
+        self.stop()
 
 
 class WatcherManager:

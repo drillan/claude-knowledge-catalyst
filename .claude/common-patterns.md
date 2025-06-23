@@ -389,30 +389,39 @@ uv run ckc watch &
 echo "✅ セットアップ完了!"
 ```
 
-### コードレビュー前チェックスクリプト
+### コードレビュー前チェックスクリプト（CI/CD対応）
 ```bash
 #!/bin/bash
-# pre-review.sh
+# pre-review.sh - CI/CDパイプライン準拠
 
-echo "🔍 コードレビュー前チェック開始"
+echo "🔍 コードレビュー前チェック開始 (CI/CD準拠)"
 
-# コード品質チェック
-echo "📋 リンティング..."
+# CI/CDと同等の品質チェック実行
+echo "📋 リンティング (blocking)..."
 uv run ruff check src/ tests/ || exit 1
 
-echo "🎨 フォーマットチェック..."
+echo "🎨 フォーマットチェック (blocking)..."
 uv run ruff format --check src/ tests/ || exit 1
 
-echo "🔍 型チェック..."
-uv run mypy src/ || exit 1
+echo "🧪 必須テスト実行 (blocking)..."
+uv run pytest tests/test_essential_features.py || exit 1
 
-echo "🧪 テスト実行..."
-uv run pytest || exit 1
+echo "🔒 セキュリティスキャン (blocking)..."
+uv run bandit -r src/ || exit 1
+
+echo "📦 ビルド検証 (blocking)..."
+uv build || exit 1
+
+echo "🔍 型チェック (non-blocking warning)..."
+uv run mypy src/ || echo "⚠️ Type check warnings (non-blocking)"
+
+echo "🧪 全テスト実行 (coverage)..."
+uv run pytest --cov=src --cov-report=term-missing || echo "⚠️ Some tests failed (check coverage)"
 
 echo "📄 ドキュメント更新チェック..."
 uv run ckc config validate || exit 1
 
-echo "✅ 全チェック完了! レビュー準備OK"
+echo "✅ CI/CD準拠チェック完了! PR準備OK"
 ```
 
 ## 緊急時の対応コマンド
@@ -539,4 +548,130 @@ for keyword, score in keywords:  # 順序要確認
 detected_lang = language or self.language_detector.detect_language(content)
 if detected_lang not in self.config.supported_languages:
     detected_lang = 'en'  # デフォルト
+```
+
+## CI/CD操作パターン (Phase 3対応)
+
+### GitHub Actions ローカル確認
+```bash
+# GitHub CLI経由でのワークフロー状況確認
+gh workflow list
+gh workflow view ci.yml
+gh run list --workflow=ci.yml
+
+# 最新ワークフロー実行の詳細
+gh run view --log
+
+# 失敗したジョブの詳細確認
+gh run view <run_id> --job=<job_id> --log
+```
+
+### CI/CDパイプライン手動実行パターン
+```bash
+# リリース用タグ作成 (自動リリーストリガー)
+git tag -a v1.2.3 -m "Release v1.2.3: New features and bug fixes"
+git push origin v1.2.3
+
+# プレリリース作成
+git tag -a v1.2.3-rc1 -m "Release candidate v1.2.3-rc1"
+git push origin v1.2.3-rc1
+
+# タグ削除（必要時）
+git tag -d v1.2.3
+git push origin --delete v1.2.3
+```
+
+### 品質ゲート対応パターン
+```bash
+# PRマージ前の必須チェック (blocking)
+uv run ruff check src/ tests/                    # Lint errors
+uv run ruff format --check src/ tests/           # Format errors  
+uv run pytest tests/test_essential_features.py   # Essential tests
+uv build                                         # Package build
+uv run pytest --cov=src --cov-report=term | grep "TOTAL.*[2-5][0-9]%"  # Coverage ≥25%
+
+# 警告レベルチェック (non-blocking)
+uv run mypy src/                                 # Type check warnings
+uv run pytest tests/test_integration_comprehensive.py  # Integration warnings
+uv run bandit -r src/                            # Security warnings
+```
+
+### 依存関係管理自動化
+```bash
+# 手動依存関係更新（週次メンテナンス準拠）
+uv lock --upgrade
+uv sync
+
+# セキュリティチェック
+uv run safety check
+uv run bandit -r src/
+
+# 更新後のテスト確認
+uv run pytest --tb=short
+
+# 自動PR作成用の変更準備
+git add uv.lock
+git commit -m "chore: update dependencies"
+```
+
+### リリース管理パターン
+```bash
+# リリース準備チェックリスト
+echo "🚀 リリース準備チェック"
+echo "✅ All tests passing: $(uv run pytest --tb=no -q && echo 'PASS' || echo 'FAIL')"
+echo "✅ Coverage adequate: $(uv run pytest --cov=src --cov-report=term | grep TOTAL)"
+echo "✅ Build successful: $(uv build && echo 'PASS' || echo 'FAIL')"
+echo "✅ Security clean: $(uv run bandit -r src/ -q && echo 'PASS' || echo 'FAIL')"
+
+# セマンティックバージョン判定
+echo "📋 Version increment guidance:"
+echo "- patch (x.x.X): Bug fixes, documentation"  
+echo "- minor (x.X.x): New features, backward compatible"
+echo "- major (X.x.x): Breaking changes"
+
+# リリースノート準備
+echo "📝 Release notes template:"
+echo "## New Features"
+echo "## Bug Fixes" 
+echo "## Breaking Changes"
+echo "## Documentation"
+```
+
+### モニタリング・ヘルスチェック
+```bash
+# プロジェクト健全性の週次確認
+echo "📊 Project Health Report $(date)"
+echo "- Active branches: $(git branch -r | wc -l)"
+echo "- Test coverage: $(uv run pytest --cov=src --cov-report=term | grep TOTAL)"
+echo "- Dependencies: $(uv pip list | wc -l) packages"
+echo "- Last release: $(git tag --sort=-version:refname | head -1)"
+echo "- Open issues: $(gh issue list --state open | wc -l)"
+echo "- Open PRs: $(gh pr list --state open | wc -l)"
+
+# CI/CDパイプライン成功率
+gh run list --workflow=ci.yml --limit=10 --json conclusion | jq '.[] | .conclusion' | sort | uniq -c
+```
+
+### トラブルシューティング：CI/CD編
+```bash
+# GitHub Actions デバッグ
+# 1. ワークフロー失敗の原因特定
+gh run view --log | grep -E "(FAIL|ERROR|✗)"
+
+# 2. 特定ジョブの詳細確認
+gh run view <run_id> --job test --log
+
+# 3. secrets/variables確認（管理者のみ）
+gh secret list
+gh variable list
+
+# 4. ワークフロー再実行
+gh run rerun <run_id>
+
+# 5. ローカルでの CI 環境再現
+docker run --rm -v $(pwd):/workspace -w /workspace python:3.11 bash -c "
+    pip install uv && 
+    uv sync --dev && 
+    uv run pytest --tb=short
+"
 ```

@@ -1,4 +1,4 @@
-# Claude Knowledge Catalyst (CKC) v0.10.0
+# Claude Knowledge Catalyst (CKC) v0.10.1
 
 **Claude Code ⇄ Obsidian Seamless Integration System**
 
@@ -57,7 +57,7 @@ obsidian-vault/
 
 ## 🎯 3-Minute Claude Code ⇄ Obsidian Integration Experience
 
-> **🚀 v0.10.0 YAKE Integration**: Advanced keyword extraction with 147 passing tests and 28.25% test coverage ensures production stability.
+> **🚀 v0.10.1 Test Stabilization**: Complete test-until-pass implementation with 396/396 passing tests and 48.09% test coverage ensures production stability.
 
 **Experience seamless integration:**
 

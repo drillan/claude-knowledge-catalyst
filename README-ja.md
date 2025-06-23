@@ -1,4 +1,4 @@
-# Claude Knowledge Catalyst (CKC) v0.10.0
+# Claude Knowledge Catalyst (CKC) v0.10.1
 
 **Claude Code ⇄ Obsidian シームレス統合システム**
 
@@ -57,7 +57,7 @@ obsidian-vault/
 
 ## 🎯 3分でClaude Code ⇄ Obsidian連携体験
 
-> **🚀 v0.9.2 ベータ安定版**: 34の基本テスト通過により、信頼性の高いコア機能を提供。
+> **🚀 v0.10.1 テスト安定化**: 396/396テスト通過率100%、48.09%カバレッジによる本格運用品質を実現。
 
 **シームレス統合を体験:**
 

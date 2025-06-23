@@ -12,7 +12,12 @@
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
-      "Bash(shellcheck:*)"
+      "Bash(shellcheck:*)",
+      "Bash(rg:*)",
+      "Bash(mkdir:*)",
+      "Bash(uv run:*)",
+      "Bash(ls:*)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": [
       "Bash(rm -rf:*)",

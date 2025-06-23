@@ -3,11 +3,11 @@
 from .ai_assistant import AIKnowledgeAssistant, create_ai_assistant
 from .smart_classifier import SmartContentClassifier
 from .yake_extractor import (
+    YAKE_AVAILABLE,
+    Keyword,
     YAKEConfig,
     YAKEKeywordExtractor,
-    Keyword,
     create_yake_extractor,
-    YAKE_AVAILABLE
 )
 
 __all__ = [
@@ -15,8 +15,8 @@ __all__ = [
     "create_ai_assistant",
     "SmartContentClassifier",
     "YAKEConfig",
-    "YAKEKeywordExtractor", 
+    "YAKEKeywordExtractor",
     "Keyword",
     "create_yake_extractor",
-    "YAKE_AVAILABLE"
+    "YAKE_AVAILABLE",
 ]

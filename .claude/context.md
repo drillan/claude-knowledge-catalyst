@@ -106,7 +106,7 @@ uv add yake>=0.4.8 langdetect>=1.0.9 unidecode>=1.3.0
 uv run pytest tests/test_yake_extractor.py::test_fallback_without_yake
 ```
 
-### コード品質
+### コード品質・CI/CD
 ```bash
 # リンティング
 uv run ruff check src/ tests/
@@ -120,6 +120,12 @@ uv run mypy src/
 # テスト（AI機能含む）
 uv run pytest tests/
 uv run pytest --cov=src/claude_knowledge_catalyst --cov-report=html
+
+# CI/CD (GitHub Actions)
+# - 自動品質チェック（lint, format, test, security）
+# - マルチPythonバージョンテスト（3.11, 3.12）
+# - 自動リリース・PyPI公開
+# - 依存関係脆弱性監視
 ```
 
 ### ファイルパス操作
@@ -152,12 +158,15 @@ uv run pytest --cov=src/claude_knowledge_catalyst --cov-report=html
 - Pydanticによる設定検証
 - 複数同期ターゲットのサポート
 
-### 開発ワークフロー
+### 開発ワークフロー（CI/CD統合）
 1. **新機能追加時**: Pydanticモデルを使用
 2. **テスト**: 全ての核となる機能に包括的テスト
 3. **CLI更新**: ユーザー向け機能の場合
 4. **エラーハンドリング**: 既存パターンに従う
 5. **型ヒント**: 全コードに型ヒント使用
+6. **プルリクエスト**: 自動品質ゲート（blocking/non-blocking）
+7. **リリース**: タグベース自動リリース（`v*`タグ）
+8. **継続監視**: 依存関係・セキュリティ・プロジェクト健全性
 
 ### 知識組織システム
 ```

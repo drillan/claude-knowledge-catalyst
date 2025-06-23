@@ -24,35 +24,64 @@ class KnowledgeMetadata(BaseModel):
     version: str = Field(default="1.0", description="Version of the content")
 
     # === Pure Multi-layered Tag Architecture ===
-    
+
     # Basic classification (required)
-    type: str = Field(default="prompt", description="Content type: prompt, code, concept, resource")
-    status: str = Field(default="draft", description="Status: draft, tested, production, deprecated")
-    
+    type: str = Field(
+        default="prompt", description="Content type: prompt, code, concept, resource"
+    )
+    status: str = Field(
+        default="draft", description="Status: draft, tested, production, deprecated"
+    )
+
     # Technical domains (multiple selection allowed)
-    tech: list[str] = Field(default_factory=list, description="Technology stack: python, javascript, api, etc.")
-    domain: list[str] = Field(default_factory=list, description="Domain areas: web-dev, data-science, automation, etc.")
-    
+    tech: list[str] = Field(
+        default_factory=list,
+        description="Technology stack: python, javascript, api, etc.",
+    )
+    domain: list[str] = Field(
+        default_factory=list,
+        description="Domain areas: web-dev, data-science, automation, etc.",
+    )
+
     # Quality indicators
-    success_rate: int | None = Field(None, description="Success rate percentage (0-100)")
-    complexity: str | None = Field(None, description="Complexity level: beginner, intermediate, advanced")
-    confidence: str | None = Field(None, description="Confidence level: low, medium, high")
-    
+    success_rate: int | None = Field(
+        None, description="Success rate percentage (0-100)"
+    )
+    complexity: str | None = Field(
+        None, description="Complexity level: beginner, intermediate, advanced"
+    )
+    confidence: str | None = Field(
+        None, description="Confidence level: low, medium, high"
+    )
+
     # Project relationships
-    projects: list[str] = Field(default_factory=list, description="Associated project names")
-    team: list[str] = Field(default_factory=list, description="Team areas: backend, frontend, devops, etc.")
-    
+    projects: list[str] = Field(
+        default_factory=list, description="Associated project names"
+    )
+    team: list[str] = Field(
+        default_factory=list, description="Team areas: backend, frontend, devops, etc."
+    )
+
     # Claude-specific metadata
-    claude_model: list[str] = Field(default_factory=list, description="Claude models: opus, sonnet, haiku")
-    claude_feature: list[str] = Field(default_factory=list, description="Claude features: code-generation, analysis, creative")
-    
+    claude_model: list[str] = Field(
+        default_factory=list, description="Claude models: opus, sonnet, haiku"
+    )
+    claude_feature: list[str] = Field(
+        default_factory=list,
+        description="Claude features: code-generation, analysis, creative",
+    )
+
     # Evolutionary tags (free-form)
-    tags: list[str] = Field(default_factory=list, description="Free-form evolutionary tags")
-    
+    tags: list[str] = Field(
+        default_factory=list, description="Free-form evolutionary tags"
+    )
+
     # System metadata
     author: str | None = Field(None, description="Author of the content")
     source: str | None = Field(None, description="Source file path")
-    checksum: str | None = Field(None, description="Content checksum for change detection")
+    checksum: str | None = Field(
+        None, description="Content checksum for change detection"
+    )
     purpose: str | None = Field(None, description="Purpose of this knowledge item")
 
     model_config = {"json_encoders": {datetime: lambda v: v.isoformat()}}
@@ -72,24 +101,61 @@ class MetadataManager:
             # Basic classification (required)
             "type": ["prompt", "code", "concept", "resource"],
             "status": ["draft", "tested", "production", "deprecated"],
-            
             # Technical domains (extensible)
-            "tech": ["python", "javascript", "typescript", "react", "nodejs", "api", 
-                    "docker", "git", "aws", "gcp", "azure", "kubernetes", "terraform"],
-            "domain": ["web-dev", "data-science", "automation", "devops", "ai-ml", 
-                      "backend", "frontend", "mobile", "database", "security", "testing"],
-            
+            "tech": [
+                "python",
+                "javascript",
+                "typescript",
+                "react",
+                "nodejs",
+                "api",
+                "docker",
+                "git",
+                "aws",
+                "gcp",
+                "azure",
+                "kubernetes",
+                "terraform",
+            ],
+            "domain": [
+                "web-dev",
+                "data-science",
+                "automation",
+                "devops",
+                "ai-ml",
+                "backend",
+                "frontend",
+                "mobile",
+                "database",
+                "security",
+                "testing",
+            ],
             # Quality indicators
             "complexity": ["beginner", "intermediate", "advanced", "expert"],
             "confidence": ["low", "medium", "high"],
-            
             # Team areas
-            "team": ["backend", "frontend", "devops", "data", "mobile", "design", "qa", "ml"],
-            
+            "team": [
+                "backend",
+                "frontend",
+                "devops",
+                "data",
+                "mobile",
+                "design",
+                "qa",
+                "ml",
+            ],
             # Claude models and features
             "claude_model": ["opus", "sonnet", "haiku"],
-            "claude_feature": ["code-generation", "analysis", "creative", "debugging", 
-                              "review", "documentation", "refactoring", "optimization"],
+            "claude_feature": [
+                "code-generation",
+                "analysis",
+                "creative",
+                "debugging",
+                "review",
+                "documentation",
+                "refactoring",
+                "optimization",
+            ],
         }
 
     def extract_metadata_from_file(self, file_path: Path) -> KnowledgeMetadata:
@@ -132,8 +198,10 @@ class MetadataManager:
         }
 
         return KnowledgeMetadata(**final_metadata)
-    
-    def _extract_tag_metadata(self, metadata: dict[str, Any], content: str) -> dict[str, Any]:
+
+    def _extract_tag_metadata(
+        self, metadata: dict[str, Any], content: str
+    ) -> dict[str, Any]:
         """Extract pure tag-centered metadata from file frontmatter and content."""
         result = {
             "type": metadata.get("type", self._infer_type_from_content(content)),
@@ -168,58 +236,101 @@ class MetadataManager:
                 result[key] = self._deduplicate_and_validate_tags(value)
 
         return result
-    
+
     def _infer_type_from_content(self, content: str) -> str:
         """Infer content type from content analysis."""
         content_lower = content.lower()
-        
+
         # Check for prompt patterns
-        if any(pattern in content_lower for pattern in ["prompt", "claude", "ask", "request", "generate"]):
+        if any(
+            pattern in content_lower
+            for pattern in ["prompt", "claude", "ask", "request", "generate"]
+        ):
             return "prompt"
-        
+
         # Check for code patterns
-        if any(pattern in content for pattern in ["```", "def ", "function ", "class ", "import ", "const ", "let "]):
+        if any(
+            pattern in content
+            for pattern in [
+                "```",
+                "def ",
+                "function ",
+                "class ",
+                "import ",
+                "const ",
+                "let ",
+            ]
+        ):
             return "code"
-        
+
         # Check for concept patterns
-        if any(pattern in content_lower for pattern in ["concept", "theory", "principle", "methodology", "approach"]):
+        if any(
+            pattern in content_lower
+            for pattern in ["concept", "theory", "principle", "methodology", "approach"]
+        ):
             return "concept"
-        
+
         # Check for resource patterns
-        if any(pattern in content_lower for pattern in ["resource", "link", "reference", "documentation", "guide"]):
+        if any(
+            pattern in content_lower
+            for pattern in ["resource", "link", "reference", "documentation", "guide"]
+        ):
             return "resource"
-        
+
         # Default to prompt if unclear
         return "prompt"
-    
+
     def _infer_domain_tags(self, content: str) -> list[str]:
         """Infer domain tags from content analysis."""
         content_lower = content.lower()
         domain_tags = []
-        
+
         # Domain detection patterns
         domain_patterns = {
-            "web-dev": ["web", "html", "css", "frontend", "backend", "server", "client"],
-            "data-science": ["data", "analysis", "pandas", "numpy", "ml", "ai", "analytics"],
+            "web-dev": [
+                "web",
+                "html",
+                "css",
+                "frontend",
+                "backend",
+                "server",
+                "client",
+            ],
+            "data-science": [
+                "data",
+                "analysis",
+                "pandas",
+                "numpy",
+                "ml",
+                "ai",
+                "analytics",
+            ],
             "automation": ["automation", "script", "cron", "task", "batch", "workflow"],
-            "devops": ["deploy", "ci/cd", "infrastructure", "monitoring", "kubernetes", "docker"],
+            "devops": [
+                "deploy",
+                "ci/cd",
+                "infrastructure",
+                "monitoring",
+                "kubernetes",
+                "docker",
+            ],
             "ai-ml": ["ai", "ml", "machine learning", "neural", "model", "training"],
             "mobile": ["mobile", "ios", "android", "app", "react native", "flutter"],
             "database": ["database", "sql", "mongodb", "postgres", "mysql", "redis"],
             "security": ["security", "auth", "encryption", "vulnerability", "secure"],
             "testing": ["test", "testing", "unit test", "integration", "qa", "quality"],
         }
-        
+
         for domain, patterns in domain_patterns.items():
             if any(pattern in content_lower for pattern in patterns):
                 domain_tags.append(domain)
-        
+
         return domain_tags
-    
+
     def _infer_metadata_from_content(self, content: str) -> dict[str, Any]:
         """Infer metadata from content analysis."""
         inferred = {}
-        
+
         # Infer complexity from content length and structure
         if len(content) < 500:
             inferred["complexity"] = "beginner"
@@ -227,17 +338,23 @@ class MetadataManager:
             inferred["complexity"] = "intermediate"
         else:
             inferred["complexity"] = "advanced"
-        
+
         # Infer confidence from content quality indicators
-        if any(indicator in content.lower() for indicator in ["tested", "proven", "validated", "production"]):
+        if any(
+            indicator in content.lower()
+            for indicator in ["tested", "proven", "validated", "production"]
+        ):
             inferred["confidence"] = "high"
-        elif any(indicator in content.lower() for indicator in ["experimental", "draft", "wip", "todo"]):
+        elif any(
+            indicator in content.lower()
+            for indicator in ["experimental", "draft", "wip", "todo"]
+        ):
             inferred["confidence"] = "low"
         else:
             inferred["confidence"] = "medium"
-        
+
         return inferred
-    
+
     def _ensure_list(self, value: Any) -> list[str]:
         """Ensure value is a list of strings."""
         if value is None:
@@ -247,23 +364,42 @@ class MetadataManager:
         if isinstance(value, list):
             return [str(item).strip() for item in value if str(item).strip()]
         return [str(value).strip()] if str(value).strip() else []
-    
+
     def _extract_hashtags_from_content(self, content: str) -> list[str]:
         """Extract hashtags from content."""
         import re
+
         hashtag_pattern = r"#(\w+)"
         hashtags = re.findall(hashtag_pattern, content)
         return list(set(hashtags))
-    
+
     def _infer_tech_tags(self, content: str) -> list[str]:
         """Infer technology tags from content."""
         content_lower = content.lower()
         tech_tags = []
-        
+
         # Enhanced technology detection
         tech_patterns = {
-            "python": ["python", "pip", "conda", "pytest", "django", "flask", "fastapi", "asyncio"],
-            "javascript": ["javascript", "js", "node.js", "npm", "yarn", "const ", "let ", "=>"],
+            "python": [
+                "python",
+                "pip",
+                "conda",
+                "pytest",
+                "django",
+                "flask",
+                "fastapi",
+                "asyncio",
+            ],
+            "javascript": [
+                "javascript",
+                "js",
+                "node.js",
+                "npm",
+                "yarn",
+                "const ",
+                "let ",
+                "=>",
+            ],
             "typescript": ["typescript", "ts", "interface", "type ", ".ts", ".tsx"],
             "react": ["react", "jsx", "component", "useState", "useEffect", "props"],
             "nodejs": ["node.js", "nodejs", "express", "npm", "package.json"],
@@ -273,59 +409,59 @@ class MetadataManager:
             "aws": ["aws", "s3", "ec2", "lambda", "cloudformation"],
             "database": ["sql", "mongodb", "postgres", "mysql", "redis"],
         }
-        
+
         for tech, patterns in tech_patterns.items():
             if any(pattern in content_lower for pattern in patterns):
                 tech_tags.append(tech)
-        
+
         return tech_tags
-    
+
     def _deduplicate_and_validate_tags(self, tags: list[str]) -> list[str]:
         """Remove duplicates and validate tag format."""
         if not tags:
             return []
-        
+
         # Normalize and deduplicate
         normalized = []
         seen = set()
-        
+
         for tag in tags:
             if isinstance(tag, str):
                 tag = tag.lower().strip()
                 if tag and tag not in seen and self._is_valid_tag(tag):
                     normalized.append(tag)
                     seen.add(tag)
-        
+
         return sorted(normalized)
-    
+
     def _is_valid_tag(self, tag: str) -> bool:
         """Validate if tag format is acceptable."""
         if not tag:
             return False
         # Allow alphanumeric, hyphens, underscores, and forward slashes
         return all(c.isalnum() or c in "-_/" for c in tag)
-    
+
     def _extract_projects(self, metadata: dict[str, Any], file_path: Path) -> list[str]:
         """Extract project information from various sources."""
         projects = []
-        
+
         # From metadata
         if "projects" in metadata:
             projects.extend(self._ensure_list(metadata["projects"]))
-        
+
         # Legacy support
         if "project" in metadata:
             projects.extend(self._ensure_list(metadata["project"]))
-        
+
         if "related_projects" in metadata:
             projects.extend(self._ensure_list(metadata["related_projects"]))
-        
+
         # Auto-detect if no projects specified
         if not projects:
             auto_project = self._auto_detect_project(file_path)
             if auto_project:
                 projects.append(auto_project)
-        
+
         return self._deduplicate_and_validate_tags(projects)
 
     def update_file_metadata(
@@ -366,7 +502,6 @@ class MetadataManager:
                 return line[:50] + ("..." if len(line) > 50 else "")
 
         return "Untitled"
-
 
     def _parse_datetime(self, dt_value: Any) -> datetime:
         """Parse datetime from various formats."""
@@ -439,25 +574,24 @@ class MetadataManager:
 
         return valid_tags
 
-    def suggest_tag_enhancements(self, content: str, existing_metadata: dict[str, Any]) -> dict[str, list[str]]:
+    def suggest_tag_enhancements(
+        self, content: str, existing_metadata: dict[str, Any]
+    ) -> dict[str, list[str]]:
         """Suggest tag enhancements based on content analysis."""
-        suggestions = {
-            "tech": [],
-            "domain": [],
-            "claude_feature": [],
-            "tags": []
-        }
-        
+        suggestions = {"tech": [], "domain": [], "claude_feature": [], "tags": []}
+
         # Infer technical tags
         inferred_tech = self._infer_tech_tags(content)
         existing_tech = self._ensure_list(existing_metadata.get("tech", []))
         suggestions["tech"] = [tag for tag in inferred_tech if tag not in existing_tech]
-        
+
         # Infer domain tags
         inferred_domain = self._infer_domain_tags(content)
         existing_domain = self._ensure_list(existing_metadata.get("domain", []))
-        suggestions["domain"] = [tag for tag in inferred_domain if tag not in existing_domain]
-        
+        suggestions["domain"] = [
+            tag for tag in inferred_domain if tag not in existing_domain
+        ]
+
         # Suggest Claude features based on content
         feature_patterns = {
             "code-generation": ["generate", "create", "build", "implement"],
@@ -466,18 +600,22 @@ class MetadataManager:
             "documentation": ["document", "readme", "guide", "explanation"],
             "optimization": ["optimize", "improve", "enhance", "performance"],
         }
-        
+
         content_lower = content.lower()
-        existing_features = self._ensure_list(existing_metadata.get("claude_feature", []))
+        existing_features = self._ensure_list(
+            existing_metadata.get("claude_feature", [])
+        )
         for feature, patterns in feature_patterns.items():
-            if feature not in existing_features and any(pattern in content_lower for pattern in patterns):
+            if feature not in existing_features and any(
+                pattern in content_lower for pattern in patterns
+            ):
                 suggestions["claude_feature"].append(feature)
-        
+
         # Extract hashtags as tag suggestions
         hashtags = self._extract_hashtags_from_content(content)
         existing_tags = self._ensure_list(existing_metadata.get("tags", []))
         suggestions["tags"] = [tag for tag in hashtags if tag not in existing_tags]
-        
+
         return suggestions
 
     def _auto_detect_project(self, file_path: Path) -> str | None:
@@ -489,117 +627,141 @@ class MetadataManager:
             if project_config.exists():
                 try:
                     import yaml
-                    with open(project_config, 'r', encoding='utf-8') as f:
+
+                    with open(project_config, encoding="utf-8") as f:
                         config = yaml.safe_load(f)
-                        return config.get('project_name')
+                        return config.get("project_name")
                 except Exception:
                     pass
-        
+
         # Method 2: Extract from git repository name
         git_project = self._detect_project_from_git(file_path)
         if git_project:
             return git_project
-        
+
         # Method 3: Use parent directory name as fallback
         return self._detect_project_from_path(file_path)
-    
+
     def _find_claude_directory(self, file_path: Path) -> Path | None:
         """Find the nearest .claude directory walking up the tree."""
         current = file_path.parent if file_path.is_file() else file_path
-        
+
         while current != current.parent:  # Stop at filesystem root
             claude_dir = current / ".claude"
             if claude_dir.exists() and claude_dir.is_dir():
                 return claude_dir
             current = current.parent
-        
+
         return None
-    
+
     def _detect_project_from_git(self, file_path: Path) -> str | None:
         """Detect project name from git repository."""
         try:
             import subprocess
+
             current = file_path.parent if file_path.is_file() else file_path
-            
+
             # Find git root
             result = subprocess.run(
-                ['git', 'rev-parse', '--show-toplevel'],
+                ["git", "rev-parse", "--show-toplevel"],
                 cwd=current,
                 capture_output=True,
-                text=True
+                text=True,
             )
-            
+
             if result.returncode == 0:
                 git_root = Path(result.stdout.strip())
                 return git_root.name
-                
+
         except (subprocess.SubprocessError, FileNotFoundError):
             pass
-        
+
         return None
-    
+
     def _detect_project_from_path(self, file_path: Path) -> str | None:
         """Detect project name from file path structure."""
         # Look for common project indicators
         current = file_path.parent if file_path.is_file() else file_path
-        
+
         # Walk up to find a directory that looks like a project root
         while current != current.parent:
             # Check for common project files
             project_indicators = [
-                'package.json', 'pyproject.toml', 'Cargo.toml', 
-                'go.mod', 'pom.xml', 'build.gradle', 'requirements.txt',
-                '.git', 'README.md'
+                "package.json",
+                "pyproject.toml",
+                "Cargo.toml",
+                "go.mod",
+                "pom.xml",
+                "build.gradle",
+                "requirements.txt",
+                ".git",
+                "README.md",
             ]
-            
+
             if any((current / indicator).exists() for indicator in project_indicators):
                 return current.name
-            
+
             current = current.parent
-        
+
         return None
-    
+
     def validate_tag_metadata(self, metadata: dict[str, Any]) -> tuple[bool, list[str]]:
         """Validate tag-centered metadata structure and return errors."""
         errors = []
-        
+
         # Required fields
         if not metadata.get("title"):
             errors.append("Title is required")
-        
+
         # Validate type
-        valid_types = self.tag_config.get("type", ["prompt", "code", "concept", "resource"])
+        valid_types = self.tag_config.get(
+            "type", ["prompt", "code", "concept", "resource"]
+        )
         if metadata.get("type") not in valid_types:
             errors.append(f"Invalid type: {metadata.get('type')}. Valid: {valid_types}")
-        
+
         # Validate status
-        valid_statuses = self.tag_config.get("status", ["draft", "tested", "production", "deprecated"])
+        valid_statuses = self.tag_config.get(
+            "status", ["draft", "tested", "production", "deprecated"]
+        )
         if metadata.get("status") not in valid_statuses:
-            errors.append(f"Invalid status: {metadata.get('status')}. Valid: {valid_statuses}")
-        
+            errors.append(
+                f"Invalid status: {metadata.get('status')}. Valid: {valid_statuses}"
+            )
+
         # Validate success_rate
         success_rate = metadata.get("success_rate")
         if success_rate is not None:
             if not isinstance(success_rate, int) or not 0 <= success_rate <= 100:
                 errors.append("success_rate must be an integer between 0 and 100")
-        
+
         # Validate complexity
         complexity = metadata.get("complexity")
         if complexity is not None:
-            valid_complexity = self.tag_config.get("complexity", ["beginner", "intermediate", "advanced"])
+            valid_complexity = self.tag_config.get(
+                "complexity", ["beginner", "intermediate", "advanced"]
+            )
             if complexity not in valid_complexity:
-                errors.append(f"Invalid complexity: {complexity}. Valid: {valid_complexity}")
-        
+                errors.append(
+                    f"Invalid complexity: {complexity}. Valid: {valid_complexity}"
+                )
+
         # Validate confidence
         confidence = metadata.get("confidence")
         if confidence is not None:
-            valid_confidence = self.tag_config.get("confidence", ["low", "medium", "high"])
+            valid_confidence = self.tag_config.get(
+                "confidence", ["low", "medium", "high"]
+            )
             if confidence not in valid_confidence:
-                errors.append(f"Invalid confidence: {confidence}. Valid: {valid_confidence}")
-        
+                errors.append(
+                    f"Invalid confidence: {confidence}. Valid: {valid_confidence}"
+                )
+
         return len(errors) == 0, errors
-    
-    def get_tag_statistics(self, metadata_list: list[dict[str, Any]]) -> dict[str, dict[str, int]]:
+
+    def get_tag_statistics(
+        self, metadata_list: list[dict[str, Any]]
+    ) -> dict[str, dict[str, int]]:
         """Get statistics about tag usage across multiple files."""
         stats = {
             "type": {},
@@ -610,40 +772,42 @@ class MetadataManager:
             "confidence": {},
             "claude_model": {},
             "claude_feature": {},
-            "tags": {}
+            "tags": {},
         }
-        
+
         for metadata in metadata_list:
             # Count single-value fields
             for field in ["type", "status", "complexity", "confidence"]:
                 value = metadata.get(field)
                 if value:
                     stats[field][value] = stats[field].get(value, 0) + 1
-            
+
             # Count list fields
             for field in ["tech", "domain", "claude_model", "claude_feature", "tags"]:
                 values = self._ensure_list(metadata.get(field, []))
                 for value in values:
                     stats[field][value] = stats[field].get(value, 0) + 1
-        
+
         return stats
-    
-    def validate_and_enhance_tags(self, metadata: KnowledgeMetadata, content: str) -> tuple[KnowledgeMetadata, list[str]]:
+
+    def validate_and_enhance_tags(
+        self, metadata: KnowledgeMetadata, content: str
+    ) -> tuple[KnowledgeMetadata, list[str]]:
         """Validate and enhance metadata tags using standards.
-        
+
         Args:
             metadata: Current metadata
             content: File content for analysis
-            
+
         Returns:
             Tuple of (enhanced_metadata, validation_errors)
         """
         # Convert to dict for validation
         metadata_dict = metadata.model_dump()
-        
+
         # Validate current tags
         is_valid, errors = self.tag_standards.validate_metadata_tags(metadata_dict)
-        
+
         # Get tag suggestions
         existing_tags = {
             "type": [metadata.type],
@@ -653,11 +817,11 @@ class MetadataManager:
             "team": metadata.team,
             "claude_model": metadata.claude_model,
             "claude_feature": metadata.claude_feature,
-            "tags": metadata.tags
+            "tags": metadata.tags,
         }
-        
+
         suggestions = self.tag_standards.suggest_tags(content, existing_tags)
-        
+
         # Enhance metadata with suggestions
         enhanced_dict = metadata_dict.copy()
         for tag_type, suggested_values in suggestions.items():
@@ -668,16 +832,18 @@ class MetadataManager:
                     if suggestion not in current_values:
                         current_values.append(suggestion)
                 enhanced_dict[tag_type] = current_values
-        
+
         # Create enhanced metadata
         enhanced_metadata = KnowledgeMetadata(**enhanced_dict)
-        
+
         return enhanced_metadata, errors
-    
-    def get_tag_recommendations(self, tag_type: str, partial_value: str = "") -> list[str]:
+
+    def get_tag_recommendations(
+        self, tag_type: str, partial_value: str = ""
+    ) -> list[str]:
         """Get tag recommendations for autocomplete."""
         return self.tag_standards.get_tag_recommendations(tag_type, partial_value)
-    
+
     def export_tag_documentation(self) -> str:
         """Export tag standards as markdown documentation."""
         return self.tag_standards.export_standards_as_markdown()

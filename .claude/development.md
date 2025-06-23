@@ -81,6 +81,9 @@ uv add --dev dev-package-name
 uv run pytest                 # Run all tests
 uv run pytest tests/test_config.py  # Run specific test file
 uv run pytest --cov         # Run with coverage
+
+# 🚨 IMPORTANT: このプロジェクトではテスト実行にuvを使用します
+# ❌ python -m pytest ではなく ✅ uv run pytest を使用してください
 ```
 
 ### Code Quality

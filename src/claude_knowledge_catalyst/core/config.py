@@ -78,42 +78,41 @@ class WatchConfig(BaseModel):
         default=False, description="Include CLAUDE.md files in synchronization"
     )
     claude_md_patterns: list[str] = Field(
-        default=["CLAUDE.md", ".claude/CLAUDE.md"], 
-        description="Patterns to match CLAUDE.md files"
+        default=["CLAUDE.md", ".claude/CLAUDE.md"],
+        description="Patterns to match CLAUDE.md files",
     )
     claude_md_sections_exclude: list[str] = Field(
-        default=[], 
-        description="Section headers to exclude from CLAUDE.md sync (e.g., '# secrets', '# private')"
+        default=[],
+        description="Section headers to exclude from CLAUDE.md sync (e.g., '# secrets', '# private')",
     )
 
 
 class MigrationConfig(BaseModel):
     """Configuration for migration features."""
-    
+
     auto_detect: bool = Field(
-        default=True, 
-        description="Automatically detect migration opportunities"
+        default=True, description="Automatically detect migration opportunities"
     )
     notify_level: str = Field(
-        default="recommended", 
-        description="Notification level: 'silent', 'minimal', 'recommended', 'verbose'"
+        default="recommended",
+        description="Notification level: 'silent', 'minimal', 'recommended', 'verbose'",
     )
     backup_before: bool = Field(
-        default=True, 
-        description="Create backup before migration"
+        default=True, description="Create backup before migration"
     )
     mixed_format_warning: bool = Field(
-        default=True, 
-        description="Show warnings when using mixed formats"
+        default=True, description="Show warnings when using mixed formats"
     )
-    
+
     @field_validator("notify_level")
     @classmethod
     def validate_notify_level(cls, v: str) -> str:
         """Validate notification level."""
         valid_levels = ["silent", "minimal", "recommended", "verbose"]
         if v.lower() not in valid_levels:
-            raise ValueError(f"Invalid notify_level: {v}. Valid options: {valid_levels}")
+            raise ValueError(
+                f"Invalid notify_level: {v}. Valid options: {valid_levels}"
+            )
         return v.lower()
 
 
@@ -153,41 +152,45 @@ class CKCConfig(BaseModel):
 
     # Hybrid structure configuration (new in v2.0)
     hybrid_structure: HybridStructureConfig = Field(
-        default_factory=HybridStructureConfig, 
-        description="Hybrid structure configuration"
+        default_factory=HybridStructureConfig,
+        description="Hybrid structure configuration",
     )
-    
+
     # Migration configuration
     migration: MigrationConfig = Field(
         default_factory=MigrationConfig,
-        description="Migration and notification configuration"
+        description="Migration and notification configuration",
     )
-    
 
     @field_validator("project_root", "template_path", mode="before")
     @classmethod
     def resolve_paths(cls, v: str | Path) -> Path:
         """Resolve relative paths."""
-        return Path(v).resolve()
+        try:
+            return Path(v).resolve()
+        except (FileNotFoundError, OSError):
+            # If path can't be resolved (e.g., during testing or if directory doesn't exist),
+            # return the path as-is to avoid breaking config loading
+            return Path(v)
 
     @classmethod
     def load_from_file(cls, config_path: str | Path) -> "CKCConfig":
         """Load configuration from YAML file."""
         config_path = Path(config_path)
-        
+
         if not config_path.exists():
             # Return default configuration for new projects
             return cls()
-        
-        with open(config_path, "r", encoding="utf-8") as f:
+
+        with open(config_path, encoding="utf-8") as f:
             data = yaml.safe_load(f)
-        
+
         return cls(**data)
 
     def save_to_file(self, config_path: str | Path) -> None:
         """Save configuration to YAML file."""
         config_path = Path(config_path)
-        # Note: Don't create parent directories as config files are typically 
+        # Note: Don't create parent directories as config files are typically
         # saved in existing directories (like project root)
 
         # Convert to dict and handle Path objects
@@ -202,7 +205,7 @@ class CKCConfig(BaseModel):
         for key, value in data.items():
             if isinstance(value, Path):
                 data[key] = str(value)
-            elif hasattr(value, 'value'):  # Enum objects
+            elif hasattr(value, "value"):  # Enum objects
                 data[key] = value.value
             elif isinstance(value, dict):
                 self._convert_paths_to_str(value)
@@ -210,7 +213,7 @@ class CKCConfig(BaseModel):
                 for i, item in enumerate(value):
                     if isinstance(item, Path):
                         value[i] = str(item)
-                    elif hasattr(item, 'value'):  # Enum objects
+                    elif hasattr(item, "value"):  # Enum objects
                         value[i] = item.value
                     elif isinstance(item, dict):
                         self._convert_paths_to_str(item)
@@ -241,5 +244,5 @@ def load_config(config_path: str | Path | None = None) -> CKCConfig:
     """Load configuration from file or create default."""
     if config_path is None:
         config_path = get_default_config_path()
-    
+
     return CKCConfig.load_from_file(config_path)

@@ -1,0 +1,178 @@
+# Technology detection patterns for SmartContentClassifier
+# Each technology has three confidence levels for pattern matching
+
+python:
+  high_confidence:
+    - "def "
+    - "import "
+    - "from "
+    - "__init__"
+    - "pip install"
+    - ".py"
+    - "python"
+  medium_confidence:
+    - "py"
+    - "conda"
+    - "virtual environment"
+    - "venv"
+  keywords:
+    - "django"
+    - "flask"
+    - "fastapi"
+    - "pandas"
+    - "numpy"
+    - "scipy"
+    - "matplotlib"
+
+javascript:
+  high_confidence:
+    - "const "
+    - "let "
+    - "var "
+    - "function("
+    - "=>"
+    - "npm install"
+    - ".js"
+  medium_confidence:
+    - "js"
+    - "node"
+    - "javascript"
+  keywords:
+    - "react"
+    - "vue"
+    - "angular"
+    - "express"
+    - "typescript"
+    - "webpack"
+
+typescript:
+  high_confidence:
+    - "interface "
+    - "type "
+    - ": string"
+    - ": number"
+    - ".ts"
+    - ".tsx"
+  medium_confidence:
+    - "typescript"
+    - "ts"
+  keywords:
+    - "angular"
+    - "nest"
+    - "type definition"
+
+react:
+  high_confidence:
+    - "jsx"
+    - "component"
+    - "props"
+    - "state"
+    - "usestate"
+    - "useeffect"
+  medium_confidence:
+    - "react"
+  keywords:
+    - "hook"
+    - "render"
+    - "virtual dom"
+
+docker:
+  high_confidence:
+    - "dockerfile"
+    - "docker build"
+    - "docker run"
+    - "container"
+  medium_confidence:
+    - "docker"
+  keywords:
+    - "image"
+    - "compose"
+    - "kubernetes"
+    - "containerize"
+
+aws:
+  high_confidence:
+    - "aws-cli"
+    - "s3 bucket"
+    - "ec2 instance"
+    - "lambda function"
+  medium_confidence:
+    - "aws"
+    - "amazon web services"
+  keywords:
+    - "cloudformation"
+    - "iam"
+    - "vpc"
+    - "rds"
+    - "cloudwatch"
+
+git:
+  high_confidence:
+    - "git clone"
+    - "git commit"
+    - "git push"
+    - "git pull"
+    - "git merge"
+  medium_confidence:
+    - "git"
+  keywords:
+    - "github"
+    - "gitlab"
+    - "repository"
+    - "branch"
+    - "merge request"
+
+sql:
+  high_confidence:
+    - "select "
+    - "from "
+    - "where "
+    - "insert into"
+    - "update "
+    - "delete from"
+  medium_confidence:
+    - "sql"
+    - "database"
+    - "query"
+  keywords:
+    - "join"
+    - "group by"
+    - "order by"
+    - "having"
+    - "alter table"
+    - "create table"
+
+fastapi:
+  high_confidence:
+    - "fastapi"
+    - "@app.get"
+    - "@app.post"
+    - "from fastapi"
+    - "FastAPI()"
+  medium_confidence:
+    - "api"
+    - "uvicorn"
+  keywords:
+    - "pydantic"
+    - "dependency"
+    - "endpoint"
+    - "swagger"
+    - "openapi"
+
+api:
+  high_confidence:
+    - "rest api"
+    - "api endpoint"
+    - "http request"
+    - "json response"
+    - "api key"
+  medium_confidence:
+    - "api"
+    - "endpoint"
+    - "rest"
+  keywords:
+    - "graphql"
+    - "webhook"
+    - "authentication"
+    - "authorization"
+    - "rate limit"

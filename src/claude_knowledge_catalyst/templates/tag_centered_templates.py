@@ -1,17 +1,16 @@
 """Template system for pure tag-centered knowledge management."""
 
-from pathlib import Path
-from typing import Dict, Any
 from datetime import datetime
+from pathlib import Path
 
 
 class TagCenteredTemplateManager:
     """Manages templates for pure tag-centered system."""
-    
+
     def __init__(self):
         self.templates = self._initialize_templates()
-    
-    def _initialize_templates(self) -> Dict[str, str]:
+
+    def _initialize_templates(self) -> dict[str, str]:
         """Initialize template definitions."""
         return {
             "prompt": self._get_prompt_template(),
@@ -20,9 +19,9 @@ class TagCenteredTemplateManager:
             "resource": self._get_resource_template(),
             "vault_readme": self._get_vault_readme_template(),
             "directory_readme": self._get_directory_readme_template(),
-            "obsidian_query": self._get_obsidian_query_template()
+            "obsidian_query": self._get_obsidian_query_template(),
         }
-    
+
     def _get_prompt_template(self) -> str:
         """Template for prompt files."""
         return """---
@@ -83,7 +82,7 @@ purpose: "{purpose}"
 ---
 *Generated with Pure Tag-Centered System*
 """
-    
+
     def _get_code_template(self) -> str:
         """Template for code snippet files."""
         return """---
@@ -136,7 +135,7 @@ purpose: "{purpose}"
 ---
 *Generated with Pure Tag-Centered System*
 """
-    
+
     def _get_concept_template(self) -> str:
         """Template for concept documentation."""
         return """---
@@ -196,7 +195,7 @@ Alternative approach.
 ---
 *Generated with Pure Tag-Centered System*
 """
-    
+
     def _get_resource_template(self) -> str:
         """Template for resource collections."""
         return """---
@@ -254,7 +253,7 @@ purpose: "{purpose}"
 ---
 *Generated with Pure Tag-Centered System*
 """
-    
+
     def _get_vault_readme_template(self) -> str:
         """Template for main vault README."""
         return """# Pure Tag-Centered Knowledge Vault
@@ -350,7 +349,7 @@ This system evolves with your needs:
 ---
 *Pure Tag-Centered System - Revolutionizing Knowledge Management*
 """
-    
+
     def _get_directory_readme_template(self) -> str:
         """Template for directory README files."""
         return """# {directory_name}
@@ -395,7 +394,7 @@ Files naturally flow between directories as their status changes:
 ---
 *Generated with Pure Tag-Centered System*
 """
-    
+
     def _get_obsidian_query_template(self) -> str:
         """Template for common Obsidian queries."""
         return """# Obsidian Queries for Pure Tag-Centered System
@@ -534,22 +533,22 @@ status:deprecated updated:<-180d
 ---
 *Pure Tag-Centered System Query Reference*
 """
-    
+
     def generate_file(self, template_type: str, **kwargs) -> str:
         """Generate file content from template.
-        
+
         Args:
             template_type: Type of template to use
             **kwargs: Variables to substitute in template
-            
+
         Returns:
             Generated file content
         """
         if template_type not in self.templates:
             raise ValueError(f"Unknown template type: {template_type}")
-        
+
         template = self.templates[template_type]
-        
+
         # Set default values
         defaults = {
             "title": "Untitled",
@@ -560,26 +559,28 @@ status:deprecated updated:<-180d
             "directory_name": "Unknown",
             "description": "Description not provided",
             "content_guidelines": "Guidelines not specified",
-            "expected_status": "draft"
+            "expected_status": "draft",
         }
-        
+
         # Merge with provided kwargs
         variables = {**defaults, **kwargs}
-        
+
         return template.format(**variables)
-    
-    def create_vault_structure(self, vault_path: Path, include_examples: bool = True) -> Dict[str, bool]:
+
+    def create_vault_structure(
+        self, vault_path: Path, include_examples: bool = True
+    ) -> dict[str, bool]:
         """Create complete vault structure with templates.
-        
+
         Args:
             vault_path: Path to vault directory
             include_examples: Whether to include example files
-            
+
         Returns:
             Dictionary of created files and success status
         """
         results = {}
-        
+
         # Create directories
         directories = {
             "_system": "System files (templates, configurations)",
@@ -587,16 +588,16 @@ status:deprecated updated:<-180d
             "_attachments": "Binary files and attachments",
             "inbox": "Draft content and unprocessed files (status: draft)",
             "active": "Currently relevant content",
-            "archive": "Deprecated or outdated content (status: deprecated)", 
-            "knowledge": "Main knowledge repository (status: tested/production)"
+            "archive": "Deprecated or outdated content (status: deprecated)",
+            "knowledge": "Main knowledge repository (status: tested/production)",
         }
-        
+
         for dir_path, description in directories.items():
             full_path = vault_path / dir_path
             try:
                 full_path.mkdir(parents=True, exist_ok=True)
                 results[f"directory_{dir_path}"] = True
-                
+
                 # Create README for each directory
                 if dir_path != "_system/templates":  # Skip templates subdirectory
                     readme_content = self.generate_file(
@@ -604,16 +605,16 @@ status:deprecated updated:<-180d
                         directory_name=dir_path.split("/")[-1],
                         description=description,
                         content_guidelines=self._get_content_guidelines(dir_path),
-                        expected_status=self._get_expected_status(dir_path)
+                        expected_status=self._get_expected_status(dir_path),
                     )
                     readme_path = full_path / "README.md"
                     readme_path.write_text(readme_content, encoding="utf-8")
                     results[f"readme_{dir_path}"] = True
-                    
+
             except Exception as e:
                 results[f"directory_{dir_path}"] = False
                 print(f"Error creating {dir_path}: {e}")
-        
+
         # Create main vault README
         try:
             vault_readme = self.generate_file("vault_readme")
@@ -622,36 +623,50 @@ status:deprecated updated:<-180d
         except Exception as e:
             results["vault_readme"] = False
             print(f"Error creating vault README: {e}")
-        
+
         # Create templates
         try:
             templates_dir = vault_path / "_system" / "templates"
             templates_dir.mkdir(parents=True, exist_ok=True)
-            
+
             template_files = {
-                "prompt_template.md": self.generate_file("prompt", title="New Prompt", purpose="Describe the prompt purpose"),
-                "code_template.md": self.generate_file("code", title="New Code Snippet", purpose="Describe what this code does"),
-                "concept_template.md": self.generate_file("concept", title="New Concept", purpose="Explain the concept"),
-                "resource_template.md": self.generate_file("resource", title="New Resource Collection", purpose="Curated resources for...")
+                "prompt_template.md": self.generate_file(
+                    "prompt", title="New Prompt", purpose="Describe the prompt purpose"
+                ),
+                "code_template.md": self.generate_file(
+                    "code",
+                    title="New Code Snippet",
+                    purpose="Describe what this code does",
+                ),
+                "concept_template.md": self.generate_file(
+                    "concept", title="New Concept", purpose="Explain the concept"
+                ),
+                "resource_template.md": self.generate_file(
+                    "resource",
+                    title="New Resource Collection",
+                    purpose="Curated resources for...",
+                ),
             }
-            
+
             for filename, content in template_files.items():
                 (templates_dir / filename).write_text(content, encoding="utf-8")
                 results[f"template_{filename}"] = True
-                
+
         except Exception as e:
             results["templates"] = False
             print(f"Error creating templates: {e}")
-        
+
         # Create Obsidian queries reference
         try:
             queries_content = self.generate_file("obsidian_query")
-            (vault_path / "_system" / "Obsidian_Queries.md").write_text(queries_content, encoding="utf-8")
+            (vault_path / "_system" / "Obsidian_Queries.md").write_text(
+                queries_content, encoding="utf-8"
+            )
             results["obsidian_queries"] = True
         except Exception as e:
             results["obsidian_queries"] = False
             print(f"Error creating Obsidian queries: {e}")
-        
+
         # Create example files if requested
         if include_examples:
             try:
@@ -660,9 +675,9 @@ status:deprecated updated:<-180d
             except Exception as e:
                 results["examples"] = False
                 print(f"Error creating examples: {e}")
-        
+
         return results
-    
+
     def _get_content_guidelines(self, directory: str) -> str:
         """Get content guidelines for directory."""
         guidelines = {
@@ -671,20 +686,22 @@ status:deprecated updated:<-180d
             "inbox": "New content, drafts, ideas, and unprocessed information",
             "active": "Currently relevant content regardless of status",
             "archive": "Deprecated content that may still have historical value",
-            "knowledge": "Validated, tested, and production-ready content"
+            "knowledge": "Validated, tested, and production-ready content",
         }
-        return guidelines.get(directory.split("/")[0], "Content appropriate for this directory")
-    
+        return guidelines.get(
+            directory.split("/")[0], "Content appropriate for this directory"
+        )
+
     def _get_expected_status(self, directory: str) -> str:
         """Get expected status for directory."""
         status_map = {
             "inbox": "draft",
             "active": "any (based on current relevance)",
-            "archive": "deprecated", 
-            "knowledge": "tested or production"
+            "archive": "deprecated",
+            "knowledge": "tested or production",
         }
         return status_map.get(directory.split("/")[0], "draft")
-    
+
     def _create_example_files(self, vault_path: Path) -> None:
         """Create example files to demonstrate the system."""
         examples = [
@@ -693,28 +710,46 @@ status:deprecated updated:<-180d
                 "content": self.generate_file(
                     "prompt",
                     title="Example: Code Review Prompt",
-                    purpose="A prompt for comprehensive code review with security focus"
-                ).replace("draft", "draft").replace("[]", "['code-review', 'security']").replace("tags: ['code-review', 'security']", "tags: ['code-review', 'security']\ntech: ['python', 'javascript']\ndomain: ['web-dev', 'security']\nteam: ['backend', 'frontend']\nclaude_feature: ['code-review', 'analysis']")
+                    purpose="A prompt for comprehensive code review with security focus",
+                )
+                .replace("draft", "draft")
+                .replace("[]", "['code-review', 'security']")
+                .replace(
+                    "tags: ['code-review', 'security']",
+                    "tags: ['code-review', 'security']\ntech: ['python', 'javascript']\ndomain: ['web-dev', 'security']\nteam: ['backend', 'frontend']\nclaude_feature: ['code-review', 'analysis']",
+                ),
             },
             {
-                "path": "knowledge/example_concept.md", 
+                "path": "knowledge/example_concept.md",
                 "content": self.generate_file(
                     "concept",
                     title="Example: Pure Tag-Centered Architecture",
-                    purpose="Explanation of the revolutionary tag-centered approach to knowledge management"
-                ).replace("draft", "production").replace("[]", "['architecture', 'knowledge-management']").replace("tags: ['architecture', 'knowledge-management']", "tags: ['architecture', 'knowledge-management']\ntech: ['obsidian', 'markdown']\ndomain: ['knowledge-management', 'productivity']\nteam: ['product']\nconfidence: high\ncomplexity: intermediate")
+                    purpose="Explanation of the revolutionary tag-centered approach to knowledge management",
+                )
+                .replace("draft", "production")
+                .replace("[]", "['architecture', 'knowledge-management']")
+                .replace(
+                    "tags: ['architecture', 'knowledge-management']",
+                    "tags: ['architecture', 'knowledge-management']\ntech: ['obsidian', 'markdown']\ndomain: ['knowledge-management', 'productivity']\nteam: ['product']\nconfidence: high\ncomplexity: intermediate",
+                ),
             },
             {
                 "path": "knowledge/example_code.md",
                 "content": self.generate_file(
-                    "code", 
+                    "code",
                     title="Example: Python Tag Validation",
                     purpose="Code snippet for validating tag structure in pure tag system",
-                    language="python"
-                ).replace("draft", "tested").replace("[]", "['validation', 'python']").replace("tags: ['validation', 'python']", "tags: ['validation', 'python']\ntech: ['python']\ndomain: ['web-dev', 'automation']\nteam: ['backend']\nclaude_feature: ['code-generation']\nconfidence: high")
-            }
+                    language="python",
+                )
+                .replace("draft", "tested")
+                .replace("[]", "['validation', 'python']")
+                .replace(
+                    "tags: ['validation', 'python']",
+                    "tags: ['validation', 'python']\ntech: ['python']\ndomain: ['web-dev', 'automation']\nteam: ['backend']\nclaude_feature: ['code-generation']\nconfidence: high",
+                ),
+            },
         ]
-        
+
         for example in examples:
             file_path = vault_path / example["path"]
             file_path.parent.mkdir(parents=True, exist_ok=True)
