@@ -2,11 +2,8 @@
 
 import pytest
 
-# Skip sync tests for v0.9.2 release due to external dependencies
-# Sync tests have significant failures, keeping skipped for stability
-pytestmark = pytest.mark.skip(
-    reason="Sync tests require external dependencies - skipping for v0.9.2 release"
-)
+# Obsidian sync tests - core functionality testing  
+# Re-enabled for improved test coverage and quality assurance
 
 import tempfile
 from pathlib import Path
@@ -113,10 +110,9 @@ This is a test file.
 
         # Setup metadata
         metadata = KnowledgeMetadata(
-            title="Test File", tags=["test", "example"], category="prompt"
+            title="Test File", tags=["test", "example"], type="prompt", status="production"
         )
-        vault_manager.metadata_manager.extract_metadata.return_value = metadata
-        vault_manager.metadata_manager.enhance_metadata.return_value = metadata
+        vault_manager.metadata_manager.extract_metadata_from_file.return_value = metadata
 
         # Initialize vault structure
         temp_vault_path.mkdir(parents=True, exist_ok=True)
@@ -124,11 +120,13 @@ This is a test file.
             (temp_vault_path / dir_name).mkdir(exist_ok=True)
 
         # Test sync
-        result = vault_manager.sync_file(source_file, metadata)
+        result = vault_manager.sync_file(source_file)
 
         assert result is True
-        # File should be placed in knowledge directory based on category
-        assert (temp_vault_path / "knowledge" / "source.md").exists()
+        # File should be placed in knowledge directory based on status
+        # Check that a file was created in the knowledge directory (filename will be generated)
+        knowledge_files = list((temp_vault_path / "knowledge").glob("*.md"))
+        assert len(knowledge_files) == 1
 
     def test_sync_file_with_tags_placement(self, vault_manager, temp_vault_path):
         """Test file placement based on tags."""
@@ -145,8 +143,7 @@ tags: ["inbox", "unprocessed"]
 
         # Setup metadata with inbox tags
         metadata = KnowledgeMetadata(title="Inbox File", tags=["inbox", "unprocessed"])
-        vault_manager.metadata_manager.extract_metadata.return_value = metadata
-        vault_manager.metadata_manager.enhance_metadata.return_value = metadata
+        vault_manager.metadata_manager.extract_metadata_from_file.return_value = metadata
 
         # Initialize vault structure
         temp_vault_path.mkdir(parents=True, exist_ok=True)
@@ -154,41 +151,44 @@ tags: ["inbox", "unprocessed"]
             (temp_vault_path / dir_name).mkdir(exist_ok=True)
 
         # Test sync
-        result = vault_manager.sync_file(source_file, metadata)
+        result = vault_manager.sync_file(source_file)
 
         assert result is True
-        # File with inbox tag should go to inbox directory
-        assert (temp_vault_path / "inbox" / "inbox_file.md").exists()
+        # File with inbox tag should go to inbox directory (filename will be generated)
+        inbox_files = list((temp_vault_path / "inbox").glob("*.md"))
+        assert len(inbox_files) == 1
 
     def test_get_target_directory_by_category(self, vault_manager):
         """Test target directory determination by category."""
-        # Test different categories
-        assert vault_manager.get_target_directory("prompt") == "knowledge"
-        assert vault_manager.get_target_directory("code") == "knowledge"
-        assert vault_manager.get_target_directory("concept") == "knowledge"
-        assert vault_manager.get_target_directory("resource") == "knowledge"
+        # This functionality is handled internally by _determine_target_path based on status
+        # Testing with actual metadata objects instead
+        metadata_production = KnowledgeMetadata(title="Production", status="production")
+        target_path = vault_manager._determine_target_path(metadata_production, Path("test.md"), None)
+        assert "knowledge" in str(target_path)
+        
+        metadata_draft = KnowledgeMetadata(title="Draft", status="draft")
+        target_path = vault_manager._determine_target_path(metadata_draft, Path("test.md"), None)
+        assert "inbox" in str(target_path)
 
     def test_get_target_directory_by_tags(self, vault_manager):
-        """Test target directory determination by tags."""
-        # Test tag-based placement
-        metadata_inbox = KnowledgeMetadata(tags=["inbox", "temp"])
-        assert vault_manager.get_target_directory_by_tags(metadata_inbox) == "inbox"
+        """Test target directory determination by status (tag-centered architecture)."""
+        # Test status-based placement (actual implementation)
+        metadata_draft = KnowledgeMetadata(title="Draft Item", status="draft")
+        target_path = vault_manager._determine_target_path(metadata_draft, Path("test.md"), None)
+        assert "inbox" in str(target_path)
 
-        metadata_archive = KnowledgeMetadata(tags=["archive", "old"])
-        assert vault_manager.get_target_directory_by_tags(metadata_archive) == "archive"
+        metadata_deprecated = KnowledgeMetadata(title="Archive Item", status="deprecated")
+        target_path = vault_manager._determine_target_path(metadata_deprecated, Path("test.md"), None)
+        assert "archive" in str(target_path)
 
-        metadata_active = KnowledgeMetadata(tags=["active", "current"])
-        assert vault_manager.get_target_directory_by_tags(metadata_active) == "active"
-
-        # Default should be knowledge
-        metadata_default = KnowledgeMetadata(tags=["example"])
-        assert (
-            vault_manager.get_target_directory_by_tags(metadata_default) == "knowledge"
-        )
+        metadata_tested = KnowledgeMetadata(title="Active Item", status="tested")
+        target_path = vault_manager._determine_target_path(metadata_tested, Path("test.md"), None)
+        assert "knowledge" in str(target_path)
 
     def test_create_directory_structure(self, vault_manager, temp_vault_path):
-        """Test directory structure creation."""
-        result = vault_manager.create_directory_structure()
+        """Test directory structure creation via initialize_vault."""
+        # The actual method is initialize_vault, not create_directory_structure
+        result = vault_manager.initialize_vault()
 
         assert result is True
         assert temp_vault_path.exists()
@@ -199,16 +199,17 @@ tags: ["inbox", "unprocessed"]
             assert (temp_vault_path / dir_name).is_dir()
 
     def test_validate_vault_structure(self, vault_manager, temp_vault_path):
-        """Test vault structure validation."""
-        # Test with missing directories
+        """Test vault structure validation via initialize_vault."""
+        # Test initialization creates proper structure
         temp_vault_path.mkdir(parents=True, exist_ok=True)
-        assert vault_manager.validate_vault_structure() is False
-
-        # Create all directories
+        
+        # Initialize should create the structure
+        result = vault_manager.initialize_vault()
+        assert result is True
+        
+        # Check that directories were created
         for dir_name in vault_manager.vault_structure.keys():
-            (temp_vault_path / dir_name).mkdir(exist_ok=True)
-
-        assert vault_manager.validate_vault_structure() is True
+            assert (temp_vault_path / dir_name).exists()
 
     def test_get_vault_statistics(self, vault_manager, temp_vault_path):
         """Test vault statistics generation."""
@@ -225,13 +226,13 @@ tags: ["inbox", "unprocessed"]
         inbox_dir.mkdir(exist_ok=True)
         (inbox_dir / "inbox_file.md").write_text("# Inbox File")
 
-        stats = vault_manager.get_vault_statistics()
+        stats = vault_manager.get_vault_stats()
 
-        assert "total_files" in stats
-        assert "directories" in stats
-        assert stats["total_files"] >= 3
-        assert "knowledge" in stats["directories"]
-        assert "inbox" in stats["directories"]
+        # get_vault_stats returns dict[str, int] with directory names as keys
+        assert "knowledge" in stats
+        assert "inbox" in stats
+        assert stats["knowledge"] >= 2  # 2 files in knowledge dir
+        assert stats["inbox"] >= 1     # 1 file in inbox dir
 
     def test_sync_target_integration(self, vault_manager):
         """Test integration with SyncTarget configuration."""
@@ -245,9 +246,12 @@ tags: ["inbox", "unprocessed"]
         # Test that vault manager can work with sync target
         assert vault_manager.vault_path == Path(sync_target.path)
 
-        # Test sync target validation
-        result = vault_manager.validate_sync_target(sync_target)
-        assert result in [True, False]  # Depends on vault state
+        # Test sync target integration - check that paths match
+        assert str(vault_manager.vault_path) == str(sync_target.path)
+        
+        # Test that vault can be initialized
+        result = vault_manager.initialize_vault()
+        assert result is True
 
     @pytest.mark.parametrize("file_extension", [".md", ".txt", ".json"])
     def test_supported_file_types(self, vault_manager, temp_vault_path, file_extension):
@@ -265,8 +269,7 @@ tags: ["inbox", "unprocessed"]
         source_file.write_text(content)
 
         metadata = KnowledgeMetadata(title="Test File")
-        vault_manager.metadata_manager.extract_metadata.return_value = metadata
-        vault_manager.metadata_manager.enhance_metadata.return_value = metadata
+        vault_manager.metadata_manager.extract_metadata_from_file.return_value = metadata
 
         # Initialize vault
         temp_vault_path.mkdir(parents=True, exist_ok=True)
@@ -274,7 +277,7 @@ tags: ["inbox", "unprocessed"]
             (temp_vault_path / dir_name).mkdir(exist_ok=True)
 
         # Test sync - should handle all file types
-        result = vault_manager.sync_file(source_file, metadata)
+        result = vault_manager.sync_file(source_file)
 
         # Markdown files should sync successfully, others might be filtered
         if file_extension == ".md":
@@ -297,7 +300,7 @@ class TestObsidianVaultManagerErrorHandling:
         invalid_file = Path("/non/existent/file.md")
         metadata = KnowledgeMetadata(title="Test")
 
-        result = vault_manager.sync_file(invalid_file, metadata)
+        result = vault_manager.sync_file(invalid_file)
         assert result is False
 
     def test_initialize_vault_permission_error(self, vault_manager):
@@ -306,10 +309,11 @@ class TestObsidianVaultManagerErrorHandling:
         result = vault_manager.initialize_vault()
         assert result is False
 
-    def test_metadata_extraction_error(self, vault_manager, temp_vault_path):
+    def test_metadata_extraction_error(self, vault_manager, tmp_path):
         """Test handling of metadata extraction errors."""
+        temp_vault_path = tmp_path / "test_vault"
         vault_manager.vault_path = temp_vault_path
-        vault_manager.metadata_manager.extract_metadata.side_effect = Exception(
+        vault_manager.metadata_manager.extract_metadata_from_file.side_effect = Exception(
             "Metadata error"
         )
 
@@ -319,6 +323,6 @@ class TestObsidianVaultManagerErrorHandling:
 
         metadata = KnowledgeMetadata(title="Test")
 
-        result = vault_manager.sync_file(source_file, metadata)
+        result = vault_manager.sync_file(source_file)
         # Should handle gracefully
         assert result in [True, False]  # Depends on error handling implementation

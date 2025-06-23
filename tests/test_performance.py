@@ -13,15 +13,15 @@ from unittest.mock import patch
 
 import pytest
 
-from src.claude_knowledge_catalyst.analytics.knowledge_analytics import (
+from claude_knowledge_catalyst.analytics.knowledge_analytics import (
     KnowledgeAnalytics,
 )
-from src.claude_knowledge_catalyst.automation.structure_automation import (
+from claude_knowledge_catalyst.automation.structure_automation import (
     AutomatedStructureManager,
 )
-from src.claude_knowledge_catalyst.core.config import CKCConfig
-from src.claude_knowledge_catalyst.core.metadata import MetadataManager
-from src.claude_knowledge_catalyst.sync.hybrid_manager import HybridObsidianVaultManager
+from claude_knowledge_catalyst.core.config import CKCConfig
+from claude_knowledge_catalyst.core.metadata import MetadataManager
+from claude_knowledge_catalyst.sync.hybrid_manager import HybridObsidianVaultManager
 
 
 class TestPerformance:
@@ -46,9 +46,7 @@ class TestPerformance:
 
         shutil.rmtree(temp_dir)
 
-    @pytest.mark.skip(
-        reason="Vault initialization performance test requires external dependencies - skipping for stability"
-    )
+    # Performance test for vault initialization
     def test_vault_initialization_performance(self, performance_setup):
         """Test vault initialization performance."""
         setup = performance_setup
@@ -194,9 +192,7 @@ Test content for concurrent processing.
             f"Concurrent efficiency {efficiency:.2f} should be reasonable"
         )
 
-    @pytest.mark.skip(
-        reason="Analytics performance test requires external dependencies - skipping for stability"
-    )
+    # Performance test for analytics generation
     def test_analytics_performance(self, performance_setup):
         """Test analytics generation performance."""
         setup = performance_setup
@@ -368,14 +364,12 @@ Outdated content.
             automation_duration, rel=0.1
         )
 
-    @pytest.mark.skip(
-        reason="Metadata enhancement performance test requires external dependencies - skipping for stability"
-    )
+    # Performance test for metadata enhancement
     def test_metadata_enhancement_performance(self, performance_setup):
         """Test metadata enhancement performance."""
         setup = performance_setup
 
-        from src.claude_knowledge_catalyst.automation.metadata_enhancer import (
+        from claude_knowledge_catalyst.automation.metadata_enhancer import (
             AdvancedMetadataEnhancer,
         )
 
@@ -505,9 +499,7 @@ def memory_test_function_{i}():
             f"Total memory increase {total_increase:.1f}MB should be under 1GB"
         )
 
-    @pytest.mark.skip(
-        reason="Large vault analytics performance test requires extended runtime - skipping for stability"
-    )
+    # Performance test for large vault analytics
     def test_large_vault_analytics_performance(self, performance_setup):
         """Test analytics performance with large vault."""
         setup = performance_setup

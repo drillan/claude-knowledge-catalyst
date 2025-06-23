@@ -297,6 +297,15 @@ class KnowledgeWatcher:
             "debounce_seconds": self.watch_config.debounce_seconds,
         }
 
+    def __enter__(self) -> "KnowledgeWatcher":
+        """Context manager entry."""
+        self.start()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Context manager exit."""
+        self.stop()
+
 
 class WatcherManager:
     """Manager for multiple watchers."""

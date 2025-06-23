@@ -59,9 +59,7 @@ class TestHybridIntegration:
         config.hybrid_structure.numbering_system = NumberingSystem.SEQUENTIAL
         return config
 
-    @pytest.mark.skip(
-        reason="Vault initialization requires external dependencies - skipping for stability"
-    )
+    # Hybrid vault initialization test
     def test_hybrid_vault_initialization(self, temp_vault, hybrid_config):
         """Test hybrid vault initialization."""
         metadata_manager = MetadataManager()
@@ -258,9 +256,7 @@ Test content for {filename}
         assert hybrid_structure["numbering_system"] == "sequential"
         assert hybrid_structure["legacy_support"] == True
 
-    @pytest.mark.skip(
-        reason="End-to-end workflow requires external dependencies - skipping for stability"
-    )
+    # End-to-end workflow integration test
     def test_end_to_end_workflow(self, temp_vault, hybrid_config):
         """Test complete end-to-end workflow."""
         metadata_manager = MetadataManager()
