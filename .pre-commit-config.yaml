@@ -5,7 +5,6 @@ repos:
     hooks:
       - id: ruff
         name: ruff linting
-        args: [--fix]
         types: [python]
       - id: ruff-format
         name: ruff formatting check
