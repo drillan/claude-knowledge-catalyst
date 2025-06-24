@@ -835,17 +835,22 @@ WHERE contains(string(tags), "automation")
 - Errors: {len(stats["errors"])}
 
 ## Directory Structure Created
-{chr(10).join(
-            f"- {dir_name}: {desc}"
-            for dir_name, desc in self.minimal_structure.items()
-        )}
+{
+            chr(10).join(
+                f"- {dir_name}: {desc}"
+                for dir_name, desc in self.minimal_structure.items()
+            )
+        }
 
 ## Migration Details
 {chr(10).join(f"- {change}" for change in stats["directory_changes"])}
 
 ## Errors
-{chr(10).join(f"- {error}" for error in stats["errors"])
-        if stats["errors"] else "No errors occurred."}
+{
+            chr(10).join(f"- {error}" for error in stats["errors"])
+            if stats["errors"]
+            else "No errors occurred."
+        }
 
 Generated: {datetime.now().isoformat()}
 Dry Run: {dry_run}
