@@ -121,6 +121,7 @@ warn_unused_ignores = true
 warn_no_return = true
 warn_unreachable = true
 strict_equality = true
+plugins = ["pydantic.mypy"]
 
 # CLI modules with typer/click decorators - allow untyped decorators
 [[tool.mypy.overrides]]
@@ -175,4 +176,9 @@ dev-dependencies = [
     "safety>=3.2.4",
     "bandit>=1.8.5",
     "twine>=6.1.0",
+]
+
+[dependency-groups]
+dev = [
+    "types-pyyaml>=6.0.12.20250516",
 ]

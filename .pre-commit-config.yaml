@@ -18,7 +18,7 @@ repos:
       - id: mypy
         name: mypy type checking
         args: [--ignore-missing-imports]
-        additional_dependencies: [types-PyYAML]
+        additional_dependencies: [types-PyYAML, pydantic]
         types: [python]
         exclude: ^tests/
 

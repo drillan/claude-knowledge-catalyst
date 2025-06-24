@@ -273,6 +273,7 @@ dev = [
     { name = "ruff" },
     { name = "safety" },
     { name = "twine" },
+    { name = "types-pyyaml" },
 ]
 
 [package.metadata]
@@ -318,6 +319,7 @@ dev = [
     { name = "ruff", specifier = ">=0.1.0" },
     { name = "safety", specifier = ">=3.2.4" },
     { name = "twine", specifier = ">=6.1.0" },
+    { name = "types-pyyaml", specifier = ">=6.0.12.20250516" },
 ]
 
 [[package]]
