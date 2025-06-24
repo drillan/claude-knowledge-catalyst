@@ -3,7 +3,7 @@
 import logging
 import re
 from dataclasses import dataclass, field
-from typing import NamedTuple, Optional
+from typing import Any, NamedTuple, Optional
 
 try:
     import langdetect
@@ -369,7 +369,7 @@ class YAKEKeywordExtractor:
 
         return results
 
-    def get_extractor_info(self) -> dict[str, any]:
+    def get_extractor_info(self) -> dict[str, Any]:
         """Get information about available extractors."""
         return {
             "yake_available": YAKE_AVAILABLE,

@@ -11,7 +11,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-
 from claude_knowledge_catalyst.ai.ai_assistant import AIKnowledgeAssistant
 from claude_knowledge_catalyst.analytics.knowledge_analytics import KnowledgeAnalytics
 from claude_knowledge_catalyst.analytics.usage_statistics import (

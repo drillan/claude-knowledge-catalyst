@@ -9,8 +9,11 @@ import sys
 # Add source directory to path for autodoc
 sys.path.insert(0, os.path.abspath("../src"))
 
-# Import version from package
-from claude_knowledge_catalyst import __version__
+# Import version from package - required after path setup
+try:
+    from claude_knowledge_catalyst import __version__
+except ImportError:
+    __version__ = "0.10.1"  # fallback version
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information

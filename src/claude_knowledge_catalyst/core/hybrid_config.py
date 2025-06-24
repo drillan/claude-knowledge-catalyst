@@ -62,13 +62,11 @@ class HybridStructureConfig(BaseModel):
     @classmethod
     def validate_numbering_system(cls, v: NumberingSystem) -> NumberingSystem:
         """Validate numbering system."""
-        if not isinstance(v, NumberingSystem):
-            if isinstance(v, str):
-                try:
-                    return NumberingSystem(v.lower())
-                except ValueError:
-                    raise ValueError(f"Invalid numbering system: {v}") from None
-            raise ValueError(f"Invalid numbering system type: {type(v)}")
+        if isinstance(v, str):
+            try:
+                return NumberingSystem(v.lower())
+            except ValueError:
+                raise ValueError(f"Invalid numbering system: {v}") from None
         return v
 
     def get_default_structure(self) -> dict[str, dict[str, str]]:
@@ -163,6 +161,7 @@ class HybridStructureConfig(BaseModel):
                 number=None,
                 description=f"System directory: {dir_name[1:]}",
                 purpose="System management and automation",
+                auto_organization=True,
             )
 
         # Check for numbered directories
@@ -180,6 +179,7 @@ class HybridStructureConfig(BaseModel):
                 number=number,
                 description=f"Core workflow directory: {name_part}",
                 purpose="Main knowledge organization",
+                auto_organization=True,
             )
 
         # Auxiliary directory (no prefix)
@@ -188,6 +188,7 @@ class HybridStructureConfig(BaseModel):
             tier=DirectoryTier.AUXILIARY,
             prefix=None,
             number=None,
+            auto_organization=True,
             description=f"Auxiliary directory: {dir_name}",
             purpose="Supporting functionality",
         )

@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 
 class TagCenteredTemplateManager:
@@ -538,7 +539,7 @@ status:deprecated updated:<-180d
 *Pure Tag-Centered System Query Reference*
 """
 
-    def generate_file(self, template_type: str, **kwargs) -> str:
+    def generate_file(self, template_type: str, **kwargs: Any) -> str:
         """Generate file content from template.
 
         Args:

@@ -3,7 +3,6 @@
 from unittest.mock import patch
 
 import pytest
-
 from claude_knowledge_catalyst.ai.yake_extractor import (
     YAKE_AVAILABLE,
     Keyword,

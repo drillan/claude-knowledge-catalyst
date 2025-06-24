@@ -110,7 +110,7 @@ class AutomatedStructureManager:
 
     def _run_structure_validation(self) -> dict[str, Any]:
         """Run structure validation with auto-fix."""
-        result = {
+        result: dict[str, Any] = {
             "validation_result": None,
             "auto_fixes": [],
             "issues_found": [],

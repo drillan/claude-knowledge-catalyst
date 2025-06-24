@@ -22,7 +22,7 @@ class MigrationPlan:
 
     def __init__(self) -> None:
         self.operations = []
-        self.estimated_time = 0
+        self.estimated_time = 0.0
         self.backup_required = True
         self.safety_score = 100
 

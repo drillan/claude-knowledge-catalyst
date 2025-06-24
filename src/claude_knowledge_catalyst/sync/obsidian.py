@@ -113,7 +113,7 @@ class ObsidianVaultManager:
         Returns:
             Dictionary mapping file paths to sync results
         """
-        results = {}
+        results: dict[str, bool] = {}
 
         if not source_dir.exists():
             print(f"Source directory does not exist: {source_dir}")
@@ -275,7 +275,7 @@ class ObsidianVaultManager:
             YAML frontmatter string
         """
         # Pure tag-centered frontmatter (no legacy fields)
-        frontmatter_data = {
+        frontmatter_data: dict[str, Any] = {
             "title": metadata.title,
             "created": metadata.created.isoformat(),
             "updated": metadata.updated.isoformat(),

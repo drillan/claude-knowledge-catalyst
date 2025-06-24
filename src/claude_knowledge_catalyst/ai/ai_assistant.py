@@ -1275,7 +1275,7 @@ updated: "{timestamp}"
 
     def _score_metadata_quality(self, metadata: KnowledgeMetadata) -> float:
         """Score metadata quality (0-1)."""
-        score = 0
+        score = 0.0
         if metadata.title and metadata.title != "Untitled":
             score += 0.2
         if metadata.tags:
@@ -1295,7 +1295,7 @@ updated: "{timestamp}"
         has_structure = bool(re.search(r"^#+", content, re.MULTILINE))
         has_examples = "example" in content.lower()
 
-        quality = 0
+        quality = 0.0
         if word_count > 100:
             quality += 0.3
         if has_structure:

@@ -650,8 +650,8 @@ def _show_project_stats(
 ) -> None:
     """Show statistics for a specific project."""
     files_found = []
-    categories = {}
-    statuses = {}
+    categories: dict[str, int] = {}
+    statuses: dict[str, int] = {}
     locations = {"source": 0, "vault": 0}
 
     # Search in tag-centered structure
