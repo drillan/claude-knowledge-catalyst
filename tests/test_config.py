@@ -4,6 +4,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
+
 from claude_knowledge_catalyst.core.config import (
     CKCConfig,
     SyncTarget,

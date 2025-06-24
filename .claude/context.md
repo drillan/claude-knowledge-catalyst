@@ -136,6 +136,32 @@ uv run pre-commit run --all-files
 - **依存関係脆弱性監視**: safety, bandit統合
 - **ドキュメント自動生成**: sphinx-build統合
 
+#### 🚨 CI/CD無限ループ回避（重要）
+**問題**: Pre-commitとGitHub Actions間の動作不整合による無限ループ
+**解決済み設定**:
+```yaml
+# .pre-commit-config.yaml
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.8.6  # バージョン統一が重要
+  hooks:
+    - id: ruff
+      # 注意: --fix なし（チェックのみ）
+    - id: ruff-format
+      args: [--check]  # チェックのみ
+```
+
+**開発者向けワークフロー**:
+```bash
+# エラー修正（手動）
+uv run ruff check src/ tests/ --fix
+uv run ruff format src/ tests/
+
+# 確認
+uv run pre-commit run --all-files
+```
+
+**詳細**: `.claude/ci-cd-infinite-loop-troubleshooting.md`
+
 ### ファイルパス操作
 - **必須**: `pathlib.Path`の使用（`os.path`ではない）
 - **設定ファイル**: `ckc_config.yaml`（YAMLフォーマット）

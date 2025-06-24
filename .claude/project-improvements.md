@@ -76,6 +76,81 @@ Claude Codeとの開発効率を向上させるため、記事 (https://zenn.dev
 
 ## 技術的改善
 
+### 2025-06-24: CI/CD無限ループ問題の完全解決
+
+**背景**: GitHub Actions CI/CDパイプラインとpre-commitフックの間で動作の不整合により、無限ループが発生していた。開発者がコードを修正してコミットすると、CI側で再びエラーが検出される現象。
+
+**根本原因の分析**:
+1. **Ruff Format無限ループ**
+   - Pre-commit: フォーマットを実際に適用
+   - GitHub CI: `--check`フラグでチェックのみ
+   - 結果: Pre-commitで修正→CIで再検出→無限ループ
+
+2. **Ruff Check無限ループ**
+   - Pre-commit: `--fix`フラグで自動修正
+   - GitHub CI: チェックのみで修正なし
+   - 結果: Pre-commitで修正→CIで再検出→無限ループ
+
+3. **Ruffバージョン不整合**
+   - Pre-commit: v0.1.6 (古いバージョン)
+   - ローカル環境: v0.11.13 (新しいバージョン)
+   - 結果: 同じコードで異なる結果
+
+**実施した解決策**:
+```yaml
+# .pre-commit-config.yaml の修正
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.6  # v0.1.6 から更新
+    hooks:
+      - id: ruff
+        name: ruff linting
+        # args: [--fix] を削除（チェックのみ）
+      - id: ruff-format
+        name: ruff formatting check
+        args: [--check]  # チェックのみに統一
+```
+
+```yaml
+# .github/workflows/ci.yml は変更なし（既にチェックのみ）
+- name: Lint with ruff
+  run: uv run ruff check src/ tests/ --output-format=github
+- name: Format check with ruff
+  run: uv run ruff format src/ tests/ --check
+```
+
+**最終的な一貫設定**:
+- **Pre-commit**: チェックのみ（修正は手動）
+- **GitHub CI**: チェックのみ（修正は手動）
+- **開発者ワークフロー**: エラー時は手動で `--fix` や `format` を実行
+
+**開発者向けのコマンド**:
+```bash
+# リンティングエラー修正
+uv run ruff check src/ tests/ --fix
+
+# フォーマット適用
+uv run ruff format src/ tests/
+
+# 型チェック
+uv run mypy src/
+
+# 全体確認
+uv run pre-commit run --all-files
+```
+
+**解決結果**:
+- ✅ 無限ループ問題完全解決
+- ✅ CI/CD環境の完全一貫性確保
+- ✅ 開発者体験の大幅改善
+- ✅ 予期しないCI失敗の削減
+
+**学んだ教訓**:
+- ツールのバージョン不整合は予期しない問題を引き起こす
+- Pre-commitとCIの動作を完全に統一することが重要
+- 自動修正機能は便利だが、環境間の一貫性が最優先
+- 問題解決時は根本原因を徹底的に分析することが必要
+
 ### パッケージ管理の現代化 (uv採用)
 
 **問題**: 従来のpipベースの依存関係管理の課題
