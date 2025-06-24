@@ -1,7 +1,6 @@
 """Tests for smart content classification system."""
 
 import pytest
-
 from claude_knowledge_catalyst.ai.classification_engine import (
     ClassificationResult,
     ConfidenceLevel,

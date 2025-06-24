@@ -10,7 +10,6 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
-
 from claude_knowledge_catalyst.core.config import WatchConfig
 from claude_knowledge_catalyst.core.metadata import MetadataManager
 from claude_knowledge_catalyst.core.watcher import (

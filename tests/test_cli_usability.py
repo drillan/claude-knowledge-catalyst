@@ -7,10 +7,9 @@ from unittest.mock import Mock, patch
 
 import pytest
 import typer
-from typer.testing import CliRunner
-
 from claude_knowledge_catalyst.cli.main import app
 from claude_knowledge_catalyst.core.config import CKCConfig, SyncTarget
+from typer.testing import CliRunner
 
 
 class TestCLIWizard:

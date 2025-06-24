@@ -6,7 +6,6 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
-
 from claude_knowledge_catalyst.analytics.knowledge_analytics import KnowledgeAnalytics
 from claude_knowledge_catalyst.core.config import CKCConfig, HybridStructureConfig
 from claude_knowledge_catalyst.core.metadata import KnowledgeMetadata
