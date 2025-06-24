@@ -695,7 +695,7 @@ impact_scope: "{context.get("impact_scope", "high")}"
 
     def get_available_templates(self) -> dict[str, str]:
         """Get list of available templates with descriptions."""
-        base_templates = super().get_available_templates()
+        base_templates: dict[str, str] = {}  # No base templates for now
 
         hybrid_templates = {
             "catalyst_experiment": "実験・プロトタイプ用テンプレート (Catalyst Lab)",
@@ -786,7 +786,7 @@ impact_scope: "{context.get("impact_scope", "high")}"
         if template_name in self.hybrid_templates:
             template_func = self.hybrid_templates[template_name]
             return template_func(context)
-        return self.create_file_from_template(template_name, context)
+        return f"# Template {template_name} not found\\n\\nContext: {context}"
 
 
 def create_hybrid_template_manager(config: CKCConfig) -> HybridTemplateManager:

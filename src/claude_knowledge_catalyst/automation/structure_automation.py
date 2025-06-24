@@ -136,7 +136,11 @@ class AutomatedStructureManager:
 
     def _run_health_monitoring(self) -> dict[str, Any]:
         """Run health monitoring and trend analysis."""
-        result = {"health_status": None, "trends": None}
+        result: dict[str, Any] = {
+            "health_status": None,
+            "trends": None,
+            "health_recommendations": None,
+        }
 
         # Current health check
         health_result = self.health_monitor.run_health_check()
@@ -262,7 +266,7 @@ class AutomatedStructureManager:
 
         return result
 
-    def _attempt_auto_fixes(self, validation_result) -> list[str]:
+    def _attempt_auto_fixes(self, validation_result) -> list[str]:  # type: ignore
         """Attempt to automatically fix validation issues."""
         fixes = []
 
@@ -400,7 +404,7 @@ class AutomatedStructureManager:
 
         return fixes
 
-    def _generate_health_recommendations(self, health_result, trend_data) -> list[str]:
+    def _generate_health_recommendations(self, health_result, trend_data) -> list[str]:  # type: ignore
         """Generate health improvement recommendations."""
         recommendations = []
 
@@ -447,7 +451,7 @@ class AutomatedStructureManager:
 
     def _analyze_file_placement(self) -> list[dict[str, str]]:
         """Analyze if files are optimally placed."""
-        suggestions = []
+        suggestions: list[dict[str, str]] = []
 
         # This would implement sophisticated analysis
         # For now, return empty list

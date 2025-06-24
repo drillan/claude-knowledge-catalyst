@@ -155,7 +155,7 @@ class CKCConfig(BaseModel):
 
     # Hybrid structure configuration (new in v2.0)
     hybrid_structure: HybridStructureConfig = Field(
-        default_factory=lambda: HybridStructureConfig(),
+        default_factory=HybridStructureConfig,
         description="Hybrid structure configuration",
     )
 

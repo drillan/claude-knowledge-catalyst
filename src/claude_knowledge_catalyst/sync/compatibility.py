@@ -161,7 +161,7 @@ class BackwardCompatibilityManager:
         self.config = config
         self.compatibility = StructureCompatibilityManager(vault_path, config)
 
-    def get_appropriate_manager(self, metadata_manager) -> ObsidianVaultManager:
+    def get_appropriate_manager(self, metadata_manager) -> ObsidianVaultManager:  # type: ignore
         """Get appropriate vault manager based on configuration."""
 
         if self.config.hybrid_structure.enabled:

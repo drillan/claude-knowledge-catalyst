@@ -21,7 +21,7 @@ class MigrationPlan:
     """Migration plan for structure conversion."""
 
     def __init__(self) -> None:
-        self.operations = []
+        self.operations: list[dict[str, str]] = []
         self.estimated_time = 0.0
         self.backup_required = True
         self.safety_score = 100
@@ -33,7 +33,7 @@ class MigrationPlan:
                 "type": "move_directory",
                 "source": old_path,
                 "target": new_path,
-                "estimated_time": 5,  # seconds
+                "estimated_time": "5",  # seconds
             }
         )
         self.estimated_time += 5
@@ -45,7 +45,7 @@ class MigrationPlan:
                 "type": "create_directory",
                 "path": path,
                 "description": description,
-                "estimated_time": 1,
+                "estimated_time": "1",
             }
         )
         self.estimated_time += 1
@@ -57,7 +57,7 @@ class MigrationPlan:
                 "type": "move_file",
                 "source": old_path,
                 "target": new_path,
-                "estimated_time": 0.1,
+                "estimated_time": "0.1",
             }
         )
         self.estimated_time += 0.1
@@ -69,7 +69,7 @@ class MigrationPlan:
                 "type": "create_symlink",
                 "link": link_path,
                 "target": target_path,
-                "estimated_time": 0.5,
+                "estimated_time": "0.5",
             }
         )
         self.estimated_time += 0.5
@@ -82,11 +82,11 @@ class MigrationResult:
         self.success = False
         self.operations_completed = 0
         self.operations_total = 0
-        self.backup_path = None
-        self.errors = []
-        self.warnings = []
-        self.start_time = None
-        self.end_time = None
+        self.backup_path: Path | None = None
+        self.errors: list[str] = []
+        self.warnings: list[str] = []
+        self.start_time: datetime | None = None
+        self.end_time: datetime | None = None
 
     def to_dict(self) -> dict:
         """Convert to dictionary."""
@@ -601,7 +601,7 @@ def status(config_path: str | None, vault_path: str | None) -> None:
         table.add_row(
             "Numbering System", config.hybrid_structure.numbering_system.value.title()
         )
-        table.add_row("Migration Mode", config.hybrid_structure.migration_mode.title())
+        # Migration mode removed - not part of HybridStructureConfig
         table.add_row("Legacy Support", str(config.hybrid_structure.legacy_support))
 
         if vault_dir and vault_dir.exists():
@@ -612,17 +612,19 @@ def status(config_path: str | None, vault_path: str | None) -> None:
         console.print(table)
 
         # Migration history
-        if config.structure_migration_log:
-            console.print("\n📜 Migration History:")
-            for entry in config.structure_migration_log[-5:]:  # Last 5 entries
-                timestamp = entry.get("timestamp", "Unknown")
-                from_version = entry.get("from_version", "Unknown")
-                to_version = entry.get("to_version", "Unknown")
-                migration_type = entry.get("migration_type", "Unknown")
-
-                console.print(
-                    f"  • {timestamp}: {from_version} → {to_version} ({migration_type})"
-                )
+        # Migration log feature not implemented yet
+        # if hasattr(config, 'structure_migration_log') and \
+        #    config.structure_migration_log:
+        #     console.print("\n📜 Migration History:")
+        #     for entry in config.structure_migration_log[-5:]:  # Last 5 entries
+        #         timestamp = entry.get("timestamp", "Unknown")
+        #         from_version = entry.get("from_version", "Unknown")
+        #         to_version = entry.get("to_version", "Unknown")
+        #         migration_type = entry.get("migration_type", "Unknown")
+        #         console.print(
+        #             f"  • {timestamp}: {from_version} → {to_version} "
+        #             f"({migration_type})"
+        #         )
 
     except Exception as e:
         console.print(f"❌ Error checking migration status: {e}", style="red")

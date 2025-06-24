@@ -3,7 +3,6 @@
 from unittest.mock import Mock, patch
 
 import pytest
-
 from claude_knowledge_catalyst.cli.smart_sync import (
     analyze_content_advanced,
     apply_metadata_to_file,

@@ -26,7 +26,7 @@ class AIKnowledgeAssistant:
 
         # Knowledge patterns and templates
         self.knowledge_patterns = self._load_knowledge_patterns()
-        self.suggestion_cache = {}
+        self.suggestion_cache: dict[str, Any] = {}
 
     def suggest_content_improvements(self, file_path: Path) -> dict[str, Any]:
         """Suggest improvements for existing content."""
@@ -107,7 +107,11 @@ class AIKnowledgeAssistant:
         self, content: str, existing_metadata: KnowledgeMetadata | None = None
     ) -> dict[str, list[str]]:
         """Suggest intelligent tags and categories for content."""
-        suggestions = {"tags": [], "categories": [], "confidence_scores": {}}
+        suggestions: dict[str, Any] = {
+            "tags": [],
+            "categories": [],
+            "confidence_scores": {},
+        }
 
         # Use enhanced metadata analysis
         if existing_metadata:
@@ -1164,7 +1168,7 @@ updated: "{timestamp}"
         if len(s2) == 0:
             return len(s1)
 
-        previous_row = range(len(s2) + 1)
+        previous_row = list(range(len(s2) + 1))
         for i, c1 in enumerate(s1):
             current_row = [i + 1]
             for j, c2 in enumerate(s2):
@@ -1172,7 +1176,7 @@ updated: "{timestamp}"
                 deletions = current_row[j] + 1
                 substitutions = previous_row[j] + (c1 != c2)
                 current_row.append(min(insertions, deletions, substitutions))
-            previous_row = current_row
+            previous_row = list(current_row)
 
         return previous_row[-1]
 
@@ -1196,7 +1200,8 @@ updated: "{timestamp}"
         if patterns_file.exists():
             try:
                 with open(patterns_file, encoding="utf-8") as f:
-                    return json.load(f)
+                    loaded_patterns: dict[str, Any] = json.load(f)
+                    return loaded_patterns
             except (json.JSONDecodeError, OSError):
                 return default_patterns
 

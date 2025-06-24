@@ -444,7 +444,7 @@ class InteractiveTagManager:
                 f"{'...' if len(valid_values) > 5 else ''}[/dim]"
             )
 
-        value = Prompt.ask(f"New {field_name}", default=current_value)
+        value: str = Prompt.ask(f"New {field_name}", default=current_value)
 
         if value == current_value:
             return None

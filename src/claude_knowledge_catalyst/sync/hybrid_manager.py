@@ -21,7 +21,7 @@ class StructureManager:
     def __init__(self, hybrid_config: HybridStructureConfig):
         self.config = hybrid_config
         self.number_manager = NumberManagerConfig(
-            system_type=hybrid_config.numbering_system
+            system_type=hybrid_config.numbering_system, step_size=10, max_number=990
         )
 
     def get_vault_structure(self) -> dict[str, str]:
@@ -58,9 +58,10 @@ class StructureManager:
         """Flatten custom structure into path -> description mapping."""
         flattened = {}
 
-        for _tier_name, tier_dirs in self.config.custom_structure.items():
-            for dir_name, description in tier_dirs.items():
-                flattened[dir_name] = description
+        if self.config.custom_structure is not None:
+            for _tier_name, tier_dirs in self.config.custom_structure.items():
+                for dir_name, description in tier_dirs.items():
+                    flattened[dir_name] = description
 
         return flattened
 

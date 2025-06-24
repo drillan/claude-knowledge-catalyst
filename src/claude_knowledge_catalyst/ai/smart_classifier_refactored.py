@@ -15,8 +15,8 @@ try:
     from .yake_extractor import YAKE_AVAILABLE, YAKEConfig, YAKEKeywordExtractor
 except ImportError:
     YAKE_AVAILABLE = False
-    YAKEKeywordExtractor = None
-    YAKEConfig = None
+    YAKEKeywordExtractor = None  # type: ignore
+    YAKEConfig = None  # type: ignore
 
 
 class SmartContentClassifier:
@@ -44,7 +44,7 @@ class SmartContentClassifier:
         self.classification_engine = ClassificationEngine(pattern_loader)
 
         # Initialize YAKE extractor if available and enabled
-        self.yake_extractor = None
+        self.yake_extractor: YAKEKeywordExtractor | None = None
         if self.enable_yake:
             self._initialize_yake()
 
@@ -340,7 +340,7 @@ class SmartContentClassifier:
         Returns:
             Deduplicated list of results.
         """
-        seen = {}
+        seen: dict[tuple[str, str], ClassificationResult] = {}
         for result in results:
             key = (result.tag_type, result.suggested_value)
             if key not in seen or result.confidence > seen[key].confidence:

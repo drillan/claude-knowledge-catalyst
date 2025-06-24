@@ -42,22 +42,22 @@ class KnowledgeFileEventHandler(FileSystemEventHandler):
     def on_modified(self, event: FileSystemEvent) -> None:
         """Handle file modification events."""
         if not event.is_directory:
-            self._handle_file_event("modified", Path(event.src_path))
+            self._handle_file_event("modified", Path(str(event.src_path)))
 
     def on_created(self, event: FileSystemEvent) -> None:
         """Handle file creation events."""
         if not event.is_directory:
-            self._handle_file_event("created", Path(event.src_path))
+            self._handle_file_event("created", Path(str(event.src_path)))
 
     def on_deleted(self, event: FileSystemEvent) -> None:
         """Handle file deletion events."""
         if not event.is_directory:
-            self._handle_file_event("deleted", Path(event.src_path))
+            self._handle_file_event("deleted", Path(str(event.src_path)))
 
     def on_moved(self, event: FileSystemEvent) -> None:
         """Handle file move events."""
         if not event.is_directory and hasattr(event, "dest_path"):
-            self._handle_file_event("moved", Path(event.dest_path))
+            self._handle_file_event("moved", Path(str(event.dest_path)))
 
     def _handle_file_event(self, event_type: str, file_path: Path) -> None:
         """Handle file system events with debouncing."""
@@ -306,7 +306,7 @@ class KnowledgeWatcher:
         self.start()
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:  # type: ignore
         """Context manager exit."""
         self.stop()
 

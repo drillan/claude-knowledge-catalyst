@@ -182,7 +182,7 @@ jobs:
 
     - name: Install dependencies with docs extras
       run: |
-        uv sync --dev
+        uv sync --dev --extra docs
 
     - name: Build documentation
       run: |

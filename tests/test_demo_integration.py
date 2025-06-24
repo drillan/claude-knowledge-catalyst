@@ -15,7 +15,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-
 from claude_knowledge_catalyst.core.config import CKCConfig, SyncTarget
 from claude_knowledge_catalyst.core.metadata import MetadataManager
 from claude_knowledge_catalyst.sync.hybrid_manager import HybridObsidianVaultManager
@@ -306,9 +305,9 @@ status: "validated"
 
         for dir_name in expected_dirs:
             dir_path = vault_path / dir_name
-            assert dir_path.exists(), (
-                f"Directory {dir_name} should exist after initialization"
-            )
+            assert (
+                dir_path.exists()
+            ), f"Directory {dir_name} should exist after initialization"
 
         # Step 6: Sync files (equivalent to 'ckc sync')
         sync_results = []
@@ -339,16 +338,14 @@ status: "validated"
             # Alternative pattern check
             prompt_files = list(vault_path.rglob("*Prompt*.md"))
 
-        assert len(prompt_files) >= 1, (
-            f"Prompt file should be synced. Found files: \
+        assert len(prompt_files) >= 1, f"Prompt file should be synced. Found files: \
 {list(vault_path.rglob('*.md'))}"
-        )
 
         if prompt_files:
             content = prompt_files[0].read_text()
-            assert "Daily Standup Meeting Prompt" in content, (
-                "Content should be preserved"
-            )
+            assert (
+                "Daily Standup Meeting Prompt" in content
+            ), "Content should be preserved"
             assert "success_rate: 95" in content, "Metadata should be preserved"
 
     def test_demo_status_functionality(self, demo_env):
@@ -557,9 +554,9 @@ teams to capture and share insights efficiently.
             "30_Wisdom_Archive",
         ]
         for expected_dir in expected_top_level_dirs:
-            assert any(expected_dir in path for path in vault_structure.keys()), (
-                f"Should have {expected_dir} in structure"
-            )
+            assert any(
+                expected_dir in path for path in vault_structure.keys()
+            ), f"Should have {expected_dir} in structure"
 
 
 class TestDemoMultiProject:
@@ -777,9 +774,9 @@ async def robust_api_call(session, url, retries=3):
         for file_path in frontend_files:
             if file_path.name.endswith(".md"):
                 result = vault_manager.sync_file(file_path, "Frontend-Team")
-                assert result, (
-                    f"Frontend file {file_path.name} should sync successfully"
-                )
+                assert (
+                    result
+                ), f"Frontend file {file_path.name} should sync successfully"
 
         # Sync backend team content with project identification
         for file_path in backend_files:
@@ -808,20 +805,20 @@ async def robust_api_call(session, url, retries=3):
             "LLM Architecture" in f or "Async Python" in f for f in synced_files
         )
 
-        assert frontend_files_found, (
-            f"Should find frontend team files in vault. Files: {synced_files}"
-        )
-        assert backend_files_found, (
-            f"Should find backend team files in vault. Files: {synced_files}"
-        )
+        assert (
+            frontend_files_found
+        ), f"Should find frontend team files in vault. Files: {synced_files}"
+        assert (
+            backend_files_found
+        ), f"Should find backend team files in vault. Files: {synced_files}"
 
         # Verify 10_Projects directory for team-specific content
         projects_dir_exists = any(
             "10_Projects" in path for path in vault_structure.keys()
         )
-        assert projects_dir_exists, (
-            "Should have 10_Projects directory for team organization"
-        )
+        assert (
+            projects_dir_exists
+        ), "Should have 10_Projects directory for team organization"
 
     def test_project_identification_methods(self, multi_demo_env):
         """Test different project identification methods."""
@@ -886,9 +883,9 @@ category: "test"
         # Verify files were placed correctly
         synced_files = list(vault_path.rglob("*.md"))
         non_readme_files = [f for f in synced_files if f.name != "README.md"]
-        assert len(non_readme_files) >= 2, (
-            "Should have synced project identification test files"
-        )
+        assert (
+            len(non_readme_files) >= 2
+        ), "Should have synced project identification test files"
 
 
 class TestDemoManagement:
@@ -935,18 +932,18 @@ class TestDemoManagement:
             (vault_path / "demo_note.md").write_text("# Demo vault content")
 
         # Verify demo environment exists
-        assert len(created_projects) == len(project_dirs), (
-            "Should create all project directories"
-        )
-        assert len(created_vaults) == len(vault_dirs), (
-            "Should create all vault directories"
-        )
+        assert len(created_projects) == len(
+            project_dirs
+        ), "Should create all project directories"
+        assert len(created_vaults) == len(
+            vault_dirs
+        ), "Should create all vault directories"
 
         for project_path in created_projects:
             assert project_path.exists(), f"Project {project_path} should exist"
-            assert (project_path / "ckc_config.yaml").exists(), (
-                "Should have config files"
-            )
+            assert (
+                project_path / "ckc_config.yaml"
+            ).exists(), "Should have config files"
 
         for vault_path in created_vaults:
             assert vault_path.exists(), f"Vault {vault_path} should exist"
@@ -991,9 +988,9 @@ class TestDemoManagement:
 
         # Check for configuration files
         config_files = list(workspace.rglob("ckc_config.yaml"))
-        assert len(config_files) >= len(artifacts["configs"]), (
-            "Should find configuration files"
-        )
+        assert len(config_files) >= len(
+            artifacts["configs"]
+        ), "Should find configuration files"
 
         # Check for content files
         content_files = list(workspace.rglob("*.md"))
@@ -1047,12 +1044,12 @@ class TestDemoManagement:
         demo_dir_names = {d.name for d in demo_artifacts}
 
         # Verify important files are not in demo patterns
-        assert important_file.name not in demo_dir_names, (
-            "Important file should not match demo patterns"
-        )
-        assert important_dir.name not in demo_dir_names, (
-            "Important directory should not match demo patterns"
-        )
+        assert (
+            important_file.name not in demo_dir_names
+        ), "Important file should not match demo patterns"
+        assert (
+            important_dir.name not in demo_dir_names
+        ), "Important directory should not match demo patterns"
 
         # Simulate safe cleanup (only remove known demo patterns)
         cleanup_targets = []
@@ -1061,20 +1058,20 @@ class TestDemoManagement:
                 cleanup_targets.append(item)
 
         # Verify cleanup targets are only demo artifacts
-        assert len(cleanup_targets) == len(demo_artifacts), (
-            "Should only target demo artifacts"
-        )
+        assert len(cleanup_targets) == len(
+            demo_artifacts
+        ), "Should only target demo artifacts"
 
         for target in cleanup_targets:
             assert target in demo_artifacts, "Cleanup target should be a demo artifact"
 
         # Verify important files would be preserved
-        assert important_file.exists(), (
-            "Important file should exist after cleanup identification"
-        )
-        assert important_dir.exists(), (
-            "Important directory should exist after cleanup identification"
-        )
+        assert (
+            important_file.exists()
+        ), "Important file should exist after cleanup identification"
+        assert (
+            important_dir.exists()
+        ), "Important directory should exist after cleanup identification"
 
 
 class TestDemoErrorHandling:
@@ -1150,9 +1147,9 @@ category: "nonexistent_category_type"
 
         # Check that vault is still functional after errors
         vault_dirs = [d for d in vault_path.iterdir() if d.is_dir()]
-        assert len(vault_dirs) > 0, (
-            "Vault should maintain basic structure despite errors"
-        )
+        assert (
+            len(vault_dirs) > 0
+        ), "Vault should maintain basic structure despite errors"
 
         # Verify error handling is informative
         for filename, error in sync_errors:
@@ -1184,21 +1181,21 @@ category: "nonexistent_category_type"
 
         # Should handle partial initialization gracefully
         init_result = initialize_vault_resilient(vault_manager, vault_path)
-        assert init_result, (
-            "Should complete initialization even with pre-existing content"
-        )
+        assert (
+            init_result
+        ), "Should complete initialization even with pre-existing content"
 
         # Verify expected structure is created
         expected_dirs = ["10_Projects", "20_Knowledge_Base", "30_Wisdom_Archive"]
         for dir_name in expected_dirs:
-            assert (vault_path / dir_name).exists(), (
-                f"Should create missing directory {dir_name}"
-            )
+            assert (
+                vault_path / dir_name
+            ).exists(), f"Should create missing directory {dir_name}"
 
         # Verify pre-existing content is preserved
-        assert (vault_path / "existing_file.md").exists(), (
-            "Should preserve pre-existing content"
-        )
+        assert (
+            vault_path / "existing_file.md"
+        ).exists(), "Should preserve pre-existing content"
 
         # Test sync still works
         test_files = error_demo_env.create_claude_content(
@@ -1336,9 +1333,9 @@ git pull origin main
         git_files = [f for f in synced_files if "git" in f.name.lower()]
         if git_files:
             synced_content = git_files[0].read_text()
-            assert "git branch -vv" in synced_content, (
-                "Original content should be preserved"
-            )
+            assert (
+                "git branch -vv" in synced_content
+            ), "Original content should be preserved"
 
     def test_readme_automatic_metadata_enhancement(self, readme_test_env):
         """Test the automatic metadata enhancement described in README."""
@@ -1386,9 +1383,9 @@ Key technologies: FastAPI, JWT, OAuth2, Python, authentication, security"""
         # Should detect FastAPI, Python, JWT based on content
         tech_tags = [tag.lower() for tag in metadata.tech]
         assert any("python" in tag for tag in tech_tags), "Should detect Python"
-        assert any("fastapi" in tag or "api" in tag for tag in tech_tags), (
-            "Should detect FastAPI/API"
-        )
+        assert any(
+            "fastapi" in tag or "api" in tag for tag in tech_tags
+        ), "Should detect FastAPI/API"
 
         # Verify confidence scoring
         assert hasattr(metadata, "confidence"), "Should have confidence scoring"
@@ -1414,9 +1411,9 @@ Key technologies: FastAPI, JWT, OAuth2, Python, authentication, security"""
 
         for dir_name, description in expected_structure.items():
             dir_path = vault_path / dir_name
-            assert dir_path.exists(), (
-                f"Should create {dir_name} directory ({description})"
-            )
+            assert (
+                dir_path.exists()
+            ), f"Should create {dir_name} directory ({description})"
 
         # Verify templates are created in _system
         templates_dir = vault_path / "_system" / "templates"

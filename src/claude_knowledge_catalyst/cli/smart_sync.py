@@ -64,7 +64,18 @@ def classify_file_intelligent(
         classifier = KnowledgeClassifier(config.hybrid_structure)
 
         # Create minimal metadata for classification
-        KnowledgeMetadata(title=file_path.stem, category=None, tags=[])
+        KnowledgeMetadata(
+            title=file_path.stem,
+            category="concept",
+            tags=[],
+            success_rate=0,
+            complexity="medium",
+            confidence="medium",
+            author="",
+            source="",
+            checksum="",
+            purpose="",
+        )
 
         # Analyze content and determine classification
         classification = analyze_content_advanced(content, file_path, classifier)
@@ -309,8 +320,8 @@ def smart_sync_command(
     dry_run: bool = False,
     directory: str = ".claude",
     backup: bool = True,
-    config: CKCConfig = None,
-    metadata_manager: MetadataManager = None,
+    config: CKCConfig | None = None,
+    metadata_manager: MetadataManager | None = None,
     min_confidence: float = 0.7,
 ) -> None:
     """Smart sync main logic"""
@@ -389,6 +400,8 @@ def smart_sync_command(
         for file_path in needs_classification:
             console.print(f"  📋 Analyzing: [cyan]{file_path.name}[/cyan]")
 
+            if config is None or metadata_manager is None:
+                continue
             result = classify_file_intelligent(file_path, config, metadata_manager)
             if result["success"]:
                 successful_classifications.append((file_path, result["classification"]))

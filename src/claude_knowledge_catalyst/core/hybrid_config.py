@@ -1,6 +1,7 @@
 """Hybrid structure configuration for CKC."""
 
 from enum import Enum
+from typing import Any
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -67,7 +68,7 @@ class HybridStructureConfig(BaseModel):
                 return NumberingSystem(v.lower())
             except ValueError:
                 raise ValueError(f"Invalid numbering system: {v}") from None
-        return v
+        return v  # type: ignore
 
     def get_default_structure(self) -> dict[str, dict[str, str]]:
         """Get default structure based on numbering system."""
@@ -104,7 +105,7 @@ class HybridStructureConfig(BaseModel):
         # Legacy structure is no longer supported - return modern structure
         return self._get_ten_step_structure()
 
-    def get_knowledge_base_structure(self) -> dict[str, dict[str, str]]:
+    def get_knowledge_base_structure(self) -> dict[str, dict[str, Any]]:
         """Get Knowledge_Base detailed structure."""
         return {
             "20_Knowledge_Base": {

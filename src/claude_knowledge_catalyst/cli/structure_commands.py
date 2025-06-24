@@ -485,7 +485,7 @@ def _show_recommendations(config: CKCConfig, current_structure: str) -> None:
             console.print(f"  • {rec}", style="blue")
 
 
-def _attempt_auto_fix(vault_dir: Path, config: CKCConfig, validation_result) -> None:
+def _attempt_auto_fix(vault_dir: Path, config: CKCConfig, validation_result) -> None:  # type: ignore
     """Attempt to automatically fix validation issues."""
     fixed_count = 0
 

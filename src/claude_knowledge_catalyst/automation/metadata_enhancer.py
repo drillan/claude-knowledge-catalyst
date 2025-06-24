@@ -165,7 +165,7 @@ class AdvancedMetadataEnhancer:
             complexity_scores["intermediate"] += 1
 
         # Return highest scoring complexity
-        return max(complexity_scores, key=complexity_scores.get)
+        return max(complexity_scores, key=lambda x: complexity_scores[x])
 
     def _assess_quality(
         self, content: str, analysis: dict[str, Any], metadata: KnowledgeMetadata

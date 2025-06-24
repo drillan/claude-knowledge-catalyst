@@ -80,11 +80,11 @@ class PatternLoader:
 
         try:
             with open(file_path, encoding="utf-8") as f:
-                patterns = yaml.safe_load(f)
+                patterns: dict[str, dict[str, list[str]]] = yaml.safe_load(f)
 
             # Validate pattern structure
             self._validate_patterns(patterns, filename)
-            return patterns  # type: ignore[no-any-return]
+            return patterns
 
         except yaml.YAMLError as e:
             raise yaml.YAMLError(f"Error parsing {filename}: {e}") from e

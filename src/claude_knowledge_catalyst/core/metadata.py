@@ -491,7 +491,7 @@ class MetadataManager:
         """Extract title from metadata or content."""
         # Try metadata first
         if "title" in metadata:
-            return metadata["title"]
+            return str(metadata["title"])  # Convert to string
 
         # Try to find first H1 heading
         h1_match = re.search(r"^#\s+(.+)$", content, re.MULTILINE)
@@ -639,7 +639,8 @@ class MetadataManager:
 
                     with open(project_config, encoding="utf-8") as f:
                         config = yaml.safe_load(f)
-                        return config.get("project_name")
+                        project_name = config.get("project_name")
+                        return str(project_name) if project_name else None
                 except Exception:
                     pass
 

@@ -38,7 +38,7 @@ class KnowledgeAnalytics:
 
     def generate_comprehensive_report(self) -> dict[str, Any]:
         """Generate comprehensive analytics report."""
-        report = {
+        report: dict[str, Any] = {
             "timestamp": datetime.now().isoformat(),
             "vault_path": str(self.vault_path),
             "report_sections": {},
@@ -54,18 +54,18 @@ class KnowledgeAnalytics:
 
         # Generate report sections
         report["report_sections"]["overview"] = self._generate_overview(knowledge_items)
-        report["report_sections"]["content_analysis"] = (
-            self._analyze_content_distribution(knowledge_items)
-        )
+        report["report_sections"][
+            "content_analysis"
+        ] = self._analyze_content_distribution(knowledge_items)
         report["report_sections"]["quality_metrics"] = self._analyze_quality_metrics(
             knowledge_items
         )
         report["report_sections"]["usage_patterns"] = self._analyze_usage_patterns(
             knowledge_items
         )
-        report["report_sections"]["knowledge_evolution"] = (
-            self._analyze_knowledge_evolution(knowledge_items)
-        )
+        report["report_sections"][
+            "knowledge_evolution"
+        ] = self._analyze_knowledge_evolution(knowledge_items)
         report["report_sections"]["structure_health"] = self._analyze_structure_health()
         report["report_sections"]["recommendations"] = self._generate_recommendations(
             knowledge_items
@@ -82,7 +82,10 @@ class KnowledgeAnalytics:
         if self._cache_timestamp and datetime.now() - self._cache_timestamp < timedelta(
             hours=1
         ):
-            return self._cache.get("knowledge_items", [])
+            cached_items: list[tuple[Path, KnowledgeMetadata]] = self._cache.get(
+                "knowledge_items", []
+            )
+            return cached_items
 
         knowledge_items = []
 
@@ -605,20 +608,20 @@ class KnowledgeAnalytics:
 
         # Analyze current state with null safety
         total_files = len(knowledge_items)
-        files_without_tags = sum(
-            1 for _, m in knowledge_items if m and hasattr(m, "tech") and not m.tech
-        )
-        files_without_category = sum(
-            1 for _, m in knowledge_items if m and hasattr(m, "type") and not m.type
-        )
-        outdated_files = sum(
-            1
-            for _, m in knowledge_items
-            if m
-            and hasattr(m, "updated")
-            and m.updated
-            and (datetime.now() - m.updated).days > 180
-        )
+        files_without_tags = 0
+        for _, m in knowledge_items:
+            if m and hasattr(m, "tech") and not m.tech:
+                files_without_tags += 1
+        files_without_category = 0
+        for _, m in knowledge_items:
+            if m and hasattr(m, "type") and not m.type:
+                files_without_category += 1
+        outdated_count = 0
+        for _, m in knowledge_items:
+            if m and hasattr(m, "updated") and m.updated:
+                if (datetime.now() - m.updated).days > 180:
+                    outdated_count += 1
+        outdated_files = outdated_count
 
         # Generate specific recommendations
         if files_without_tags > total_files * 0.2:
@@ -663,11 +666,11 @@ class KnowledgeAnalytics:
             )
 
         # Quality-based recommendations with null safety
-        high_quality_files = sum(
-            1
-            for _, m in knowledge_items
-            if m and hasattr(m, "confidence") and m.confidence == "high"
-        )
+        high_quality_count = 0
+        for _, m in knowledge_items:
+            if m and hasattr(m, "confidence") and m.confidence == "high":
+                high_quality_count += 1
+        high_quality_files = high_quality_count
         if high_quality_files < total_files * 0.3:
             recommendations.append(
                 {
@@ -684,7 +687,7 @@ class KnowledgeAnalytics:
 
         return recommendations
 
-    def _generate_structure_recommendations(self, health_result) -> list[str]:
+    def _generate_structure_recommendations(self, health_result) -> list[str]:  # type: ignore
         """Generate structure-specific recommendations."""
         recommendations = []
 

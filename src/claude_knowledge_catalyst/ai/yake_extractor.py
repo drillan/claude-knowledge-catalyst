@@ -144,7 +144,7 @@ class TextNormalizer:
                     pattern, replacement, normalized, flags=re.IGNORECASE
                 )
 
-            return normalized
+            return str(normalized)
 
         except Exception as e:
             logger.warning(f"Text normalization failed: {e}")

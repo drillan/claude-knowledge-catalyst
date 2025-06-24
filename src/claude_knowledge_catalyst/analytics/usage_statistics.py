@@ -5,7 +5,10 @@ import time
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from typing import Self
 
 from ..core.config import CKCConfig
 
@@ -27,7 +30,7 @@ class UsageStatisticsCollector:
         self.interaction_log_path = self.stats_dir / "interaction_log.jsonl"
 
         # Cache
-        self._stats_cache = {}
+        self._stats_cache: dict[str, Any] = {}
         self._cache_timestamp = None
 
     def track_operation(
@@ -93,7 +96,7 @@ class UsageStatisticsCollector:
         }
 
         # Generate recommendations based on analysis
-        report["recommendations"] = self._generate_usage_recommendations(report)
+        report["recommendations"] = self._generate_usage_recommendations(report)  # type: ignore
 
         return report
 
@@ -375,7 +378,7 @@ class UsageStatisticsCollector:
             workflows.append(current_window)
 
         # Analyze workflow patterns
-        workflow_patterns = Counter()
+        workflow_patterns: Counter[str] = Counter()
         for workflow in workflows:
             pattern = " -> ".join(op["operation"] for op in workflow)
             workflow_patterns[pattern] += 1
@@ -393,8 +396,8 @@ class UsageStatisticsCollector:
         if not accesses:
             return {"content_preferences": {}}
 
-        directory_preferences = Counter()
-        file_type_preferences = Counter()
+        directory_preferences: Counter[str] = Counter()
+        file_type_preferences: Counter[str] = Counter()
 
         for access in accesses:
             file_path = Path(access["file_path"])
@@ -604,7 +607,7 @@ class UsageStatisticsCollector:
 
     def _load_log_entries(self, log_path: Path, cutoff_date: datetime) -> list[dict]:
         """Load log entries since cutoff date."""
-        entries = []
+        entries: list[dict] = []
 
         if not log_path.exists():
             return entries
@@ -678,13 +681,13 @@ class PerformanceMonitor:
         self.collector = collector
         self.operation_name = operation_name
         self.metadata = metadata or {}
-        self.start_time = None
+        self.start_time: float | None = None
 
-    def __enter__(self):
+    def __enter__(self) -> "Self":
         self.start_time = time.time()
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:  # type: ignore
         if self.start_time:
             duration = time.time() - self.start_time
             self.collector.track_operation(self.operation_name, duration, self.metadata)

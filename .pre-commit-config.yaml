@@ -11,16 +11,16 @@ repos:
         name: ruff formatting
         types: [python]
 
-  # mypy - Static type checking (temporarily disabled for gradual improvement)
-  # - repo: https://github.com/pre-commit/mirrors-mypy
-  #   rev: v1.7.1
-  #   hooks:
-  #     - id: mypy
-  #       name: mypy type checking
-  #       args: [--ignore-missing-imports]
-  #       additional_dependencies: [types-PyYAML]
-  #       types: [python]
-  #       exclude: ^tests/
+  # mypy - Static type checking (re-enabled for CI compliance)
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.7.1
+    hooks:
+      - id: mypy
+        name: mypy type checking
+        args: [--ignore-missing-imports]
+        additional_dependencies: [types-PyYAML]
+        types: [python]
+        exclude: ^tests/
 
   # Local hooks for project-specific checks
   - repo: local
