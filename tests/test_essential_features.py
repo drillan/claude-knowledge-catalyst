@@ -221,9 +221,9 @@ git pull origin main
             "knowledge",
         ]
         for dir_name in expected_dirs:
-            assert (
-                vault_path / dir_name
-            ).exists(), f"Should create {dir_name} directory"
+            assert (vault_path / dir_name).exists(), (
+                f"Should create {dir_name} directory"
+            )
 
         # Test file sync
         sync_result = vault_manager.sync_file(git_tips_file)
@@ -388,9 +388,9 @@ Tags: python, fastapi, web-development, api
             ]
             for dir_name in expected_dirs:
                 vault_dir = vault_path / dir_name
-                assert (
-                    vault_dir.exists()
-                ), f"Should create {dir_name} directory in vault"
+                assert vault_dir.exists(), (
+                    f"Should create {dir_name} directory in vault"
+                )
 
             # Step 6: Test status command shows project state
             with patch("pathlib.Path.cwd", return_value=project_path):
@@ -428,9 +428,9 @@ Tags: python, fastapi, web-development, api
                 "code" in r.suggested_value.lower() for r in type_results
             )
 
-            assert (
-                python_detected or api_detected
-            ), "Should detect Python/API technology"
+            assert python_detected or api_detected, (
+                "Should detect Python/API technology"
+            )
             assert code_detected, "Should detect code content type"
 
         finally:
@@ -499,9 +499,9 @@ Technologies: Python, FastAPI, Pydantic, async, REST API"""
         # Verify specific technologies were detected
         tech_tags = [tag.lower() for tag in metadata.tech]
         assert any("python" in tag for tag in tech_tags), "Should detect Python"
-        assert any(
-            "api" in tag or "fastapi" in tag for tag in tech_tags
-        ), "Should detect API technology"
+        assert any("api" in tag or "fastapi" in tag for tag in tech_tags), (
+            "Should detect API technology"
+        )
 
         # Test classification with AI
         classifier = SmartContentClassifier()

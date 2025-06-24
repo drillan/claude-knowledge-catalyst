@@ -54,18 +54,18 @@ class KnowledgeAnalytics:
 
         # Generate report sections
         report["report_sections"]["overview"] = self._generate_overview(knowledge_items)
-        report["report_sections"][
-            "content_analysis"
-        ] = self._analyze_content_distribution(knowledge_items)
+        report["report_sections"]["content_analysis"] = (
+            self._analyze_content_distribution(knowledge_items)
+        )
         report["report_sections"]["quality_metrics"] = self._analyze_quality_metrics(
             knowledge_items
         )
         report["report_sections"]["usage_patterns"] = self._analyze_usage_patterns(
             knowledge_items
         )
-        report["report_sections"][
-            "knowledge_evolution"
-        ] = self._analyze_knowledge_evolution(knowledge_items)
+        report["report_sections"]["knowledge_evolution"] = (
+            self._analyze_knowledge_evolution(knowledge_items)
+        )
         report["report_sections"]["structure_health"] = self._analyze_structure_health()
         report["report_sections"]["recommendations"] = self._generate_recommendations(
             knowledge_items

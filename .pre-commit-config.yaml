@@ -8,7 +8,8 @@ repos:
         args: [--fix]
         types: [python]
       - id: ruff-format
-        name: ruff formatting
+        name: ruff formatting check
+        args: [--check]
         types: [python]
 
   # mypy - Static type checking (re-enabled for CI compliance)
