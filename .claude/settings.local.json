@@ -18,7 +18,8 @@
       "Bash(uv run:*)",
       "Bash(ls:*)",
       "mcp__ide__getDiagnostics",
-      "Bash(sed:*)"
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)"
     ],
     "deny": [
       "Bash(rm -rf:*)",
