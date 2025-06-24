@@ -861,6 +861,49 @@ gh release create v0.10.0 --title "..." --notes "..."
 4. **ドキュメント同期**: リリースと同時にドキュメントを更新
 5. **後方互換性**: 既存ユーザーへの影響を最小限に
 
+## 🚨 必須品質ゲート - Push前チェックリスト
+
+### ⛔ 絶対遵守ルール
+
+**以下の条件をすべて満たす場合のみpushが許可されます：**
+
+```bash
+# 必須チェック1: pre-commit完全通過
+uv run pre-commit run --all-files
+# ↳ Must show: "All hooks passed!"
+
+# 必須チェック2: 全テスト通過
+uv run pytest
+# ↳ Must show: "X passed, 0 failed"
+
+# 必須チェック3: パッケージビルド成功
+uv build
+# ↳ Must complete without errors
+```
+
+### 🚫 Push禁止条件
+
+- **pre-commitで1つでもエラーがある状態**
+- **テストが1つでも失敗している状態**
+- **ビルドが失敗する状態**
+- **linting違反がある状態**
+
+### 🆘 緊急時例外手順
+
+```bash
+# 緊急時のみ: pre-commitスキップ (非推奨)
+git commit --no-verify -m "emergency: [理由]"
+
+# 緊急push後は24時間以内に修正コミット必須
+# Follow-up issue作成義務あり
+```
+
+### 🎯 品質保証原則
+
+- **ローカル品質チェック通過 = GitHub Actions CI成功保証**
+- **エラーがある状態でのpushは時間の無駄**
+- **段階的修正よりも完全修正を優先**
+
 ## 全CIチェック項目のローカル実行
 
 ### 🚀 自動化されたCI事前確認 (推奨)

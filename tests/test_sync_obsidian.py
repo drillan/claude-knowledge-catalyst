@@ -7,6 +7,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
+
 from claude_knowledge_catalyst.core.config import SyncTarget
 from claude_knowledge_catalyst.core.metadata import KnowledgeMetadata, MetadataManager
 from claude_knowledge_catalyst.sync.obsidian import ObsidianVaultManager

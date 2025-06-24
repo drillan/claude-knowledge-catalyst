@@ -84,7 +84,7 @@ class PatternLoader:
 
             # Validate pattern structure
             self._validate_patterns(patterns, filename)
-            return patterns
+            return patterns  # type: ignore[no-any-return]
 
         except yaml.YAMLError as e:
             raise yaml.YAMLError(f"Error parsing {filename}: {e}") from e
