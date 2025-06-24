@@ -121,14 +121,18 @@ jobs:
       run: |
         uv build
 
+    - name: Create virtual environment
+      run: |
+        uv venv
+
     - name: Install built package
       run: |
-        uv pip install dist/*.whl --system
+        uv pip install dist/*.whl
 
     - name: Test CLI functionality
       run: |
-        ckc --version
-        ckc --help
+        uv run ckc --version
+        uv run ckc --help
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
