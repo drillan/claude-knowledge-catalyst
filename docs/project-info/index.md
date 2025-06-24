@@ -84,7 +84,7 @@ in the Software without restriction...
 ## 貢献とサポート
 
 ### 貢献方法
-1. **コード貢献**: Contributing Guide（準備中）
+1. **コード貢献**: [Contributing Guide](https://github.com/drillan/claude-knowledge-catalyst/blob/main/CONTRIBUTING.md)
 2. **バグ報告**: [GitHub Issues](https://github.com/drillan/claude-knowledge-catalyst/issues)
 3. **機能要望**: [GitHub Discussions](https://github.com/drillan/claude-knowledge-catalyst/discussions)
 4. **ドキュメント改善**: [Documentation Issues](https://github.com/drillan/claude-knowledge-catalyst/issues?q=is%3Aissue+is%3Aopen+label%3Adocumentation)
