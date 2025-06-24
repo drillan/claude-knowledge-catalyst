@@ -471,14 +471,14 @@ jobs:
       url: https://pypi.org/p/claude-knowledge-catalyst
     permissions:
       id-token: write  # Trusted Publisher
-    
+
     steps:
     - uses: actions/checkout@v4
     - uses: astral-sh/setup-uv@v3
-    
+
     - name: Build package
       run: uv build
-    
+
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
@@ -720,7 +720,7 @@ git add .claude/  # 開発ドキュメントも含める
 git commit -m "enhance: Complete v0.10.0 with improved demos and updated .claude
 
 - Add YAKE integration demonstration in demo.sh
-- Fix CLI command compatibility in tag_centered_demo.sh  
+- Fix CLI command compatibility in tag_centered_demo.sh
 - Improve shell syntax compliance (shellcheck clean)
 - Update README.md with accurate v0.10.0 feature descriptions
 - Fix cleanup.sh directory structure alignment
@@ -741,7 +741,7 @@ git tag -a v0.10.0 -m "Release v0.10.0: YAKE Integration with Enhanced Demos
 
 🚀 Core Features:
 - Advanced YAKE keyword extraction system
-- Multi-language support (7 languages including Japanese)  
+- Multi-language support (7 languages including Japanese)
 - Hybrid classification (pattern matching + AI enhancement)
 - 147 passing tests, enhanced stability
 
@@ -860,3 +860,100 @@ gh release create v0.10.0 --title "..." --notes "..."
 3. **デモ品質**: リリース前にデモスクリプトの動作を確認
 4. **ドキュメント同期**: リリースと同時にドキュメントを更新
 5. **後方互換性**: 既存ユーザーへの影響を最小限に
+
+## 全CIチェック項目のローカル実行
+
+### 🚀 自動化されたCI事前確認 (推奨)
+
+**pre-commit**システムが設定済みです。コミット時に自動でCIチェックが実行されます：
+
+```bash
+# 初回設定（既に設定済み）
+uv run pre-commit install
+
+# 手動で全ファイルをチェック
+uv run pre-commit run --all-files
+
+# 特定のhookのみ実行
+uv run pre-commit run ruff
+uv run pre-commit run mypy
+uv run pre-commit run pytest
+
+# 緊急時：pre-commitをスキップ（非推奨）
+git commit --no-verify -m "emergency commit"
+```
+
+**自動実行される項目：**
+- ✅ Ruffリンティング&フォーマット（自動修正付き）
+- ✅ mypy型チェック
+- ✅ pytest全テスト実行
+- ✅ パッケージビルドテスト
+- ✅ YAML/TOML構文チェック
+- ✅ 空白・改行チェック
+
+### 📋 手動CI確認（バックアップ方法）
+
+GitHubActions CIで実行される全てのチェック項目をローカルで事前実行する手順：
+
+### 前提条件
+```bash
+# 依存関係がインストールされていることを確認
+uv sync --dev
+```
+
+### 全チェック項目の実行
+```bash
+# 1. Ruff リンティング&フォーマット
+uv run ruff check src/ tests/          # リント検査
+uv run ruff format src/ tests/         # コードフォーマット
+
+# 2. mypy 型チェック
+uv run mypy src/                       # 型注釈チェック
+
+# 3. pytest テスト実行
+uv run pytest                         # 全テスト実行
+uv run pytest --cov                   # カバレッジ付きテスト
+
+# 4. パッケージビルドテスト
+uv build                              # パッケージビルド確認
+
+# 5. セキュリティチェック (optional)
+uv run bandit -r src/                 # セキュリティスキャン (要インストール)
+
+# 6. ドキュメント生成 (optional)
+uv run mkdocs build                   # ドキュメントビルド (要インストール)
+```
+
+### ワンライナー実行
+```bash
+# 基本チェック (必須項目)
+uv run ruff check src/ tests/ && uv run ruff format src/ tests/ && uv run mypy src/ && uv run pytest && uv build
+
+# 詳細チェック (推奨)
+uv run ruff check src/ tests/ && uv run ruff format src/ tests/ && uv run mypy src/ && uv run pytest --cov && uv build && echo "✅ All CI checks passed!"
+```
+
+### エラー発生時の対処
+```bash
+# Ruffエラー修正
+uv run ruff check src/ tests/ --fix    # 自動修正可能なエラーを修正
+
+# 型エラー確認
+uv run mypy src/ --show-error-codes    # エラーコード付きで表示
+
+# 特定テストのみ実行
+uv run pytest tests/test_specific.py   # 特定ファイルのテスト
+```
+
+### CI設定ファイルの確認
+CIの詳細設定は `.github/workflows/ci.yml` で確認可能：
+- test job: pytest実行
+- integration-tests job: 統合テスト
+- build-test job: パッケージビルド
+- security job: セキュリティチェック
+- docs job: ドキュメント生成
+
+### 注意事項
+- 全チェックが通ってからコミット・プッシュすることを強く推奨
+- エラーが残っている状態でのプッシュはCI失敗の原因となる
+- 大規模変更時は段階的にチェックを実行して問題を早期発見する

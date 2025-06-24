@@ -144,7 +144,7 @@ YAKE-extracted keywords automatically become Obsidian tags:
 <!-- In Obsidian vault -->
 ---
 title: "Machine Learning Pipeline Optimization"
-tags: 
+tags:
   - type/concept
   - tech/python
   - tech/tensorflow

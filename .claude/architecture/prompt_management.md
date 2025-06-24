@@ -118,7 +118,7 @@ execution_history:
   - date: 2024-06-16
     result: partial_success
     feedback: "複雑な関数で詳細度不足"
-    
+
 # 改善ログ
 improvement_log:
   - version: "1.0 → 1.1"
@@ -144,7 +144,7 @@ tags:
 ```python
 PROMPT_TYPES = {
     "instruction": "明確な指示・命令型",
-    "conversation": "対話・インタラクティブ型", 
+    "conversation": "対話・インタラクティブ型",
     "system": "システムメッセージ・設定型",
     "template": "再利用可能テンプレート型",
     "chain": "チェーン・連続実行型"
@@ -301,15 +301,15 @@ class PromptTemplateManager:
             'now': datetime.now,
             'uuid4': lambda: str(uuid.uuid4()),
         })
-    
+
     def create_prompt_from_template(
-        self, 
-        template_name: str, 
+        self,
+        template_name: str,
         context: dict[str, Any]
     ) -> str:
         template = self.env.get_template(f"{template_name}.md")
         return template.render(**context)
-    
+
     def create_specialized_prompt(
         self,
         prompt_type: str,
@@ -336,22 +336,22 @@ class PromptQualityAssessor:
             'completeness': self._assess_completeness,
             'efficiency': self._assess_efficiency
         }
-    
+
     def assess_prompt_quality(self, prompt_content: str) -> dict[str, float]:
         """プロンプト品質の多次元評価"""
         results = {}
         for metric_name, assessor in self.metrics.items():
             results[metric_name] = assessor(prompt_content)
-        
+
         results['overall_score'] = sum(results.values()) / len(results)
         return results
-    
+
     def _assess_clarity(self, content: str) -> float:
         """明確性の評価 (0.0-1.0)"""
         # 文構造の複雑さ、曖昧な表現の検出
         # 実装: 自然言語処理による分析
         pass
-    
+
     def _assess_specificity(self, content: str) -> float:
         """具体性の評価 (0.0-1.0)"""
         # 具体的な指示の割合、例の有無
@@ -364,7 +364,7 @@ class PromptQualityAssessor:
 class PromptSuccessTracker:
     def __init__(self, storage: PromptExecutionStorage):
         self.storage = storage
-    
+
     def record_execution(
         self,
         prompt_id: str,
@@ -373,11 +373,11 @@ class PromptSuccessTracker:
         """プロンプト実行結果の記録"""
         self.storage.save_execution(prompt_id, execution_result)
         self._update_success_metrics(prompt_id)
-    
+
     def get_success_analytics(self, prompt_id: str) -> dict[str, Any]:
         """成功率分析の取得"""
         executions = self.storage.get_executions(prompt_id)
-        
+
         return {
             'total_executions': len(executions),
             'success_count': len([e for e in executions if e.result_status == 'success']),
@@ -394,7 +394,7 @@ class PromptSuccessTracker:
 class PromptABTester:
     def __init__(self):
         self.active_tests = {}
-    
+
     def create_ab_test(
         self,
         test_name: str,
@@ -412,7 +412,7 @@ class PromptABTester:
             'created': datetime.now()
         }
         return test_id
-    
+
     def analyze_test_results(self, test_id: str) -> dict[str, Any]:
         """テスト結果の統計分析"""
         test = self.active_tests[test_id]
@@ -432,27 +432,27 @@ class PromptImprovementSuggester:
     def __init__(self, ai_assistant: AIAssistant):
         self.ai = ai_assistant
         self.improvement_patterns = self._load_improvement_patterns()
-    
+
     def suggest_improvements(
         self,
         prompt_content: str,
         execution_history: list[PromptExecution]
     ) -> list[ImprovementSuggestion]:
         """実行履歴に基づく改善提案"""
-        
+
         # 1. パフォーマンス分析
         performance_issues = self._analyze_performance_issues(execution_history)
-        
+
         # 2. パターンマッチング
         pattern_suggestions = self._match_improvement_patterns(
             prompt_content, performance_issues
         )
-        
+
         # 3. AI支援改善提案
         ai_suggestions = self.ai.generate_improvement_suggestions(
             prompt_content, execution_history
         )
-        
+
         return self._merge_and_rank_suggestions(
             pattern_suggestions + ai_suggestions
         )
@@ -464,7 +464,7 @@ class PromptImprovementSuggester:
 class PromptVersionManager:
     def __init__(self, storage: PromptStorage):
         self.storage = storage
-    
+
     def create_new_version(
         self,
         prompt_id: str,
@@ -475,7 +475,7 @@ class PromptVersionManager:
         """新バージョンの作成"""
         current_version = self.storage.get_latest_version(prompt_id)
         new_version = self._increment_version(current_version.version)
-        
+
         version_entry = PromptVersion(
             prompt_id=prompt_id,
             version=new_version,
@@ -485,14 +485,14 @@ class PromptVersionManager:
             created=datetime.now(),
             parent_version=current_version.version
         )
-        
+
         self.storage.save_version(version_entry)
         return new_version
-    
+
     def compare_versions(
-        self, 
-        prompt_id: str, 
-        version_a: str, 
+        self,
+        prompt_id: str,
+        version_a: str,
         version_b: str
     ) -> VersionComparison:
         """バージョン間の詳細比較"""
@@ -535,15 +535,15 @@ class PromptDiscoveryEngine:
     def __init__(self, index: PromptIndex):
         self.index = index
         self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
-    
+
     def semantic_search(self, query: str, limit: int = 10) -> list[PromptMatch]:
         """セマンティック検索による関連プロンプト発見"""
         query_embedding = self.embedding_model.encode(query)
         matches = self.index.similarity_search(query_embedding, limit)
         return matches
-    
+
     def recommend_prompts(
-        self, 
+        self,
         current_context: dict[str, Any]
     ) -> list[PromptRecommendation]:
         """コンテキストベースのプロンプト推奨"""
@@ -560,7 +560,7 @@ class PromptPerformanceMonitor:
     def __init__(self):
         self.metrics_collector = MetricsCollector()
         self.alert_manager = AlertManager()
-    
+
     def monitor_execution(self, execution: PromptExecution) -> None:
         """実行時監視とアラート"""
         # 成功率低下の検出
@@ -568,7 +568,7 @@ class PromptPerformanceMonitor:
             self.alert_manager.send_alert(
                 f"プロンプト性能低下: {execution.prompt_id}"
             )
-        
+
         # 異常なトークン使用量の検出
         if self._detect_unusual_token_usage(execution):
             self.alert_manager.send_alert(

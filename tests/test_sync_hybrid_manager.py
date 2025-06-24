@@ -5,7 +5,6 @@ from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
-
 from claude_knowledge_catalyst.core.config import CKCConfig
 from claude_knowledge_catalyst.core.hybrid_config import (
     HybridStructureConfig,

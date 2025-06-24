@@ -61,7 +61,7 @@ uv sync --group docs
 # 設定更新
 /project:sphinx-update
 
-# ドキュメントビルド  
+# ドキュメントビルド
 /project:sphinx-build
 ```
 

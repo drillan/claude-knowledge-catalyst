@@ -1,7 +1,6 @@
 """Tests for smart content classification system."""
 
 import pytest
-
 from claude_knowledge_catalyst.ai.classification_engine import (
     ClassificationResult,
     ConfidenceLevel,
@@ -75,7 +74,8 @@ Please review the following code and provide feedback on:
 3. Security considerations
 4. Best practices compliance
 
-Focus on constructive feedback that helps improve the code while maintaining its functionality."""
+Focus on constructive feedback that helps improve the code while maintaining its \
+functionality."""
 
     def test_classifier_initialization(self, classifier):
         """Test classifier initialization."""
@@ -203,7 +203,8 @@ Focus on constructive feedback that helps improve the code while maintaining its
             "",  # Empty content
             "   ",  # Whitespace only
             "# Title Only",  # Minimal content
-            "Mixed content with python and javascript code together",  # Multiple technologies
+            "Mixed content with python and javascript code together",  # Multiple \
+            # technologies
         ]
 
         for content in edge_cases:
@@ -241,7 +242,8 @@ Focus on constructive feedback that helps improve the code while maintaining its
 
         for content, expected_category in test_cases:
             result = classifier.classify_category(content)
-            # Allow for some flexibility in classification as AI might suggest different but valid categories
+            # Allow for some flexibility in classification as AI might suggest \
+            # different but valid categories
             assert result.suggested_value in [
                 expected_category,
                 "prompt",
@@ -398,7 +400,8 @@ class TestYAKEIntegration:
     @pytest.mark.skipif(not YAKE_AVAILABLE, reason="YAKE dependencies not available")
     def test_yake_keyword_extraction(self, classifier):
         """Test YAKE keyword extraction functionality."""
-        content = """Python machine learning with scikit-learn and pandas for data analysis.
+        content = """Python machine learning with scikit-learn and pandas for \
+data analysis.
         This tutorial covers neural networks and deep learning algorithms."""
 
         keywords = classifier._extract_yake_keywords(content)
@@ -505,7 +508,8 @@ class TestYAKEIntegration:
     def test_yake_confidence_boosting(self, classifier):
         """Test that YAKE keywords boost confidence of pattern matches."""
         # Content with clear patterns that should also be detected by YAKE
-        content = """Python data science project using pandas and numpy for statistical analysis.
+        content = """Python data science project using pandas and numpy for \
+statistical analysis.
         This includes machine learning algorithms implemented with scikit-learn."""
 
         suggestions = classifier.generate_tag_suggestions(content)
@@ -521,7 +525,8 @@ class TestYAKEIntegration:
 
             # Should mention YAKE in evidence
             " ".join(python_result.evidence)
-            # Note: This might not always trigger if YAKE doesn't extract 'python' as a keyword
+            # Note: This might not always trigger if YAKE doesn't extract \
+            # 'python' as a keyword
             # but the confidence should still be boosted by the clear patterns
 
     def test_multilingual_support_preparation(self, classifier):

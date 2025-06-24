@@ -11,7 +11,7 @@ from .hybrid_config import DirectoryTier, HybridStructureConfig
 class ValidationResult:
     """Result of structure validation."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.passed: bool = True
         self.errors: list[str] = []
         self.warnings: list[str] = []
@@ -19,20 +19,20 @@ class ValidationResult:
         self.timestamp: datetime = datetime.now()
         self.statistics: dict[str, Any] = {}
 
-    def add_error(self, message: str):
+    def add_error(self, message: str) -> None:
         """Add validation error."""
         self.errors.append(message)
         self.passed = False
 
-    def add_warning(self, message: str):
+    def add_warning(self, message: str) -> None:
         """Add validation warning."""
         self.warnings.append(message)
 
-    def add_info(self, message: str):
+    def add_info(self, message: str) -> None:
         """Add validation info."""
         self.info.append(message)
 
-    def set_statistics(self, stats: dict[str, Any]):
+    def set_statistics(self, stats: dict[str, Any]) -> None:
         """Set validation statistics."""
         self.statistics = stats
 
@@ -99,7 +99,7 @@ class StructureValidator:
 
         return result
 
-    def _validate_directory_structure(self, result: ValidationResult):
+    def _validate_directory_structure(self, result: ValidationResult) -> None:
         """Validate directory structure against configuration."""
         expected_structure = self.config.get_default_structure()
 
@@ -142,7 +142,7 @@ class StructureValidator:
         # Check for unexpected directories
         self._check_unexpected_directories(result, expected_structure)
 
-    def _validate_numbering_consistency(self, result: ValidationResult):
+    def _validate_numbering_consistency(self, result: ValidationResult) -> None:
         """Validate numbering system consistency."""
         numbered_dirs = []
 
@@ -163,7 +163,7 @@ class StructureValidator:
 
     def _validate_ten_step_numbering(
         self, result: ValidationResult, numbered_dirs: list[tuple]
-    ):
+    ) -> None:
         """Validate ten-step numbering system."""
         expected_base_numbers = [0, 10, 20, 30]
         actual_numbers = [num for _, num in numbered_dirs]
@@ -185,12 +185,13 @@ class StructureValidator:
 
                 if lower_base not in actual_numbers:
                     result.add_warning(
-                        f"Intermediate number without base: {dir_name} (missing {lower_base:02d}_*)"
+                        f"Intermediate number without base: {dir_name} "
+                        f"(missing {lower_base:02d}_*)"
                     )
 
     def _validate_sequential_numbering(
         self, result: ValidationResult, numbered_dirs: list[tuple]
-    ):
+    ) -> None:
         """Validate sequential numbering system."""
         if not numbered_dirs:
             return
@@ -211,7 +212,7 @@ class StructureValidator:
                 f"Numbering doesn't start from 00, starts from {numbers[0]:02d}"
             )
 
-    def _validate_tier_compliance(self, result: ValidationResult):
+    def _validate_tier_compliance(self, result: ValidationResult) -> None:
         """Validate directory tier compliance."""
         tier_counts = dict.fromkeys(DirectoryTier, 0)
 
@@ -246,7 +247,7 @@ class StructureValidator:
             f"Auxiliary: {tier_counts[DirectoryTier.AUXILIARY]}"
         )
 
-    def _validate_readme_coverage(self, result: ValidationResult):
+    def _validate_readme_coverage(self, result: ValidationResult) -> None:
         """Validate README.md coverage."""
         missing_readmes = []
 
@@ -263,7 +264,7 @@ class StructureValidator:
         else:
             result.add_info("All directories have README.md files")
 
-    def _validate_metadata_compliance(self, result: ValidationResult):
+    def _validate_metadata_compliance(self, result: ValidationResult) -> None:
         """Validate metadata compliance in files."""
         markdown_files = list(self.vault_path.rglob("*.md"))
         files_without_frontmatter = 0
@@ -291,7 +292,8 @@ class StructureValidator:
             )
             result.add_info(
                 f"Metadata coverage: {metadata_coverage:.1f}% "
-                f"({total_content_files - files_without_frontmatter}/{total_content_files} files)"
+                f"({total_content_files - files_without_frontmatter}/"
+                f"{total_content_files} files)"
             )
 
             if files_without_frontmatter > 0:
@@ -301,7 +303,7 @@ class StructureValidator:
 
     def _check_unexpected_directories(
         self, result: ValidationResult, expected_structure: dict[str, dict[str, str]]
-    ):
+    ) -> None:
         """Check for unexpected directories in vault root."""
         expected_names = set()
 
@@ -319,12 +321,14 @@ class StructureValidator:
 
     def _generate_statistics(self) -> dict[str, Any]:
         """Generate structure statistics."""
-        stats = {
+        tier_distribution: dict[str, int] = {tier.value: 0 for tier in DirectoryTier}
+
+        stats: dict[str, Any] = {
             "total_directories": 0,
             "total_files": 0,
             "markdown_files": 0,
             "readme_files": 0,
-            "tier_distribution": {tier.value: 0 for tier in DirectoryTier},
+            "tier_distribution": tier_distribution,
             "numbering_system": self.config.numbering_system.value,
             "largest_directory": None,
             "largest_directory_size": 0,
@@ -381,7 +385,7 @@ class StructureHealthMonitor:
 
         return result
 
-    def _log_health_result(self, result: ValidationResult):
+    def _log_health_result(self, result: ValidationResult) -> None:
         """Log health check result."""
         # Ensure log directory exists
         self.health_log_path.parent.mkdir(parents=True, exist_ok=True)

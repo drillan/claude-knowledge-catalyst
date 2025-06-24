@@ -56,7 +56,7 @@ Claude Codeとの開発効率を向上させるため、記事 (https://zenn.dev
 **実施した改善**:
 1. `.claude/`ディレクトリ構造の作成
    - `context.md`: プロジェクト背景と制約
-   - `project-knowledge.md`: 技術的洞察とパターン  
+   - `project-knowledge.md`: 技術的洞察とパターン
    - `project-improvements.md`: この改善履歴ファイル
    - `common-patterns.md`: よく使用するコマンドパターン
    - `debug-log.md`: 重要なデバッグ記録
@@ -119,7 +119,7 @@ from pydantic import BaseModel
 class CKCConfig(BaseModel):
     project_name: str
     auto_sync: bool = True
-    
+
 config = CKCConfig.model_validate(yaml_data)  # 型安全
 ```
 
@@ -139,7 +139,7 @@ config = CKCConfig.model_validate(yaml_data)  # 型安全
    ```python
    # 新機能: 教師なしキーワード抽出
    from claude_knowledge_catalyst.ai.yake_extractor import YAKEKeywordExtractor
-   
+
    extractor = YAKEKeywordExtractor()
    keywords = extractor.extract_keywords(content, language="japanese")
    # 結果: [Keyword(text="FastAPI", score=0.05, confidence=0.95)]
@@ -154,7 +154,7 @@ config = CKCConfig.model_validate(yaml_data)  # 型安全
    ```python
    # 従来: パターンマッチングのみ
    tech_tags = self._extract_tech_from_patterns(content)
-   
+
    # v0.10.0: YAKE + パターンマッチング
    if self.yake_enabled:
        yake_keywords = self.yake_extractor.extract_keywords(content)
@@ -176,8 +176,8 @@ config = CKCConfig.model_validate(yaml_data)  # 型安全
    # 修正前: 旧フィールド名
    assert metadata.quality == "high"
    assert metadata.category == "prompt"
-   
-   # 修正後: 新フィールド名  
+
+   # 修正後: 新フィールド名
    assert metadata.confidence == "high"
    assert metadata.type == "prompt"
    ```
@@ -192,9 +192,9 @@ config = CKCConfig.model_validate(yaml_data)  # 型安全
    # 修正前: 存在しないコマンド
    ["tag", "--help"]
    ["analytics", "--help"]
-   
+
    # 修正後: 実際のコマンド
-   ["search", "--help"] 
+   ["search", "--help"]
    ["analyze", "--help"]
    ```
 
@@ -209,7 +209,7 @@ config = CKCConfig.model_validate(yaml_data)  # 型安全
    class KnowledgeMetadata:
        category: str  # 削除
        quality: str   # 削除
-   
+
    # v0.10.0: tag-centered
    class KnowledgeMetadata:
        type: str
@@ -318,7 +318,7 @@ class DebounceHandler(FileSystemEventHandler):
     def __init__(self, callback: Callable, debounce_seconds: float = 1.0):
         self._debounce_seconds = debounce_seconds
         self._timer: Optional[Timer] = None
-        
+
     def on_modified(self, event):
         if self._timer:
             self._timer.cancel()
@@ -407,10 +407,10 @@ class DemoTestEnvironment:
 
 ### Phase 4対応 (4-6週間): Quality Excellence
 - **テストカバレッジ70%+**: 現在39.84% → 目標達成
-- **パフォーマンス最適化**: YAKE効率化、大規模対応  
+- **パフォーマンス最適化**: YAKE効率化、大規模対応
 - **ユーザビリティ向上**: CLIウィザード、診断機能
 
-### Phase 5対応 (6-8週間): Advanced Features  
+### Phase 5対応 (6-8週間): Advanced Features
 - **AI機能拡張**: カスタムモデル、品質スコア、知識グラフ
 - **プラットフォーム統合**: Notion、GitHub、VS Code拡張
 - **チーム機能**: マルチユーザー、権限管理、知識共有
@@ -423,7 +423,7 @@ class DemoTestEnvironment:
 ### バージョンリリース戦略
 ```markdown
 v0.11.0: Quality Excellence (Phase 4)
-v0.12.0: AI & Integration (Phase 5) 
+v0.12.0: AI & Integration (Phase 5)
 v1.0.0: Enterprise Platform (Phase 6)
 ```
 
@@ -495,12 +495,12 @@ v1.0.0: Enterprise Platform (Phase 6)
 def _enhance_classification_with_yake(self, content: str, pattern_results: List[ClassificationResult]) -> List[ClassificationResult]:
     """パターンマッチング + YAKE キーワード抽出のハイブリッド分類"""
     yake_keywords = self._extract_yake_keywords(content)
-    
+
     # パターンマッチ結果の信頼度向上
     for result in enhanced_results:
         if any(keyword in yake_keywords for keyword in [result.suggested_value.lower()]):
             result.confidence = min(0.95, result.confidence + 0.1)
-    
+
     # YAKE発見技術の追加
     for tech, keywords in tech_keywords.items():
         if any(kw in yake_keywords for kw in keywords):
@@ -525,7 +525,7 @@ def _enhance_classification_with_yake(self, content: str, pattern_results: List[
    # 問題: 極小コンテンツでの測定
    content = "def test(): pass"  # 17文字
    # → YAKE初期化コストが支配的 (28倍遅延)
-   
+
    # 現実: 実際のファイルサイズ
    average_file_size = 2-5KB  # .claudeディレクトリ実測
    # → 初期化コストが相対的に小さい (1.6倍遅延)
@@ -540,10 +540,10 @@ def _enhance_classification_with_yake(self, content: str, pattern_results: List[
    ```bash
    # 従来: 機能単体テスト
    uv run pytest tests/test_smart_classifier.py
-   
+
    # 追加: 統合性能テスト
    uv run pytest --cov=src/claude_knowledge_catalyst --cov-report=html
-   
+
    # 新規: 実用環境での検証
    python migration-test/claude_migration_comparison.py
    ```
@@ -801,10 +801,10 @@ Phase 3でエンタープライズ級のCI/CD基盤が完成したことを受�
 # 実装例: 包括的E2Eテスト
 class TestCompleteUserJourney:
     """README体験からエンタープライズ利用まで"""
-    
+
     def test_5_minute_quickstart_e2e(self):
         # Step 1-4の完全再現 + 検証
-        
+
     def test_enterprise_workflow_e2e(self):
         # 大規模プロジェクト、チーム利用シナリオ
 ```
@@ -841,7 +841,7 @@ class TestCompleteUserJourney:
 class AdvancedAIAnalyzer:
     def generate_knowledge_graph(self, content_collection):
         # 知識間の関係性を自動発見
-        
+
     def calculate_content_quality_score(self, content):
         # 多次元品質評価 (0-100スコア)
 ```
@@ -977,7 +977,7 @@ TestCLIUsabilityIntegration: # ユーザビリティ統合テスト
 ### 🎯 Phase 4で達成された品質指標
 
 #### テスト品質指標
-```bash 
+```bash
 Test Coverage Improvement:
   Before Phase 4: 39.84%
   After Phase 4:  45.34%
@@ -990,7 +990,7 @@ Test Stability:
   Failure Rate: 0%
 
 Performance Indicators:
-  Test Execution Time: ~29s (optimized)  
+  Test Execution Time: ~29s (optimized)
   Memory Usage: Reduced by ~15%
   YAKE Processing: 20% faster
 ```
@@ -1162,7 +1162,7 @@ Claude Knowledge Catalyst は、Phase 4の**Quality Excellence達成**により�
 - 影響: `test_hybrid_legacy_compatibility` の失敗
 - 優先度: Medium (エラーメッセージ表示されるが他テストは成功)
 
-🔶 **CLI Command Tests集合実行エラー** (ERROR x2)  
+🔶 **CLI Command Tests集合実行エラー** (ERROR x2)
 - 問題: `test_ckc_init_command`, `test_ckc_status_command` が集合実行時のみエラー
 - 状況: 個別実行では成功、集合実行で原因不明のエラー
 - 優先度: High (Essential機能に影響)
@@ -1211,7 +1211,7 @@ def isolated_project():
 # Before: 推測ベースのAPI呼び出し
 metadata = metadata_manager.extract_metadata(file)
 
-# After: 実際のAPIに基づく正確な呼び出し  
+# After: 実際のAPIに基づく正確な呼び出し
 metadata = metadata_manager.extract_metadata_from_file(file)
 vault_manager = ObsidianVaultManager(vault_path, metadata_manager)
 ```
@@ -1259,7 +1259,7 @@ Core modules:
 - **品質測定基準**: カバレッジ・実行時間・成功率
 
 #### 継続改善体制
-- **週次測定**: `uv run pytest --cov=src | grep TOTAL`  
+- **週次測定**: `uv run pytest --cov=src | grep TOTAL`
 - **新機能TDD**: test_essential_features.pyパターン適用
 - **回帰防止**: 重要ワークフローのテスト自動化
 
@@ -1269,7 +1269,7 @@ Core modules:
 
 #### 大規模リファクタリングの成功
 - **SmartContentClassifier**: 752行 → 333行 (56%削減)
-- **モジュール分離**: 
+- **モジュール分離**:
   - `classification_engine.py` (264行) - コア分類ロジック
   - `pattern_loader.py` (149行) - YAML パターン管理
   - `smart_classifier.py` (333行) - メイン API とYAKE統合
@@ -1304,14 +1304,14 @@ javascript:
 ```python
 # Before: 752行の単一ファイル
 class SmartContentClassifier:
-    def __init__(self): 
+    def __init__(self):
         self._initialize_patterns()      # 300行
         self._load_tech_patterns()       # 200行
         self._setup_classification()     # 252行
 
 # After: 責任分離
 class PatternLoader:              # パターン管理に特化
-class ClassificationEngine:      # 分類ロジックに特化  
+class ClassificationEngine:      # 分類ロジックに特化
 class SmartContentClassifier:    # API統合に特化
 ```
 
@@ -1454,7 +1454,7 @@ AI Classifier: 33/36 (92%) → 概ね良好
 #### Week 1: データモデル統一
 - [ ] quality属性問題の影響範囲調査
 - [ ] AdvancedMetadataEnhancer修正
-- [ ] KnowledgeAnalytics修正  
+- [ ] KnowledgeAnalytics修正
 - [ ] 統合テスト成功率向上確認
 
 #### Week 2: インフラ・設定問題
@@ -1468,11 +1468,11 @@ AI Classifier: 33/36 (92%) → 概ね良好
 # Phase 2.5進捗状況 (June 22, 2025)
 Week 1: Data Model Unification ✅ COMPLETE
 - KnowledgeMetadata.quality → confidence (全修正完了)
-- KnowledgeMetadata.category → type (全修正完了)  
+- KnowledgeMetadata.category → type (全修正完了)
 - KnowledgeMetadata.related_projects → projects (全修正完了)
 - Integration test: test_integration_comprehensive.py ✅ PASSING
 
-Week 2: Infrastructure and Configuration Problems ✅ COMPLETE  
+Week 2: Infrastructure and Configuration Problems ✅ COMPLETE
 - SmartContentClassifier API修正 (classify_complexity, _extract_yake_keywords) ✅
 - Demo Integration Tests 全修正 (13/13 PASSING) ✅
 - HybridObsidianVaultManager import問題解決 ✅
@@ -1481,7 +1481,7 @@ Week 2: Infrastructure and Configuration Problems ✅ COMPLETE
 
 # Phase 2.5完了後の目標
 Essential Features: 7/7 (100%) ← CI/CD Ready
-AI Classifier: 36/36 (100%) ← CI/CD Ready ✅ 
+AI Classifier: 36/36 (100%) ← CI/CD Ready ✅
 Demo Integration: 13/13 (100%) ← CI/CD Ready ✅
 Integration Tests: 5/6+ (83%+) ← CI/CD Ready
 Coverage: 21%+ 維持 (↑ from 16%)
@@ -1494,7 +1494,7 @@ Coverage: 21%+ 維持 (↑ from 16%)
 - 自動品質チェックパイプライン
 - 回帰防止体制確立
 
-#### Phase 4: Advanced Features (Week 4-5)  
+#### Phase 4: Advanced Features (Week 4-5)
 - パフォーマンス最適化
 - 高度な分析機能
 - ユーザビリティ向上
@@ -1548,7 +1548,7 @@ class TestCLIAdvancedCommands:
 ```bash
 # 自動テストされるワークフロー
 1. ckc init          # プロジェクト初期化
-2. ckc add my-vault  # Obsidianvault接続  
+2. ckc add my-vault  # Obsidianvault接続
 3. ckc sync          # .claude/ファイル同期
 4. ckc status        # プロジェクト状態確認
 ```
@@ -1607,7 +1607,7 @@ class TestCLIAdvancedCommands:
 # 新しいCLIヘルパー関数
 def get_config() -> CKCConfig:
     """設定取得または作成"""
-    
+
 def get_metadata_manager() -> MetadataManager:
     """メタデータマネージャー取得"""
 ```
@@ -1644,7 +1644,7 @@ def get_metadata_manager() -> MetadataManager:
 - パフォーマンス最適化による大規模対応
 - 自動診断によるシステム監視
 
-#### 2. 卓越したユーザーエクスペリエンス  
+#### 2. 卓越したユーザーエクスペリエンス
 - ゼロ設定セットアップウィザード
 - リアルタイム問題診断と解決支援
 - 直感的CLIインターフェース

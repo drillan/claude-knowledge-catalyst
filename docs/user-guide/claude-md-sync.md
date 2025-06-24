@@ -26,7 +26,7 @@ watch:
     - ".claude/CLAUDE.md"
   claude_md_sections_exclude:
     - "# secrets"
-    - "# private" 
+    - "# private"
     - "# confidential"
 ```
 
@@ -83,7 +83,7 @@ pytest を実行して...
 # Project Overview
 このプロジェクトは...
 
-# Architecture  
+# Architecture
 システム構成は...
 
 # Commands
@@ -168,7 +168,7 @@ watch:
   claude_md_sections_exclude:
     - "# secrets"
     - "# private"
-    - "# confidential" 
+    - "# confidential"
     - "# api-keys"
     - "# credentials"
     - "# internal"
@@ -185,7 +185,7 @@ watch:
 # Architecture
 一般的な技術情報
 
-# Commands  
+# Commands
 開発コマンド
 
 # Best Practices

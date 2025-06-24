@@ -2,7 +2,8 @@
 
 # Skip hybrid integration tests for v0.9.2 release due to complexity
 # Re-enabled hybrid integration tests for improved coverage
-# pytestmark = pytest.mark.skip(reason="Hybrid integration tests require complex setup - skipping for v0.9.2 release")
+# pytestmark = pytest.mark.skip(reason="Hybrid integration tests require \
+# complex setup - skipping for v0.9.2 release")
 import shutil
 import tempfile
 from pathlib import Path
@@ -169,7 +170,8 @@ Test content for {filename}
             test_file = temp_vault / dir_name / "test.md"
             test_file.write_text("# Test\nTest content")
 
-        # Note: legacy_support field removed in v2.0, compatibility is handled automatically
+        # Note: legacy_support field removed in v2.0, compatibility is handled \
+        # automatically
 
         compat_manager = BackwardCompatibilityManager(temp_vault, hybrid_config)
 
@@ -180,9 +182,9 @@ Test content for {filename}
         # Check that legacy directories are accessible
         for legacy_dir in legacy_dirs:
             legacy_path = temp_vault / legacy_dir
-            assert legacy_path.exists(), (
-                f"Legacy directory {legacy_dir} should be accessible"
-            )
+            assert (
+                legacy_path.exists()
+            ), f"Legacy directory {legacy_dir} should be accessible"
 
     def test_structure_validation(self, temp_vault, hybrid_config):
         """Test structure validation."""

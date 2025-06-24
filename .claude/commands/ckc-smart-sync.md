@@ -84,13 +84,13 @@ def scan_metadata_status():
     files = glob('.claude/**/*.md')
     has_metadata = []
     needs_classification = []
-    
+
     for file in files:
         if has_frontmatter(file):
             has_metadata.append(file)
         else:
             needs_classification.append(file)
-    
+
     return has_metadata, needs_classification
 ```
 
@@ -116,10 +116,10 @@ def apply_metadata(file_path, classification):
     # バックアップ作成
     backup_path = f"{file_path}.backup"
     shutil.copy2(file_path, backup_path)
-    
+
     # フロントマター生成
     frontmatter = generate_frontmatter(classification)
-    
+
     # ファイル更新
     with open(file_path, 'r+') as f:
         content = f.read()
@@ -168,7 +168,7 @@ Applied metadata to 17 files
 ├── Success: 16 files ✓
 └── Failed: 1 file ❌
 
-# CKC同期実行  
+# CKC同期実行
 uv run ckc sync
 └── Synced 31/32 files ✓
 ```

@@ -442,7 +442,8 @@ def generate_obsidian_queries_file() -> str:
     lines = [
         "# Obsidian Queries for Pure Tag-Centered System",
         "",
-        "This document contains optimized queries for the revolutionary tag-centered knowledge management system.",
+        "This document contains optimized queries for the revolutionary "
+        "tag-centered knowledge management system.",
         "",
         "## How to Use",
         "",
@@ -518,7 +519,8 @@ def generate_obsidian_queries_file() -> str:
             "Use the `ObsidianQueryBuilder` class to create custom queries:",
             "",
             "```python",
-            "from claude_knowledge_catalyst.obsidian.query_builder import ObsidianQueryBuilder",
+            "from claude_knowledge_catalyst.obsidian.query_builder import "
+            "ObsidianQueryBuilder",
             "",
             "# Build custom query",
             "query = (ObsidianQueryBuilder()",

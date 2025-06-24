@@ -7,7 +7,7 @@ from pathlib import Path
 class TagCenteredTemplateManager:
     """Manages templates for pure tag-centered system."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.templates = self._initialize_templates()
 
     def _initialize_templates(self) -> dict[str, str]:
@@ -258,7 +258,9 @@ purpose: "{purpose}"
         """Template for main vault README."""
         return """# Pure Tag-Centered Knowledge Vault
 
-Welcome to your revolutionary tag-centered knowledge management system! This vault eliminates complex directory hierarchies and relies on intelligent tagging for organization.
+Welcome to your revolutionary tag-centered knowledge management system!
+This vault eliminates complex directory hierarchies and relies on intelligent
+tagging for organization.
 
 ## Directory Structure (Minimal & State-Based)
 
@@ -358,7 +360,8 @@ This system evolves with your needs:
 
 ## Purpose
 
-This directory is part of the pure tag-centered system's minimal structure. Content is organized by **state** rather than **type**.
+This directory is part of the pure tag-centered system's minimal structure.
+Content is organized by **state** rather than **type**.
 
 ## Content Guidelines
 
@@ -399,7 +402,8 @@ Files naturally flow between directories as their status changes:
         """Template for common Obsidian queries."""
         return """# Obsidian Queries for Pure Tag-Centered System
 
-This document contains pre-built queries for organizing and discovering content in the tag-centered system.
+This document contains pre-built queries for organizing and discovering
+content in the tag-centered system.
 
 ## Content Discovery
 
@@ -710,13 +714,19 @@ status:deprecated updated:<-180d
                 "content": self.generate_file(
                     "prompt",
                     title="Example: Code Review Prompt",
-                    purpose="A prompt for comprehensive code review with security focus",
+                    purpose=(
+                        "A prompt for comprehensive code review with security focus"
+                    ),
                 )
                 .replace("draft", "draft")
                 .replace("[]", "['code-review', 'security']")
                 .replace(
                     "tags: ['code-review', 'security']",
-                    "tags: ['code-review', 'security']\ntech: ['python', 'javascript']\ndomain: ['web-dev', 'security']\nteam: ['backend', 'frontend']\nclaude_feature: ['code-review', 'analysis']",
+                    "tags: ['code-review', 'security']\n"
+                    "tech: ['python', 'javascript']\n"
+                    "domain: ['web-dev', 'security']\n"
+                    "team: ['backend', 'frontend']\n"
+                    "claude_feature: ['code-review', 'analysis']",
                 ),
             },
             {
@@ -724,13 +734,21 @@ status:deprecated updated:<-180d
                 "content": self.generate_file(
                     "concept",
                     title="Example: Pure Tag-Centered Architecture",
-                    purpose="Explanation of the revolutionary tag-centered approach to knowledge management",
+                    purpose=(
+                        "Explanation of the revolutionary tag-centered approach to "
+                        "knowledge management"
+                    ),
                 )
                 .replace("draft", "production")
                 .replace("[]", "['architecture', 'knowledge-management']")
                 .replace(
                     "tags: ['architecture', 'knowledge-management']",
-                    "tags: ['architecture', 'knowledge-management']\ntech: ['obsidian', 'markdown']\ndomain: ['knowledge-management', 'productivity']\nteam: ['product']\nconfidence: high\ncomplexity: intermediate",
+                    "tags: ['architecture', 'knowledge-management']\n"
+                    "tech: ['obsidian', 'markdown']\n"
+                    "domain: ['knowledge-management', 'productivity']\n"
+                    "team: ['product']\n"
+                    "confidence: high\n"
+                    "complexity: intermediate",
                 ),
             },
             {
@@ -738,14 +756,21 @@ status:deprecated updated:<-180d
                 "content": self.generate_file(
                     "code",
                     title="Example: Python Tag Validation",
-                    purpose="Code snippet for validating tag structure in pure tag system",
+                    purpose=(
+                        "Code snippet for validating tag structure in pure tag system"
+                    ),
                     language="python",
                 )
                 .replace("draft", "tested")
                 .replace("[]", "['validation', 'python']")
                 .replace(
                     "tags: ['validation', 'python']",
-                    "tags: ['validation', 'python']\ntech: ['python']\ndomain: ['web-dev', 'automation']\nteam: ['backend']\nclaude_feature: ['code-generation']\nconfidence: high",
+                    "tags: ['validation', 'python']\n"
+                    "tech: ['python']\n"
+                    "domain: ['web-dev', 'automation']\n"
+                    "team: ['backend']\n"
+                    "claude_feature: ['code-generation']\n"
+                    "confidence: high",
                 ),
             },
         ]

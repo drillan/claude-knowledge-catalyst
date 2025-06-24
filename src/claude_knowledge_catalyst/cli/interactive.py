@@ -504,7 +504,7 @@ class InteractiveTagManager:
 class SmartQueryBuilder:
     """Smart query builder with natural language processing."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.tag_standards = TagStandardsManager()
 
     def build_from_natural_language(

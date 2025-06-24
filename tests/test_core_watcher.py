@@ -2,14 +2,14 @@
 
 # Skip watcher tests for v0.9.2 release due to complexity
 # Re-enabled core watcher tests for improved coverage
-# pytestmark = pytest.mark.skip(reason="Watcher tests require complex setup - skipping for v0.9.2 release")
+# pytestmark = pytest.mark.skip(reason="Watcher tests require complex setup - \
+# skipping for v0.9.2 release")
 import tempfile
 import time
 from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
-
 from claude_knowledge_catalyst.core.config import WatchConfig
 from claude_knowledge_catalyst.core.metadata import MetadataManager
 from claude_knowledge_catalyst.core.watcher import (
@@ -243,7 +243,8 @@ class TestKnowledgeWatcher:
                 mock_join.assert_called_once()
                 assert watcher.is_running is False
 
-    # Re-enabled for Phase 4 quality improvement - context manager is basic functionality
+    # Re-enabled for Phase 4 quality improvement - context manager is basic \
+    # functionality
     # @pytest.mark.skip(
     #     reason="Context manager test requires complex setup - skipping for stability"
     # )
@@ -278,7 +279,8 @@ class TestKnowledgeWatcher:
 
     # Note: Testing multiple callbacks concept even if not fully implemented
     def test_multiple_callbacks(self, watcher, temp_watch_dir):
-        """Test callback registration and replacement (current single callback design)."""
+        """Test callback registration and replacement (current single callback \
+design)."""
         # Current KnowledgeWatcher supports single sync_callback
         results1 = []
         results2 = []
@@ -398,7 +400,8 @@ class TestKnowledgeWatcherIntegration:
 
         # Should have received events
         assert len(events_received) >= 1
-        # Event types may vary by platform, but should include file creation/modification
+        # Event types may vary by platform, but should include file \
+        # creation/modification
 
     def test_claude_md_file_detection(self, temp_project_dir):
         """Test specific handling of CLAUDE.md files."""
@@ -422,11 +425,13 @@ class TestKnowledgeWatcherIntegration:
         with watcher:
             # Create CLAUDE.md file
             claude_file = temp_project_dir / "CLAUDE.md"
-            claude_file.write_text("""# Project Instructions
+            claude_file.write_text(
+                """# Project Instructions
 
 ## Development Guidelines
 Follow best practices.
-""")
+"""
+            )
 
             time.sleep(0.2)
 

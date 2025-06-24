@@ -1,7 +1,8 @@
 """Tests for metadata management."""
 
 # Metadata tests - core functionality testing
-# pytestmark = pytest.mark.skip(reason="Metadata tests require AI dependencies - skipping for v0.9.2 release")
+# pytestmark = pytest.mark.skip(reason="Metadata tests require AI dependencies - \
+# skipping for v0.9.2 release")
 import tempfile
 from datetime import datetime
 from pathlib import Path
@@ -137,7 +138,8 @@ def hello():
 
             for tag in expected_tags:
                 assert tag in all_inferred, (
-                    f"Expected tag '{tag}' not found in {all_inferred} for content: {content}"
+                    f"Expected tag '{tag}' not found in {all_inferred} for "
+                    f"content: {content}"
                 )
 
     def test_metadata_template_creation(self):

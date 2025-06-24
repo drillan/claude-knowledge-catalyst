@@ -20,13 +20,13 @@ console = Console()
 class MigrationPlan:
     """Migration plan for structure conversion."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.operations = []
         self.estimated_time = 0
         self.backup_required = True
         self.safety_score = 100
 
-    def add_directory_move(self, old_path: str, new_path: str):
+    def add_directory_move(self, old_path: str, new_path: str) -> None:
         """Add directory move operation."""
         self.operations.append(
             {
@@ -38,7 +38,7 @@ class MigrationPlan:
         )
         self.estimated_time += 5
 
-    def add_directory_creation(self, path: str, description: str):
+    def add_directory_creation(self, path: str, description: str) -> None:
         """Add directory creation operation."""
         self.operations.append(
             {
@@ -50,7 +50,7 @@ class MigrationPlan:
         )
         self.estimated_time += 1
 
-    def add_file_move(self, old_path: str, new_path: str):
+    def add_file_move(self, old_path: str, new_path: str) -> None:
         """Add file move operation."""
         self.operations.append(
             {
@@ -62,7 +62,7 @@ class MigrationPlan:
         )
         self.estimated_time += 0.1
 
-    def add_symlink_creation(self, link_path: str, target_path: str):
+    def add_symlink_creation(self, link_path: str, target_path: str) -> None:
         """Add symlink creation operation."""
         self.operations.append(
             {
@@ -78,7 +78,7 @@ class MigrationPlan:
 class MigrationResult:
     """Result of migration execution."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.success = False
         self.operations_completed = 0
         self.operations_total = 0
@@ -88,7 +88,7 @@ class MigrationResult:
         self.start_time = None
         self.end_time = None
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """Convert to dictionary."""
         return {
             "success": self.success,
@@ -226,7 +226,8 @@ class MigrationManager:
             for _i, operation in enumerate(plan.operations):
                 if dry_run:
                     console.print(
-                        f"Would execute: {operation['type']} - {operation.get('source', operation.get('path', ''))}"
+                        f"Would execute: {operation['type']} - "
+                        f"{operation.get('source', operation.get('path', ''))}"
                     )
                 else:
                     success = self._execute_operation(operation)
@@ -303,7 +304,7 @@ class MigrationManager:
 
 
 @click.group()
-def migrate():
+def migrate() -> None:
     """Migrate vault structure between different systems."""
     pass
 
@@ -327,7 +328,7 @@ def plan(
     to: str,
     dry_run: bool,
     force: bool,
-):
+) -> None:
     """Create and show migration plan."""
     try:
         # Load configuration
@@ -444,7 +445,7 @@ def execute(
     to: str,
     backup: bool,
     force: bool,
-):
+) -> None:
     """Execute migration to target structure."""
     try:
         # Load configuration
@@ -572,7 +573,7 @@ def execute(
 @migrate.command()
 @click.option("--config-path", type=click.Path(), help="Path to configuration file")
 @click.option("--vault-path", type=click.Path(), help="Path to vault directory")
-def status(config_path: str | None, vault_path: str | None):
+def status(config_path: str | None, vault_path: str | None) -> None:
     """Show migration status and history."""
     try:
         # Load configuration

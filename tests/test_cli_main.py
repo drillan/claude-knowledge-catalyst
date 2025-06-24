@@ -1,18 +1,18 @@
 """Tests for main CLI interface."""
 
 # Re-enabled CLI tests for improved coverage
-# pytestmark = pytest.mark.skip(reason="CLI tests require complex setup - skipping for v0.9.2 release")
+# pytestmark = pytest.mark.skip(reason="CLI tests require complex setup - \
+# skipping for v0.9.2 release")
 import tempfile
 from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
 import typer
-from typer.testing import CliRunner
-
 from claude_knowledge_catalyst import __version__
 from claude_knowledge_catalyst.cli.main import app, version_callback
 from claude_knowledge_catalyst.core.config import CKCConfig, SyncTarget
+from typer.testing import CliRunner
 
 
 class TestCLIBasics:
@@ -428,7 +428,8 @@ class TestCLIValidation:
                     ],
                 )
 
-                # Should handle invalid paths gracefully, 2 for argument validation errors
+                # Should handle invalid paths gracefully, 2 for argument \
+                # validation errors
                 assert result.exit_code in [0, 1, 2]
 
     def test_config_validation(self, cli_runner):

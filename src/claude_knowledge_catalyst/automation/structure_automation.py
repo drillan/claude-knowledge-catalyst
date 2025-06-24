@@ -28,7 +28,7 @@ class AutomatedStructureManager:
 
     def run_automated_maintenance(self) -> dict[str, Any]:
         """Run comprehensive automated maintenance."""
-        maintenance_result = {
+        maintenance_result: dict[str, Any] = {
             "timestamp": datetime.now().isoformat(),
             "tasks_completed": [],
             "issues_found": [],
@@ -156,7 +156,11 @@ class AutomatedStructureManager:
 
     def _check_metadata_consistency(self) -> dict[str, Any]:
         """Check and fix metadata consistency issues."""
-        result = {"files_checked": 0, "metadata_issues": [], "metadata_fixes": []}
+        result: dict[str, Any] = {
+            "files_checked": 0,
+            "metadata_issues": [],
+            "metadata_fixes": [],
+        }
 
         # Find all markdown files
         md_files = list(self.vault_path.rglob("*.md"))
@@ -188,7 +192,11 @@ class AutomatedStructureManager:
 
     def _optimize_directory_structure(self) -> dict[str, Any]:
         """Optimize directory structure organization."""
-        result = {"optimizations": [], "moves_suggested": [], "empty_dirs_removed": 0}
+        result: dict[str, Any] = {
+            "optimizations": [],
+            "moves_suggested": [],
+            "empty_dirs_removed": 0,
+        }
 
         # Remove empty directories
         empty_dirs = self._find_empty_directories()
@@ -360,15 +368,18 @@ class AutomatedStructureManager:
                 # Suggest tags based on content
                 try:
                     content = file_path.read_text(encoding="utf-8")
-                    suggested_tags = self.metadata_manager.suggest_tags(
-                        content, metadata.tags
-                    )
-                    if suggested_tags:
-                        metadata.tags.extend(
-                            suggested_tags[:3]
-                        )  # Add up to 3 suggestions
+                    # Note: suggest_tags method may not be implemented
+                    if hasattr(self.metadata_manager, "suggest_tags"):
+                        suggested_tags = self.metadata_manager.suggest_tags(
+                            content, metadata.tags
+                        )
+                        if suggested_tags:
+                            metadata.tags.extend(
+                                suggested_tags[:3]
+                            )  # Add up to 3 suggestions
                         fixes.append(
-                            f"Added suggested tags {suggested_tags[:3]} to {file_path.name}"
+                            f"Added suggested tags {suggested_tags[:3]} to "
+                            f"{file_path.name}"
                         )
                 except Exception:
                     pass
@@ -491,7 +502,7 @@ class AutomatedStructureManager:
 
         return rotated_count
 
-    def _log_maintenance_result(self, result: dict[str, Any]):
+    def _log_maintenance_result(self, result: dict[str, Any]) -> None:
         """Log maintenance result."""
         # Ensure log directory exists
         self.automation_log_path.parent.mkdir(parents=True, exist_ok=True)

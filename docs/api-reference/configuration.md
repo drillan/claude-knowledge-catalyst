@@ -89,24 +89,24 @@ tags:
     - "concept"
     - "resource"
     - "project_log"
-    
+
   tech_tags:        # 技術タグ
     - "python"
     - "javascript"
     - "typescript"
     - "react"
-    
+
   claude_tags:      # Claudeモデルタグ
     - "opus"
     - "sonnet"
     - "haiku"
-    
+
   status_tags:      # ステータスタグ
     - "draft"
     - "tested"
     - "production"
     - "deprecated"
-    
+
   quality_tags:     # 品質タグ
     - "high"
     - "medium"
@@ -122,13 +122,13 @@ watch:
   watch_paths:
     - ".claude"
     - "docs/claude"
-    
+
   # ファイルパターン
   file_patterns:
     - "*.md"
     - "*.txt"
     - "*.json"
-    
+
   # 除外パターン
   ignore_patterns:
     - ".git"
@@ -136,10 +136,10 @@ watch:
     - "*.pyc"
     - ".DS_Store"
     - "node_modules"
-    
+
   # デバウンス設定
   debounce_seconds: 1.0
-  
+
   # CLAUDE.md同期設定
   include_claude_md: false              # CLAUDE.md同期の有効/無効
   claude_md_patterns:                   # 対象ファイルパターン
@@ -159,7 +159,7 @@ watch:
 | `claude_md_patterns` | list[string] | `["CLAUDE.md", ".claude/CLAUDE.md"]` | 同期対象ファイルパターン |
 | `claude_md_sections_exclude` | list[string] | `[]` | 除外するセクションヘッダーのリスト |
 
-**セキュリティ重要事項**: 
+**セキュリティ重要事項**:
 - `include_claude_md` はデフォルトで `false` です
 - 機密情報を含む場合は必ず `claude_md_sections_exclude` を設定してください
 - セクション除外は大文字小文字を区別しません
@@ -175,7 +175,7 @@ watch:
 ```yaml
 hybrid_structure:
   enabled: true                        # ハイブリッド構造の有効/無効
-  
+
   # 従来のPARA method設定
   para_method:
     enabled: true
@@ -183,8 +183,8 @@ hybrid_structure:
     projects_path: "01-Projects"
     resources_path: "03-Resources"
     archive_path: "04-Archive"
-    
-  # モダンなPKM設定  
+
+  # モダンなPKM設定
   modern_pkm:
     enabled: true
     concepts_path: "concepts"
@@ -216,7 +216,7 @@ enabled_targets = config.get_enabled_sync_targets()
 from claude_knowledge_catalyst.core.config import SyncTarget
 new_target = SyncTarget(
     name="backup-vault",
-    type="obsidian", 
+    type="obsidian",
     path="/path/to/backup"
 )
 config.add_sync_target(new_target)
@@ -308,7 +308,7 @@ sync_targets:
 
 watch:
   include_claude_md: false  # CLAUDE.md同期を無効化
-  
+
 # または、厳格な除外設定
 watch:
   include_claude_md: true
@@ -338,7 +338,7 @@ watch:
 
 ```bash
 export CKC_PROJECT_ROOT="/custom/project/path"
-export CKC_AUTO_SYNC="false" 
+export CKC_AUTO_SYNC="false"
 export CKC_CLAUDE_MD_ENABLED="true"
 ```
 

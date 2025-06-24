@@ -454,10 +454,12 @@ def analytics_report(ctx: click.Context, days: int, output: Path | None) -> None
         # Display summary
         console.print("[green]✓[/green] Analytics report generated")
         console.print(
-            f"[blue]Total files analyzed:[/blue] {knowledge_report['report_sections']['overview']['total_files']}"
+            f"[blue]Total files analyzed:[/blue] "
+            f"{knowledge_report['report_sections']['overview']['total_files']}"
         )
         console.print(
-            f"[blue]Total operations:[/blue] {usage_report['operation_statistics']['total_operations']}"
+            f"[blue]Total operations:[/blue] "
+            f"{usage_report['operation_statistics']['total_operations']}"
         )
 
         # Show top recommendations
@@ -528,7 +530,8 @@ def analytics_usage(ctx: click.Context, days: int) -> None:
                 score = productivity.get("productivity_score", 0)
                 console.print(f"\n[blue]Productivity Score:[/blue] {score:.1f}/100")
                 console.print(
-                    f"[blue]Activities per hour:[/blue] {productivity.get('activities_per_hour', 0):.1f}"
+                    f"[blue]Activities per hour:[/blue] "
+                    f"{productivity.get('activities_per_hour', 0):.1f}"
                 )
 
     except Exception as e:
@@ -561,7 +564,8 @@ def ai_suggest(ctx: click.Context, file_path: Path) -> None:
                 )
 
                 console.print(
-                    f"{i}. [{priority_color}]{suggestion['priority'].upper()}[/{priority_color}] {suggestion['suggestion']}"
+                    f"{i}. [{priority_color}]{suggestion['priority'].upper()}"
+                    f"[/{priority_color}] {suggestion['suggestion']}"
                 )
                 console.print(f"   [dim]→ {suggestion['action']}[/dim]\n")
         else:

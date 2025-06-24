@@ -127,7 +127,7 @@ echo ""
 echo "💡 What just happened:"
 echo "  ✅ AI detected 'git' keywords → tech: [git]"
 echo "  ✅ Code blocks detected → type: code"
-echo "  ✅ Command patterns → domain: [devops]" 
+echo "  ✅ Command patterns → domain: [devops]"
 echo "  ✅ Content length analysis → complexity: beginner"
 echo "  ✅ No quality indicators → confidence: medium"
 echo "  ✅ H1 title extracted → title: 'Git便利コマンド集'"
@@ -309,7 +309,7 @@ tags:
 // Parent component manages shared state
 function Tabs({ children, defaultTab = 0 }) {
   const [activeTab, setActiveTab] = useState(defaultTab);
-  
+
   return (
     <div className="tabs">
       {React.Children.map(children, (child, index) =>
@@ -334,19 +334,19 @@ function Tab({ children, activeTab, index, label }) {
 function DataProvider({ render, endpoint }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     fetch(endpoint)
       .then(res => res.json())
       .then(setData)
       .finally(() => setLoading(false));
   }, [endpoint]);
-  
+
   return render({ data, loading });
 }
 
 // Usage
-<DataProvider 
+<DataProvider
   endpoint="/api/users"
   render={({ data, loading }) => (
     loading ? <Spinner /> : <UserList users={data} />
@@ -496,11 +496,11 @@ if [ -d "$DEMO_DIR/my_vault" ]; then
     echo "├── archive/          # Deprecated content"
     echo "└── knowledge/        # Mature content (status: production)"
     echo ""
-    
+
     echo "📁 Generated Structure:"
     find "$DEMO_DIR/my_vault" -type d -name "*" | head -8 | sort
     echo ""
-    
+
     echo "📄 Sample Files by Status (not by content type):"
     for dir in "inbox" "knowledge" "_system"; do
         if [ -d "$DEMO_DIR/my_vault/$dir" ]; then

@@ -46,6 +46,9 @@ class HybridStructureConfig(BaseModel):
     auto_classification: bool = Field(True, description="Auto category classification")
     auto_enhancement: bool = Field(True, description="Auto metadata enhancement")
     structure_validation: bool = Field(True, description="Structure validation")
+    legacy_support: bool = Field(
+        False, description="Support legacy directory structures"
+    )
 
     # Custom structure definitions (optional)
     custom_structure: dict[str, dict[str, str]] | None = Field(

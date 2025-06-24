@@ -19,10 +19,10 @@
 graph LR
     A[基本Obsidianボルト] --> B[CKC移行プロセス]
     B --> C[Claude Code統合ボルト]
-    
+
     A1[手動組織化<br/>基本メタデータ<br/>単純タグ] --> A
     C --> C1[自動同期<br/>自動強化メタデータ<br/>多次元タグ]
-    
+
     style A fill:#fff2cc
     style C fill:#d5e8d4
 ```
@@ -133,7 +133,7 @@ uv run ckc analyze-structure /existing/vault --output analysis.json
   "structure_type": "category_based",
   "directories": {
     "Notes": 45,
-    "Projects": 23, 
+    "Projects": 23,
     "Resources": 67,
     "Daily": 89
   },

@@ -374,7 +374,8 @@ def smart_sync_command(
 
     # Phase 2: Batch classification
     console.print(
-        f"\n[bold yellow]🤖 Phase 2:[/bold yellow] Batch Classification ({len(needs_classification)} files)"
+        f"\n[bold yellow]🤖 Phase 2:[/bold yellow] Batch Classification "
+        f"({len(needs_classification)} files)"
     )
 
     successful_classifications = []
@@ -392,7 +393,8 @@ def smart_sync_command(
             if result["success"]:
                 successful_classifications.append((file_path, result["classification"]))
                 console.print(
-                    f"    ✅ Category: [green]{result['classification']['category']}[/green]"
+                    f"    ✅ Category: "
+                    f"[green]{result['classification']['category']}[/green]"
                 )
             else:
                 failed_classifications.append((file_path, result["error"]))
@@ -403,7 +405,8 @@ def smart_sync_command(
     # Phase 3: Apply metadata
     if successful_classifications and not dry_run:
         console.print(
-            f"\n[bold yellow]📝 Phase 3:[/bold yellow] Metadata Application ({len(successful_classifications)} files)"
+            f"\n[bold yellow]📝 Phase 3:[/bold yellow] Metadata Application "
+            f"({len(successful_classifications)} files)"
         )
 
         applied_files = []
@@ -435,7 +438,8 @@ def smart_sync_command(
 
     elif dry_run:
         console.print(
-            f"\n[yellow]🔍 Dry run: Would apply metadata to {len(successful_classifications)} files[/yellow]"
+            f"\n[yellow]🔍 Dry run: Would apply metadata to "
+            f"{len(successful_classifications)} files[/yellow]"
         )
         applied_files = []
     else:
@@ -498,7 +502,8 @@ def smart_sync_command(
 
     if failed_classifications:
         console.print(
-            f"\n[red]⚠️ Manual attention required for {len(failed_classifications)} files:[/red]"
+            f"\n[red]⚠️ Manual attention required for "
+            f"{len(failed_classifications)} files:[/red]"
         )
         for file_path, error in failed_classifications:
             console.print(f"  - [yellow]{file_path}[/yellow]: {error}")
@@ -509,7 +514,8 @@ def smart_sync_command(
         )
     elif dry_run:
         console.print(
-            f"\n[yellow]🔍 Dry run completed. {len(successful_classifications)} files ready for processing.[/yellow]"
+            f"\n[yellow]🔍 Dry run completed. {len(successful_classifications)} "
+            f"files ready for processing.[/yellow]"
         )
 
 
@@ -517,7 +523,7 @@ def smart_sync_command(
 
 
 class TagCenteredSmartSync:
-    """Enhanced Smart Sync with tag-centered approach and minimal directory structure."""
+    """Enhanced Smart Sync with tag-centered approach and minimal structure."""
 
     def __init__(self, config: CKCConfig | None = None):
         """Initialize tag-centered smart sync manager."""
@@ -540,7 +546,7 @@ class TagCenteredSmartSync:
     ) -> dict[str, Any]:
         """Migrate existing directory structure to tag-centered approach."""
 
-        migration_stats = {
+        migration_stats: dict[str, Any] = {
             "files_processed": 0,
             "files_migrated": 0,
             "metadata_enhanced": 0,
@@ -800,7 +806,7 @@ WHERE contains(string(tags), "automation")
                             set(current_values + suggested_values)
                         )
                     else:
-                        # For non-list fields, take the first suggestion if current is empty
+                        # For non-list fields, take first suggestion if current is empty
                         if not current_values and suggested_values:
                             metadata_dict[field] = suggested_values[0]
 
@@ -812,7 +818,8 @@ WHERE contains(string(tags), "automation")
 
         except Exception as e:
             self.console.print(
-                f"[yellow]Warning: Could not enhance metadata for {file_path}: {e}[/yellow]"
+                f"[yellow]Warning: Could not enhance metadata for "
+                f"{file_path}: {e}[/yellow]"
             )
 
     def _generate_migration_report(
@@ -828,13 +835,17 @@ WHERE contains(string(tags), "automation")
 - Errors: {len(stats["errors"])}
 
 ## Directory Structure Created
-{chr(10).join(f"- {dir_name}: {desc}" for dir_name, desc in self.minimal_structure.items())}
+{chr(10).join(
+            f"- {dir_name}: {desc}"
+            for dir_name, desc in self.minimal_structure.items()
+        )}
 
 ## Migration Details
 {chr(10).join(f"- {change}" for change in stats["directory_changes"])}
 
 ## Errors
-{chr(10).join(f"- {error}" for error in stats["errors"]) if stats["errors"] else "No errors occurred."}
+{chr(10).join(f"- {error}" for error in stats["errors"])
+        if stats["errors"] else "No errors occurred."}
 
 Generated: {datetime.now().isoformat()}
 Dry Run: {dry_run}

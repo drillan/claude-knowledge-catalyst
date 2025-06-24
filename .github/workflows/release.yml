@@ -19,40 +19,40 @@ jobs:
   validate-release:
     name: Validate Release
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Install uv
       uses: astral-sh/setup-uv@v3
       with:
         version: "latest"
-        
+
     - name: Set up Python 3.11
       run: uv python install 3.11
-      
+
     - name: Install dependencies
       run: |
         uv sync --dev
-        
+
     - name: Run full test suite
       run: |
         uv run pytest tests/ --cov=src --cov-fail-under=30
-        
+
     - name: Lint and format check
       run: |
         uv run ruff check src/ tests/
         uv run ruff format src/ tests/ --check
-        
+
     - name: Type check
       run: |
         uv run mypy src/ --ignore-missing-imports
-        
+
     - name: Build package
       run: |
         uv build
-        
+
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -65,11 +65,11 @@ jobs:
     needs: validate-release
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
-      
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Extract version from tag
       id: extract_version
       run: |
@@ -78,7 +78,7 @@ jobs:
         else
           echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
         fi
-        
+
     - name: Generate changelog
       id: changelog
       run: |
@@ -90,7 +90,7 @@ jobs:
         else
           echo "changelog=Release ${{ steps.extract_version.outputs.version }}" >> $GITHUB_OUTPUT
         fi
-        
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -101,26 +101,26 @@ jobs:
         release_name: Claude Knowledge Catalyst ${{ steps.extract_version.outputs.version }}
         body: |
           ## Changes in ${{ steps.extract_version.outputs.version }}
-          
+
           ${{ steps.changelog.outputs.changelog }}
-          
+
           ## Installation
-          
+
           ### Using pip
           ```bash
           pip install claude-knowledge-catalyst==${{ steps.extract_version.outputs.version }}
           ```
-          
+
           ### Using uv (recommended)
           ```bash
           uv add claude-knowledge-catalyst==${{ steps.extract_version.outputs.version }}
           ```
-          
+
           ## Verification
           ```bash
           ckc --version
           ```
-          
+
           For detailed documentation, visit: https://claude-knowledge-catalyst.readthedocs.io/
         draft: false
         prerelease: ${{ contains(steps.extract_version.outputs.version, '-') }}
@@ -130,31 +130,31 @@ jobs:
     runs-on: ubuntu-latest
     needs: [validate-release, create-release]
     environment: pypi
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Install uv
       uses: astral-sh/setup-uv@v3
       with:
         version: "latest"
-        
+
     - name: Set up Python 3.11
       run: uv python install 3.11
-      
+
     - name: Install dependencies
       run: |
         uv sync --dev
-        
+
     - name: Build package
       run: |
         uv build
-        
+
     - name: Verify package
       run: |
         uv run twine check dist/*
-        
+
     - name: Publish to Test PyPI
       if: contains(github.ref, '-')
       env:
@@ -162,7 +162,7 @@ jobs:
         TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
       run: |
         uv run twine upload --repository testpypi dist/*
-        
+
     - name: Publish to PyPI
       if: "!contains(github.ref, '-')"
       env:
@@ -176,28 +176,28 @@ jobs:
     runs-on: ubuntu-latest
     needs: publish-pypi
     if: "!contains(github.ref, '-')"
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Install uv
       uses: astral-sh/setup-uv@v3
       with:
         version: "latest"
-        
+
     - name: Set up Python 3.11
       run: uv python install 3.11
-      
+
     - name: Install dependencies
       run: |
         uv sync --dev
-        
+
     - name: Build documentation
       run: |
         cd docs
         uv run sphinx-build -b html . _build/html
-        
+
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
@@ -209,13 +209,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: [publish-pypi, update-docs]
     if: success()
-    
+
     steps:
     - name: Extract version
       id: version
       run: |
         echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-        
+
     - name: Create success summary
       run: |
         echo "## 🎉 Release ${{ steps.version.outputs.version }} Published Successfully!" >> $GITHUB_STEP_SUMMARY

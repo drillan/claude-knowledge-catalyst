@@ -12,7 +12,8 @@ class ClaudeMdProcessor:
         """Initialize processor with excluded sections.
 
         Args:
-            sections_exclude: List of section headers to exclude (e.g., ['# secrets', '# private'])
+            sections_exclude: List of section headers to exclude
+                (e.g., ['# secrets', '# private'])
         """
         self.sections_exclude = sections_exclude or []
         # Normalize section patterns for case-insensitive matching

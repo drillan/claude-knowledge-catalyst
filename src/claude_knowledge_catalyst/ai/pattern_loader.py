@@ -142,10 +142,10 @@ class PatternLoader:
 
         This is useful when pattern files have been modified.
         """
-        # Clear the LRU cache to force reload
-        self.load_tech_patterns.cache_clear()
-        self.load_domain_patterns.cache_clear()
-        self.load_content_patterns.cache_clear()
+        # Clear the manual cache to force reload
+        self._tech_patterns_cache = None
+        self._domain_patterns_cache = None
+        self._content_patterns_cache = None
 
     def get_pattern_files_info(self) -> dict[str, dict[str, Any]]:
         """Get information about pattern files.

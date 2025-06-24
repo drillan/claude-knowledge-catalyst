@@ -75,7 +75,7 @@ class AdvancedMetadataEnhancer:
         if not hasattr(metadata, "complexity"):
             metadata.complexity = self._assess_complexity(content, content_analysis)
 
-        # Enhance confidence assessment (quality renamed to confidence in metadata model)
+        # Enhance confidence assessment (quality renamed to confidence)
         if not metadata.confidence or metadata.confidence == "experimental":
             metadata.confidence = self._assess_quality(
                 content, content_analysis, metadata

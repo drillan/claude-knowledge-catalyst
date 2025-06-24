@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
+from typing import Any
 
 from ..core.metadata import KnowledgeMetadata
 from ..core.tag_standards import TagStandardsManager
@@ -582,22 +583,23 @@ class SmartContentClassifier:
         content_length = len(content)
 
         for complexity, indicators in self.complexity_indicators.items():
+            indicators = indicators  # type: dict[str, Any]
             confidence = 0.0
             evidence = []
 
             # Check keywords
+            keywords_list: list[str] = indicators.get("keywords", [])
             keyword_matches = sum(
-                1 for keyword in indicators["keywords"] if keyword in content_lower
+                1 for keyword in keywords_list if keyword in content_lower
             )
             if keyword_matches > 0:
                 confidence = max(confidence, ConfidenceLevel.MEDIUM.value)
                 evidence.append(f"Complexity keywords: {keyword_matches} matches")
 
             # Check content patterns
+            patterns_list: list[str] = indicators.get("content_patterns", [])
             pattern_matches = sum(
-                1
-                for pattern in indicators["content_patterns"]
-                if pattern in content_lower
+                1 for pattern in patterns_list if pattern in content_lower
             )
             if pattern_matches > 0:
                 confidence = max(confidence, ConfidenceLevel.MEDIUM.value - 0.1)
@@ -744,15 +746,20 @@ class SmartContentClassifier:
 
     def get_classification_summary(
         self, results: dict[Path, list[ClassificationResult]]
-    ) -> dict[str, any]:
+    ) -> dict[str, Any]:
         """Generate summary statistics for batch classification."""
-        summary = {
+        top_technologies: dict[str, int] = {}
+        top_domains: dict[str, int] = {}
+        content_types: dict[str, int] = {}
+        confidence_distribution: dict[str, int] = {"high": 0, "medium": 0, "low": 0}
+
+        summary: dict[str, Any] = {
             "total_files": len(results),
             "files_with_suggestions": 0,
-            "top_technologies": {},
-            "top_domains": {},
-            "content_types": {},
-            "confidence_distribution": {"high": 0, "medium": 0, "low": 0},
+            "top_technologies": top_technologies,
+            "top_domains": top_domains,
+            "content_types": content_types,
+            "confidence_distribution": confidence_distribution,
         }
 
         for _file_path, classifications in results.items():

@@ -29,6 +29,10 @@ class KnowledgeMetadata(BaseModel):
     type: str = Field(
         default="prompt", description="Content type: prompt, code, concept, resource"
     )
+    category: str = Field(
+        default="prompt",
+        description="Content category (alias for type for compatibility)",
+    )
     status: str = Field(
         default="draft", description="Status: draft, tested, production, deprecated"
     )

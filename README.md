@@ -328,7 +328,7 @@ CKC implements a revolutionary pure tag-centered architecture:
 # Experience tag-centered migration
 ./demo/tag_centered_demo.sh
 
-# Try automated classification  
+# Try automated classification
 ./demo/demo.sh
 
 # Multi-team collaboration
@@ -359,7 +359,7 @@ We welcome contributions! Please see our [Contributing Guide](https://claude-kno
 
 ---
 
-**Welcome to the cognitive revolution!**  
+**Welcome to the cognitive revolution!**
 *No more "which category?" decisions - experience pure, discoverable knowledge management.*
 
 *Built with ❤️ by the Claude community*

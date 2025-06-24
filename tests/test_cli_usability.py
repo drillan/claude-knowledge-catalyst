@@ -7,10 +7,9 @@ from unittest.mock import Mock, patch
 
 import pytest
 import typer
-from typer.testing import CliRunner
-
 from claude_knowledge_catalyst.cli.main import app
 from claude_knowledge_catalyst.core.config import CKCConfig, SyncTarget
+from typer.testing import CliRunner
 
 
 class TestCLIWizard:
@@ -340,7 +339,8 @@ class TestInteractiveTagManager:
         """Test tag suggestions for Python content."""
         # Create Python file
         test_file = tmp_path / "test_script.py"
-        test_file.write_text("""
+        test_file.write_text(
+            """
 # Python Script
 import os
 import sys
@@ -350,7 +350,8 @@ def main():
 
 if __name__ == "__main__":
     main()
-""")
+"""
+        )
 
         # Create mock metadata and get suggestions
         from claude_knowledge_catalyst.core.metadata import KnowledgeMetadata
@@ -519,7 +520,8 @@ class TestObsidianQueryBuilder:
         # Test that function exists and is callable
         assert callable(interactive_search_session)
 
-        # For error handling testing of complex interactive flows, simplified testing is sufficient
+        # For error handling testing of complex interactive flows, simplified \
+        # testing is sufficient
 
 
 class TestInteractiveUsabilityIntegration:

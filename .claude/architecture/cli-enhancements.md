@@ -62,7 +62,7 @@ CKCのCLIコマンドとして`smart-sync`機能を実装し、カスタムス�
 #### コマンド構造
 ```bash
 uv run ckc smart-sync [OPTIONS]
-uv run ckc classify-missing [OPTIONS]  
+uv run ckc classify-missing [OPTIONS]
 uv run ckc scan-metadata [OPTIONS]
 ```
 
@@ -132,7 +132,7 @@ def classify_files_batch(files: list[Path]) -> list[ClassificationResult]:
 
 ### Phase 3: メタデータ適用
 ```python
-def apply_metadata_batch(classifications: list[ClassificationResult], 
+def apply_metadata_batch(classifications: list[ClassificationResult],
                         backup: bool = True) -> BatchResult:
     """
     安全なバッチメタデータ適用
@@ -203,7 +203,7 @@ smart_sync:
 - **既存システム活用** - 車輪の再発明なし
 - **保守性向上** - 単一コードベースでの管理
 
-### ユーザーエクスペリエンス  
+### ユーザーエクスペリエンス
 - **簡単アクセス** - `/ckc-smart-sync`で即座実行
 - **柔軟な実行** - オプションによる細かい制御
 - **統合ヘルプ** - `--help`での包括的ガイド

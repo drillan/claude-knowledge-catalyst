@@ -32,7 +32,7 @@ class UsageStatisticsCollector:
 
     def track_operation(
         self, operation: str, duration: float, metadata: dict | None = None
-    ):
+    ) -> None:
         """Track a CKC operation with timing."""
         log_entry = {
             "timestamp": datetime.now().isoformat(),
@@ -43,7 +43,7 @@ class UsageStatisticsCollector:
 
         self._append_to_log(self.usage_log_path, log_entry)
 
-    def track_file_access(self, file_path: Path, access_type: str):
+    def track_file_access(self, file_path: Path, access_type: str) -> None:
         """Track file access patterns."""
         # Try to make path relative to vault, fallback to absolute path
         try:
@@ -63,7 +63,7 @@ class UsageStatisticsCollector:
 
     def track_performance_metric(
         self, metric_name: str, value: float, context: dict | None = None
-    ):
+    ) -> None:
         """Track performance metrics."""
         log_entry = {
             "timestamp": datetime.now().isoformat(),
@@ -101,7 +101,7 @@ class UsageStatisticsCollector:
         """Analyze operation statistics."""
         operations = self._load_log_entries(self.usage_log_path, cutoff_date)
 
-        analysis = {
+        analysis: dict[str, Any] = {
             "total_operations": len(operations),
             "operation_types": Counter(),
             "average_duration": {},
@@ -142,16 +142,26 @@ class UsageStatisticsCollector:
         """Analyze file access patterns."""
         accesses = self._load_log_entries(self.interaction_log_path, cutoff_date)
 
-        analysis = {
+        access_types: Counter[str] = Counter()
+        most_accessed_files: Counter[str] = Counter()
+        directory_activity: Counter[str] = Counter()
+        hourly_patterns: defaultdict[int, int] = defaultdict(int)
+        daily_patterns: defaultdict[str, int] = defaultdict(int)
+        by_type_and_hour: defaultdict[str, defaultdict[int, int]] = defaultdict(
+            lambda: defaultdict(int)
+        )
+        file_size_distribution: dict[str, int] = {"small": 0, "medium": 0, "large": 0}
+
+        analysis: dict[str, Any] = {
             "total_accesses": len(accesses),
-            "access_types": Counter(),
-            "most_accessed_files": Counter(),
-            "file_size_distribution": {"small": 0, "medium": 0, "large": 0},
-            "directory_activity": Counter(),
+            "access_types": access_types,
+            "most_accessed_files": most_accessed_files,
+            "file_size_distribution": file_size_distribution,
+            "directory_activity": directory_activity,
             "access_patterns": {
-                "hourly": defaultdict(int),
-                "daily": defaultdict(int),
-                "by_type_and_hour": defaultdict(lambda: defaultdict(int)),
+                "hourly": hourly_patterns,
+                "daily": daily_patterns,
+                "by_type_and_hour": by_type_and_hour,
             },
         }
 
@@ -204,16 +214,18 @@ class UsageStatisticsCollector:
         """Analyze performance metrics."""
         metrics = self._load_log_entries(self.performance_log_path, cutoff_date)
 
-        analysis = {
+        metric_types: Counter[str] = Counter()
+        performance_trends: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+        metric_values: defaultdict[str, list[float]] = defaultdict(list)
+
+        analysis: dict[str, Any] = {
             "metrics_collected": len(metrics),
-            "metric_types": Counter(),
-            "performance_trends": defaultdict(list),
+            "metric_types": metric_types,
+            "performance_trends": performance_trends,
             "performance_summary": {},
             "bottlenecks": [],
             "optimization_opportunities": [],
         }
-
-        metric_values = defaultdict(list)
 
         for metric in metrics:
             metric_name = metric["metric"]
@@ -445,7 +457,7 @@ class UsageStatisticsCollector:
         if not operations and not accesses:
             return 0
 
-        score = 0
+        score: float = 0
 
         # Base score from activity volume
         total_activities = len(operations) + len(accesses)
@@ -535,7 +547,10 @@ class UsageStatisticsCollector:
                         "priority": "high",
                         "category": "performance",
                         "title": "Address Performance Bottlenecks",
-                        "description": f"Found {len(high_severity)} high-severity performance issues",
+                        "description": (
+                            f"Found {len(high_severity)} high-severity "
+                            "performance issues"
+                        ),
                         "action": "Optimize operations: "
                         + ", ".join(b["metric"] for b in high_severity[:3]),
                     }
@@ -555,8 +570,13 @@ class UsageStatisticsCollector:
                         "priority": "medium",
                         "category": "efficiency",
                         "title": "Optimize Slow Operations",
-                        "description": f"Operations taking >5s: {', '.join(slow_operations[:3])}",
-                        "action": "Review and optimize slow operations for better user experience",
+                        "description": (
+                            f"Operations taking >5s: {', '.join(slow_operations[:3])}"
+                        ),
+                        "action": (
+                            "Review and optimize slow operations for better "
+                            "user experience"
+                        ),
                     }
                 )
 
@@ -570,8 +590,13 @@ class UsageStatisticsCollector:
                     "priority": "low",
                     "category": "productivity",
                     "title": "Improve Productivity Score",
-                    "description": f"Current productivity score: {productivity.get('productivity_score', 0):.1f}/100",
-                    "action": "Consider workflow optimization and feature usage training",
+                    "description": (
+                        f"Current productivity score: "
+                        f"{productivity.get('productivity_score', 0):.1f}/100"
+                    ),
+                    "action": (
+                        "Consider workflow optimization and feature usage training"
+                    ),
                 }
             )
 
@@ -599,7 +624,7 @@ class UsageStatisticsCollector:
 
         return entries
 
-    def _append_to_log(self, log_path: Path, entry: dict):
+    def _append_to_log(self, log_path: Path, entry: dict) -> None:
         """Append entry to log file."""
         try:
             with open(log_path, "a", encoding="utf-8") as f:
@@ -607,7 +632,7 @@ class UsageStatisticsCollector:
         except OSError:
             pass  # Fail silently for logging
 
-    def cleanup_old_logs(self, days_to_keep: int = 90):
+    def cleanup_old_logs(self, days_to_keep: int = 90) -> None:
         """Clean up old log entries."""
         cutoff_date = datetime.now() - timedelta(days=days_to_keep)
 

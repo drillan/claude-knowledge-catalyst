@@ -13,7 +13,7 @@ from .hybrid_config import NumberingSystem
 class ConfigMigrationManager:
     """Manages configuration file migrations between versions."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.migration_handlers = {
             "1.0": self._migrate_v1_to_v2,
             "unknown": self._migrate_unknown_to_v2,
@@ -209,7 +209,9 @@ class ConfigMigrationManager:
 
         return backup_path
 
-    def _log_migration(self, from_version: str, to_version: str, config_path: Path):
+    def _log_migration(
+        self, from_version: str, to_version: str, config_path: Path
+    ) -> None:
         """Log migration details."""
         {
             "timestamp": datetime.now().isoformat(),
@@ -222,9 +224,10 @@ class ConfigMigrationManager:
         # Could implement persistent logging here
         print(f"✅ Configuration migrated: {from_version} → {to_version}")
 
-    def _show_migration_message(self, from_version: str, to_version: str):
+    def _show_migration_message(self, from_version: str, to_version: str) -> None:
         """Show migration completion message to user."""
-        print(f"""
+        print(
+            f"""
 🔄 CKC設定ファイルを自動更新しました
 
 📋 変更内容:
@@ -238,7 +241,8 @@ class ConfigMigrationManager:
 
 💡 ハイブリッド構造を有効にする:
   uv run ckc init --structure hybrid
-        """)
+        """
+        )
 
 
 class ConfigCompatibilityValidator:
@@ -274,7 +278,8 @@ class ConfigCompatibilityValidator:
                     and not config.hybrid_structure.enabled
                 ):
                     issues.append(
-                        "Obsidian sync target may not work without hybrid or legacy support"
+                        "Obsidian sync target may not work without hybrid or "
+                        "legacy support"
                     )
 
         # Check numbering system consistency
@@ -282,7 +287,8 @@ class ConfigCompatibilityValidator:
             if config.hybrid_structure.numbering_system == NumberingSystem.SEQUENTIAL:
                 if not config.hybrid_structure.legacy_support:
                     issues.append(
-                        "Sequential numbering without legacy support may cause confusion"
+                        "Sequential numbering without legacy support may cause "
+                        "confusion"
                     )
 
         return issues

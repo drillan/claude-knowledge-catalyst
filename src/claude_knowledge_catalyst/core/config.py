@@ -83,7 +83,10 @@ class WatchConfig(BaseModel):
     )
     claude_md_sections_exclude: list[str] = Field(
         default=[],
-        description="Section headers to exclude from CLAUDE.md sync (e.g., '# secrets', '# private')",
+        description=(
+            "Section headers to exclude from CLAUDE.md sync "
+            "(e.g., '# secrets', '# private')"
+        ),
     )
 
 
@@ -169,7 +172,7 @@ class CKCConfig(BaseModel):
         try:
             return Path(v).resolve()
         except (FileNotFoundError, OSError):
-            # If path can't be resolved (e.g., during testing or if directory doesn't exist),
+            # If path can't be resolved (e.g., during testing or if dir doesn't exist),
             # return the path as-is to avoid breaking config loading
             return Path(v)
 

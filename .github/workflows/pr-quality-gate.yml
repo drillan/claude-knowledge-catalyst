@@ -14,26 +14,26 @@ jobs:
     name: Quality Gate Checks
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
-    
+
     steps:
     - name: Checkout PR code
       uses: actions/checkout@v4
       with:
         ref: ${{ github.event.pull_request.head.sha }}
         fetch-depth: 0
-        
+
     - name: Install uv
       uses: astral-sh/setup-uv@v3
       with:
         version: "latest"
-        
+
     - name: Set up Python 3.11
       run: uv python install 3.11
-      
+
     - name: Install dependencies
       run: |
         uv sync --dev
-        
+
     - name: Check for secrets in code
       run: |
         # Simple check for common secret patterns
@@ -42,7 +42,7 @@ jobs:
           grep -r -i "api[_-]key\|secret\|password\|token" src/ --include="*.py" | grep -v "# nosec" | grep -v "test" || true
           exit 1
         fi
-        
+
     - name: Lint check (blocking)
       run: |
         echo "## 🔍 Linting Results" >> $GITHUB_STEP_SUMMARY
@@ -52,7 +52,7 @@ jobs:
           echo "❌ Linting issues found - please fix before merging" >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
-        
+
     - name: Format check (blocking)
       run: |
         echo "## 🎨 Code Formatting" >> $GITHUB_STEP_SUMMARY
@@ -63,7 +63,7 @@ jobs:
           echo "Run: \`uv run ruff format src/ tests/\` to fix" >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
-        
+
     - name: Type check (non-blocking)
       run: |
         echo "## 🔤 Type Checking" >> $GITHUB_STEP_SUMMARY
@@ -73,15 +73,15 @@ jobs:
           echo "⚠️ Type checking issues found (non-blocking)" >> $GITHUB_STEP_SUMMARY
         fi
       continue-on-error: true
-        
+
     - name: Test coverage check
       run: |
         echo "## 📊 Test Coverage" >> $GITHUB_STEP_SUMMARY
         coverage_output=$(uv run pytest tests/ --cov=src --cov-report=term-missing --quiet 2>&1 || true)
         coverage_percent=$(echo "$coverage_output" | grep "TOTAL" | awk '{print $4}' | sed 's/%//' || echo "0")
-        
+
         echo "Current coverage: ${coverage_percent}%" >> $GITHUB_STEP_SUMMARY
-        
+
         if [ "${coverage_percent}" -lt 25 ]; then
           echo "❌ Coverage too low (${coverage_percent}% < 25%)" >> $GITHUB_STEP_SUMMARY
           echo "Please add tests to improve coverage" >> $GITHUB_STEP_SUMMARY
@@ -92,7 +92,7 @@ jobs:
         else
           echo "✅ Good test coverage (${coverage_percent}%)" >> $GITHUB_STEP_SUMMARY
         fi
-        
+
     - name: Essential features test (blocking)
       run: |
         echo "## 🎯 Essential Features Test" >> $GITHUB_STEP_SUMMARY
@@ -103,7 +103,7 @@ jobs:
           echo "Critical user workflows are broken - please fix" >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
-        
+
     - name: Integration test check (non-blocking)
       run: |
         echo "## 🔗 Integration Tests" >> $GITHUB_STEP_SUMMARY
@@ -113,7 +113,7 @@ jobs:
           echo "⚠️ Some integration tests failing (non-blocking for PR)" >> $GITHUB_STEP_SUMMARY
         fi
       continue-on-error: true
-        
+
     - name: Build test (blocking)
       run: |
         echo "## 📦 Package Build" >> $GITHUB_STEP_SUMMARY
@@ -123,7 +123,7 @@ jobs:
           echo "❌ Package build failed" >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
-        
+
     - name: CLI smoke test (blocking)
       run: |
         echo "## 🖥️ CLI Functionality" >> $GITHUB_STEP_SUMMARY
@@ -139,25 +139,25 @@ jobs:
     name: Security Scan
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
         ref: ${{ github.event.pull_request.head.sha }}
-        
+
     - name: Install uv
       uses: astral-sh/setup-uv@v3
       with:
         version: "latest"
-        
+
     - name: Set up Python 3.11
       run: uv python install 3.11
-      
+
     - name: Install dependencies
       run: |
         uv sync --dev
-        
+
     - name: Security check with bandit
       run: |
         echo "## 🔒 Security Scan" >> $GITHUB_STEP_SUMMARY
@@ -168,7 +168,7 @@ jobs:
           echo "Please review bandit report" >> $GITHUB_STEP_SUMMARY
         fi
       continue-on-error: true
-        
+
     - name: Dependency vulnerability check
       run: |
         if uv run safety check --json --output safety-report.json; then
@@ -183,18 +183,18 @@ jobs:
     name: Changelog Check
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
         ref: ${{ github.event.pull_request.head.sha }}
         fetch-depth: 0
-        
+
     - name: Check for changelog update
       run: |
         echo "## 📝 Changelog Check" >> $GITHUB_STEP_SUMMARY
-        
+
         # Check if CHANGELOG.md was modified
         if git diff --name-only origin/main...HEAD | grep -q "CHANGELOG.md"; then
           echo "✅ Changelog updated" >> $GITHUB_STEP_SUMMARY
@@ -202,7 +202,7 @@ jobs:
           echo "⚠️ Consider updating CHANGELOG.md for significant changes" >> $GITHUB_STEP_SUMMARY
           echo "This is not blocking, but helps with release notes" >> $GITHUB_STEP_SUMMARY
         fi
-        
+
         # Check for breaking changes markers
         if git log --oneline origin/main...HEAD | grep -i "break\|major\|!:"; then
           echo "🚨 Potential breaking changes detected" >> $GITHUB_STEP_SUMMARY
@@ -214,28 +214,28 @@ jobs:
     runs-on: ubuntu-latest
     needs: [quality-checks, security-scan, changelog-check]
     if: always() && github.event.pull_request.draft == false
-    
+
     steps:
     - name: Generate PR Summary
       run: |
         echo "## 📋 Pull Request Quality Gate Summary" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        
+
         if [ "${{ needs.quality-checks.result }}" = "success" ]; then
           echo "✅ **Quality Checks**: Passed" >> $GITHUB_STEP_SUMMARY
         else
           echo "❌ **Quality Checks**: Failed" >> $GITHUB_STEP_SUMMARY
         fi
-        
+
         if [ "${{ needs.security-scan.result }}" = "success" ] || [ "${{ needs.security-scan.result }}" = "skipped" ]; then
           echo "✅ **Security Scan**: No blocking issues" >> $GITHUB_STEP_SUMMARY
         else
           echo "⚠️ **Security Scan**: Issues found (review recommended)" >> $GITHUB_STEP_SUMMARY
         fi
-        
+
         echo "✅ **Changelog**: Checked" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        
+
         if [ "${{ needs.quality-checks.result }}" = "success" ]; then
           echo "🎉 **This PR is ready for review and merge!**" >> $GITHUB_STEP_SUMMARY
         else

@@ -538,7 +538,7 @@ uv run pytest --tb=short  # 147 passed確認
 # 解決: float()変換を追加
 score_float = float(score) if not isinstance(score, (int, float)) else score
 
-# 問題2: tuple unpacking順序エラー  
+# 問題2: tuple unpacking順序エラー
 # 確認: YAKEは(text, score)でなく(score, text)を返す場合がある
 keywords = yake_extractor.extract_keywords(text)
 for keyword, score in keywords:  # 順序要確認
@@ -585,7 +585,7 @@ git push origin --delete v1.2.3
 ```bash
 # PRマージ前の必須チェック (blocking)
 uv run ruff check src/ tests/                    # Lint errors
-uv run ruff format --check src/ tests/           # Format errors  
+uv run ruff format --check src/ tests/           # Format errors
 uv run pytest tests/test_essential_features.py   # Essential tests
 uv build                                         # Package build
 uv run pytest --cov=src --cov-report=term | grep "TOTAL.*[2-5][0-9]%"  # Coverage ≥25%
@@ -625,14 +625,14 @@ echo "✅ Security clean: $(uv run bandit -r src/ -q && echo 'PASS' || echo 'FAI
 
 # セマンティックバージョン判定
 echo "📋 Version increment guidance:"
-echo "- patch (x.x.X): Bug fixes, documentation"  
+echo "- patch (x.x.X): Bug fixes, documentation"
 echo "- minor (x.X.x): New features, backward compatible"
 echo "- major (X.x.x): Breaking changes"
 
 # リリースノート準備
 echo "📝 Release notes template:"
 echo "## New Features"
-echo "## Bug Fixes" 
+echo "## Bug Fixes"
 echo "## Breaking Changes"
 echo "## Documentation"
 ```
@@ -670,8 +670,8 @@ gh run rerun <run_id>
 
 # 5. ローカルでの CI 環境再現
 docker run --rm -v $(pwd):/workspace -w /workspace python:3.11 bash -c "
-    pip install uv && 
-    uv sync --dev && 
+    pip install uv &&
+    uv sync --dev &&
     uv run pytest --tb=short
 "
 ```

@@ -70,7 +70,7 @@ export const Component: React.FC<ComponentProps> = ({ props }) => {
   // Hooks
   // Event handlers
   // Render logic
-  
+
   return (
     // JSX
   );
@@ -101,7 +101,7 @@ export const Component: React.FC<ComponentProps> = ({ props }) => {
 - **Don't**: Store sensitive data in logs
 - **Don't**: Use synchronous operations for I/O bound tasks
 
-### Frontend  
+### Frontend
 - **Don't**: Mutate state directly in React
 - **Don't**: Use any type in TypeScript
 - **Don't**: Skip error boundaries for component error handling

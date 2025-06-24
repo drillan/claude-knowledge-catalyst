@@ -7,7 +7,7 @@
 ## 🎯 純粋タグ中心システム体験
 
 ### 1. メインデモ (`demo.sh`) ⭐ 推奨
-**所要時間:** 4-5分  
+**所要時間:** 4-5分
 **内容:** 純粋タグ中心知識管理システムの革新的アプローチを体験
 
 ```bash
@@ -31,7 +31,7 @@
 - 🆕 多言語コンテンツ（YAKE統合デモ用、English + Japanese）
 
 ### 🆕 2. Obsidian移行デモ (`tag_centered_demo.sh`) ⭐ Obsidian強化体験
-**所要時間:** 8-10分  
+**所要時間:** 8-10分
 **内容:** 既存ObsidianボルトをCKCの7次元タグシステムで革命的に強化
 
 ```bash
@@ -54,7 +54,7 @@
 5. 移行前後の詳細比較とメリット分析
 
 ### 3. マルチチーム協業デモ (`multi_project_demo.sh`) ⭐ チーム体験
-**所要時間:** 7-8分  
+**所要時間:** 7-8分
 **内容:** 複数チームでの純粋タグ中心知識共有システム
 
 ```bash
@@ -146,7 +146,7 @@ WHERE contains(string(tags), "automation")
 
 **cleanup.shが削除する内容：**
 - `my_project/`, `my_vault/` - メインデモアーティファクト
-- `obsidian_vault/`, `enhanced_ckc_vault/`, `ckc_project/` - 移行デモアーティファクト  
+- `obsidian_vault/`, `enhanced_ckc_vault/`, `ckc_project/` - 移行デモアーティファクト
 - `frontend_team/`, `backend_team/`, `shared_vault/` - マルチチームデモアーティファクト
 - 一時ファイル（*.log, *.tmp, .DS_Store）
 
@@ -199,5 +199,5 @@ WHERE contains(string(tags), "automation")
 
 ---
 
-**Welcome to the cognitive revolution!**  
+**Welcome to the cognitive revolution!**
 もう「どのカテゴリ？」と悩む必要はありません - 純粋で発見可能な知識管理を体験してください。

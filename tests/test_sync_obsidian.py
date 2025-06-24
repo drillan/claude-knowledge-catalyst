@@ -7,7 +7,6 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
-
 from claude_knowledge_catalyst.core.config import SyncTarget
 from claude_knowledge_catalyst.core.metadata import KnowledgeMetadata, MetadataManager
 from claude_knowledge_catalyst.sync.obsidian import ObsidianVaultManager
@@ -95,7 +94,8 @@ class TestObsidianVaultManager:
         # Create source file
         source_file = temp_vault_path.parent / "source.md"
         source_file.parent.mkdir(exist_ok=True)
-        source_file.write_text("""---
+        source_file.write_text(
+            """---
 title: "Test File"
 tags: ["test", "example"]
 category: "prompt"
@@ -103,7 +103,8 @@ category: "prompt"
 
 # Test Content
 This is a test file.
-""")
+"""
+        )
 
         # Setup metadata
         metadata = KnowledgeMetadata(
@@ -126,7 +127,8 @@ This is a test file.
 
         assert result is True
         # File should be placed in knowledge directory based on status
-        # Check that a file was created in the knowledge directory (filename will be generated)
+        # Check that a file was created in the knowledge directory (filename will \
+        # be generated)
         knowledge_files = list((temp_vault_path / "knowledge").glob("*.md"))
         assert len(knowledge_files) == 1
 
@@ -135,13 +137,15 @@ This is a test file.
         # Create source file
         source_file = temp_vault_path.parent / "inbox_file.md"
         source_file.parent.mkdir(exist_ok=True)
-        source_file.write_text("""---
+        source_file.write_text(
+            """---
 title: "Inbox File"
 tags: ["inbox", "unprocessed"]
 ---
 
 # Temporary Content
-""")
+"""
+        )
 
         # Setup metadata with inbox tags
         metadata = KnowledgeMetadata(title="Inbox File", tags=["inbox", "unprocessed"])
@@ -164,7 +168,8 @@ tags: ["inbox", "unprocessed"]
 
     def test_get_target_directory_by_category(self, vault_manager):
         """Test target directory determination by category."""
-        # This functionality is handled internally by _determine_target_path based on status
+        # This functionality is handled internally by _determine_target_path based \
+        # on status
         # Testing with actual metadata objects instead
         metadata_production = KnowledgeMetadata(title="Production", status="production")
         target_path = vault_manager._determine_target_path(

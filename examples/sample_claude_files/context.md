@@ -28,7 +28,7 @@ This project is a web application built with FastAPI and React that helps users 
 
 ## Team Structure
 - 2 Backend developers
-- 2 Frontend developers  
+- 2 Frontend developers
 - 1 DevOps engineer
 - 1 Product manager
 

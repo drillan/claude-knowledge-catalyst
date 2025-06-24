@@ -20,7 +20,7 @@ uv run pytest --cov                   # With coverage
 
 # Code quality checks (run before commits)
 uv run ruff check src/ tests/          # Lint code
-uv run ruff format src/ tests/         # Format code  
+uv run ruff format src/ tests/         # Format code
 uv run mypy src/                       # Type checking
 
 # Run the CLI application
@@ -98,7 +98,7 @@ src/claude_knowledge_catalyst/
 
 ### Testing Strategy
 - **Unit tests**: Test individual components in isolation
-- **Integration tests**: Test sync operations and CLI workflows  
+- **Integration tests**: Test sync operations and CLI workflows
 - **Mock external dependencies**: Use pytest fixtures for file systems
 - **Coverage target**: Maintain reasonable test coverage (currently ~28%)
 
@@ -108,4 +108,3 @@ src/claude_knowledge_catalyst/
 - **Async/await**: For I/O operations where applicable
 - **Rich console**: For all CLI output and formatting
 - **pathlib.Path**: For all file operations (not os.path)
-

@@ -105,7 +105,7 @@ function DataProcessor({ items }) {
     return items.filter(item => item.active)
                 .sort((a, b) => a.priority - b.priority);
   }, [items]);
-  
+
   return <DataList data={processedData} />;
 }
 ```
@@ -117,7 +117,7 @@ function ParentComponent({ onItemClick }) {
     onItemClick(itemId);
     analytics.track('item_clicked');
   }, [onItemClick]);
-  
+
   return <ChildComponent onClick={handleClick} />;
 }
 ```
@@ -349,7 +349,7 @@ jobs:
 resource "aws_instance" "web" {
   ami           = "ami-0c55b159cbfafe1d0"
   instance_type = "t2.micro"
-  
+
   tags = {
     Name = "WebServer"
     Environment = "production"
@@ -475,7 +475,7 @@ if [ -d "../enhanced_ckc_vault" ]; then
     echo "├── archive/          # Deprecated content"
     echo "└── knowledge/        # Mature content (90% of files)"
     echo ""
-    
+
     echo "📁 Generated Structure:"
     find "../enhanced_ckc_vault" -type d -name "*" | head -8 | sort
     echo ""
@@ -529,7 +529,7 @@ if [ -d "$template_dir" ]; then
         echo "  📄 $(basename "$template_file")"
     done
     echo ""
-    
+
     # Show a sample enhanced template
     if [ -f "$template_dir/prompt_template.md" ]; then
         echo "📄 Sample Enhanced Template (prompt_template.md):"

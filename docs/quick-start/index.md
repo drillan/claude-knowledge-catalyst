@@ -158,7 +158,7 @@ git pull origin main
 ```bash
 # プロンプトファイルを作成
 echo "---
-title: API設計レビュープロンプト  
+title: API設計レビュープロンプト
 type: prompt
 ---
 
@@ -269,7 +269,7 @@ Obsidianボルトに自動生成される検索クエリ：
 # 高成功率プロンプト
 ```dataview
 TABLE success_rate, tech, updated
-FROM #prompt 
+FROM #prompt
 WHERE success_rate > 80
 SORT success_rate DESC
 ```
@@ -287,7 +287,7 @@ WHERE type = "code" AND status = "production"
 # 技術別知識
 #tech/python AND #status/production
 
-# チーム別知識  
+# チーム別知識
 #team/backend AND #complexity/intermediate
 
 # ドメイン横断
@@ -302,7 +302,7 @@ WHERE type = "code" AND status = "production"
    ```bash
    # 設定確認
    uv run ckc status
-   
+
    # 手動同期
    uv run ckc sync --force
    ```
@@ -317,7 +317,7 @@ WHERE type = "code" AND status = "production"
    ```bash
    # パス確認
    uv run ckc config get sync_targets
-   
+
    # パス更新
    uv run ckc config set sync_targets.0.path "/correct/path"
    ```
@@ -348,5 +348,5 @@ WHERE type = "code" AND status = "production"
 
 ---
 
-**🎉 おめでとうございます！**  
+**🎉 おめでとうございます！**
 Claude Code ⇄ Obsidian統合が完了しました。開発プロセスで生まれる知見が自動的にObsidianで構造化され、長期的な知識資産として活用できます。

@@ -34,17 +34,17 @@ graph TB
     Core --> Metadata[Metadata Processing]
     Core --> Watcher[File Watcher]
     Core --> ClaudeMD[CLAUDE.md Processor]
-    
+
     Core --> Sync[Sync System]
     Sync --> Obsidian[Obsidian Integration]
     Sync --> Templates[Template System]
-    
+
     Core --> Analytics[Analytics]
     Analytics --> AUTO[Automation Assistant]
-    
+
     Watcher --> ClaudeMD
     ClaudeMD --> Metadata
-    
+
     style CLI fill:#e1f5fe
     style Core fill:#f3e5f5
     style Sync fill:#e8f5e8
@@ -157,19 +157,19 @@ git push origin feature/new-feature
 # Good: 明確な型アノテーション
 def extract_metadata(file_path: Path) -> Dict[str, Any]:
     """ファイルからメタデータを抽出します。
-    
+
     Args:
         file_path: 処理するファイルのパス
-        
+
     Returns:
         抽出されたメタデータの辞書
-        
+
     Raises:
         FileNotFoundError: ファイルが存在しない場合
     """
     if not file_path.exists():
         raise FileNotFoundError(f"File not found: {file_path}")
-    
+
     return {"title": "example", "tags": ["python"]}
 
 # Good: Pydanticモデルの使用
@@ -189,12 +189,12 @@ from claude_knowledge_catalyst.core.metadata import MetadataExtractor
 
 class TestMetadataExtractor:
     """メタデータ抽出のテストクラス"""
-    
+
     @pytest.fixture
     def extractor(self):
         """テスト用のメタデータ抽出器を作成"""
         return MetadataExtractor()
-    
+
     def test_extract_from_markdown(self, extractor, tmp_path):
         """Markdownファイルからのメタデータ抽出をテスト"""
         # Arrange
@@ -206,10 +206,10 @@ tags: [test, example]
 
 # Test Content
 """)
-        
+
         # Act
         result = extractor.extract_from_file(markdown_file)
-        
+
         # Assert
         assert result["title"] == "Test Document"
         assert "test" in result["tags"]
@@ -234,16 +234,16 @@ graph TD
     Config[WatchConfig] --> Watcher[KnowledgeWatcher]
     Watcher --> Handler[KnowledgeFileEventHandler]
     Handler --> Processor[ClaudeMdProcessor]
-    
+
     Processor --> Filter[Section Filtering]
     Processor --> Meta[Metadata Generation]
-    
+
     Filter --> Content[Filtered Content]
     Meta --> Enhanced[Enhanced Metadata]
-    
+
     Content --> Sync[Obsidian Sync]
     Enhanced --> Sync
-    
+
     style Config fill:#e3f2fd
     style Processor fill:#ffecb3
     style Filter fill:#f3e5f5
@@ -257,7 +257,7 @@ graph TD
 ```python
 class ClaudeMdProcessor:
     """CLAUDE.md専用プロセッサー"""
-    
+
     def __init__(self, sections_exclude: list[str] | None = None):
         """除外セクションを指定して初期化"""
         self.sections_exclude = sections_exclude or []
@@ -265,11 +265,11 @@ class ClaudeMdProcessor:
             re.compile(rf"^{re.escape(section.strip())}$", re.IGNORECASE)
             for section in self.sections_exclude
         ]
-    
+
     def process_claude_md(self, file_path: Path) -> str:
         """CLAUDE.mdを処理してフィルタリング済み内容を返す"""
         # セクションフィルタリングロジック
-        
+
     def get_metadata_for_claude_md(self, file_path: Path) -> dict[str, Any]:
         """CLAUDE.md専用メタデータを生成"""
         # メタデータ生成ロジック
@@ -280,12 +280,12 @@ class ClaudeMdProcessor:
 ```python
 class WatchConfig(BaseModel):
     """ファイル監視設定"""
-    
+
     # 既存設定...
-    
+
     # CLAUDE.md関連設定
     include_claude_md: bool = Field(
-        default=False, 
+        default=False,
         description="CLAUDE.md同期の有効/無効"
     )
     claude_md_patterns: list[str] = Field(
@@ -303,13 +303,13 @@ class WatchConfig(BaseModel):
 ```python
 class KnowledgeFileEventHandler(FileSystemEventHandler):
     """ファイルイベントハンドラー"""
-    
+
     def __init__(self, watch_config: WatchConfig, ...):
         # CLAUDE.mdプロセッサーを初期化
         self.claude_md_processor = ClaudeMdProcessor(
             sections_exclude=watch_config.claude_md_sections_exclude
         )
-    
+
     def _should_process_file(self, file_path: Path) -> bool:
         """ファイル処理対象判定"""
         # CLAUDE.mdパターンチェック
@@ -338,7 +338,7 @@ def _filter_sections(self, content: str) -> str:
     lines = content.split('\n')
     filtered_lines = []
     skip_section = False
-    
+
     for line in lines:
         if line.strip().startswith('#'):
             # セクションヘッダー検出
@@ -349,7 +349,7 @@ def _filter_sections(self, content: str) -> str:
             # セクション内容の処理
             if not skip_section:
                 filtered_lines.append(line)
-    
+
     return '\n'.join(filtered_lines)
 ```
 
@@ -370,16 +370,16 @@ self.exclude_patterns = [
 ```python
 class TestClaudeMdProcessor:
     """CLAUDE.mdプロセッサーのテスト"""
-    
+
     def test_section_filtering_case_insensitive(self):
         """大文字小文字を区別しないセクション除外"""
         processor = ClaudeMdProcessor(["# Secrets", "# Private"])
         # 大文字小文字の異なるセクションでテスト
-        
+
     def test_empty_file_handling(self):
         """空ファイルの処理"""
         # 空のCLAUDE.mdファイルは同期されないことを確認
-        
+
     def test_metadata_generation(self):
         """メタデータ生成のテスト"""
         # プロジェクト情報、セクション解析のテスト
@@ -390,11 +390,11 @@ class TestClaudeMdProcessor:
 ```python
 class TestCLAUDEMDIntegration:
     """CLAUDE.md機能の統合テスト"""
-    
+
     def test_watch_integration(self):
         """ファイル監視との統合テスト"""
         # 実際のファイル変更をシミュレート
-        
+
     def test_obsidian_sync_integration(self):
         """Obsidian同期との統合テスト"""
         # フィルタリングされたコンテンツが正しく同期されることを確認
@@ -430,7 +430,7 @@ def should_sync_claude_md(self, file_path: Path) -> bool:
 今後、以下のセクションを順次追加予定です：
 
 - **Architecture** - 詳細なアーキテクチャ解説
-- **Contributing** - 貢献ガイドライン  
+- **Contributing** - 貢献ガイドライン
 - **Development Setup** - 開発環境の詳細設定
 - **Testing** - テスト戦略とベストプラクティス
 - **API Development** - API開発ガイド

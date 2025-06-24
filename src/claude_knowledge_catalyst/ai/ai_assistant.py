@@ -36,7 +36,7 @@ class AIKnowledgeAssistant:
         content = file_path.read_text(encoding="utf-8")
         metadata = self.metadata_manager.extract_metadata_from_file(file_path)
 
-        suggestions = {
+        suggestions: dict[str, Any] = {
             "file_path": str(file_path),
             "timestamp": datetime.now().isoformat(),
             "suggestions": [],
@@ -62,7 +62,7 @@ class AIKnowledgeAssistant:
 
     def suggest_knowledge_organization(self) -> dict[str, Any]:
         """Suggest improvements to overall knowledge organization."""
-        suggestions = {
+        suggestions: dict[str, Any] = {
             "timestamp": datetime.now().isoformat(),
             "organization_suggestions": [],
         }
@@ -383,11 +383,11 @@ class AIKnowledgeAssistant:
 
     def _analyze_vault_structure(self) -> dict[str, Any]:
         """Analyze overall vault structure."""
-        analysis = {
+        analysis: dict[str, Any] = {
             "total_files": 0,
             "directory_distribution": {},
             "tag_usage": {},
-            "category_distribution": {},
+            "type_distribution": {},
             "orphaned_files": [],
             "duplicate_content": [],
         }

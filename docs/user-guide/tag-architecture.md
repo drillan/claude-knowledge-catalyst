@@ -14,12 +14,12 @@ graph TB
     B --> C[従来: 手動分類の悩み]
     C --> C1["「これはプロンプト？コード？」"]
     C --> C2["カテゴリ決定疲労"]
-    
+
     B --> D[CKC: 自動分析]
     D --> E[多次元タグ自動生成]
     E --> F[Obsidian最適化配置]
     F --> G[シームレス統合完了]
-    
+
     style C fill:#ffcccc
     style D fill:#ccffcc
     style G fill:#ccccff
@@ -34,7 +34,7 @@ CKCの自動分析により、以下の7次元でコンテンツが自動分類�
 ```yaml
 # Claude Code開発コンテンツの自動分析例
 type: prompt                           # コンテンツ性質
-tech: [python, fastapi, rest]          # 技術スタック  
+tech: [python, fastapi, rest]          # 技術スタック
 domain: [web-dev, backend]             # アプリケーション領域
 team: [backend, fullstack]             # チーム関連性
 status: tested                         # ライフサイクル状態
@@ -186,7 +186,7 @@ graph TB
     H --> I[メタデータ生成]
     I --> J[Obsidian配置決定]
     J --> K[同期実行]
-    
+
     style D fill:#e1f5fe
     style F fill:#e8f5e8
 ```
@@ -275,7 +275,7 @@ CKCは多次元タグを活用して、Obsidian用の高度なクエリを自動
 ## 高成功率Python プロンプト
 ```
 TABLE success_rate, claude_model, updated, iteration
-FROM #prompt 
+FROM #prompt
 WHERE contains(tech, "python") AND success_rate > 80
 SORT success_rate DESC, updated DESC
 ```
@@ -329,7 +329,7 @@ tags:
   status_tags: ["draft", "tested", "production", "deprecated"]
   complexity_tags: ["beginner", "intermediate", "advanced"]
   confidence_tags: ["low", "medium", "high"]
-  
+
   # プロジェクト特化拡張
   custom_tags:
     business_value: ["low", "medium", "high", "critical"]
@@ -346,7 +346,7 @@ ai:
   confidence_threshold: 0.75
   evidence_tracking: true
   yake_enabled: true  # YAKE統合有効化
-  
+
   # YAKE設定詳細
   yake_config:
     max_ngram_size: 3
@@ -361,7 +361,7 @@ ai:
       german: "de"
       italian: "it"
       portuguese: "pt"
-  
+
   # 特定次元の重み調整
   dimension_weights:
     type: 1.0

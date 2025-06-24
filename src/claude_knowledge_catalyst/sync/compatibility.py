@@ -193,12 +193,14 @@ class BackwardCompatibilityManager:
             # No compatibility actions needed
             return True
 
-    def _suggest_migration(self):
+    def _suggest_migration(self) -> None:
         """Suggest migration to hybrid structure."""
-        print("""
+        print(
+            """
 💡 Migration Suggestion
 
-Your vault is using the legacy structure, but hybrid structure is enabled in configuration.
+Your vault is using the legacy structure, but hybrid structure is enabled in
+configuration.
 Consider migrating to take advantage of improved organization:
 
   uv run ckc migrate --to hybrid --dry-run  # Preview migration
@@ -208,7 +210,8 @@ Benefits of hybrid structure:
 - Better scalability with 10-step numbering
 - Clearer organization with three-tier classification
 - Enhanced automation capabilities
-        """)
+        """
+        )
 
     def validate_compatibility(self) -> list[str]:
         """Validate compatibility and return list of issues."""
@@ -220,7 +223,8 @@ Benefits of hybrid structure:
         if self.config.hybrid_structure.enabled and current_structure == "legacy":
             if not self.config.hybrid_structure.legacy_support:
                 issues.append(
-                    "Hybrid structure enabled but legacy support disabled with legacy vault"
+                    "Hybrid structure enabled but legacy support disabled "
+                    "with legacy vault"
                 )
 
         # Check for conflicting directories
@@ -242,7 +246,8 @@ Benefits of hybrid structure:
                     and legacy_path.resolve() != hybrid_path.resolve()
                 ):
                     issues.append(
-                        f"Conflicting directories: {legacy_path.name} and {hybrid_path.name}"
+                        f"Conflicting directories: {legacy_path.name} and "
+                        f"{hybrid_path.name}"
                     )
 
         return issues
@@ -302,7 +307,7 @@ class MigrationSafetyValidator:
 
     def validate_migration_prerequisites(self) -> dict[str, Any]:
         """Validate prerequisites for migration."""
-        result = {
+        result: dict[str, Any] = {
             "safe_to_migrate": True,
             "warnings": [],
             "errors": [],

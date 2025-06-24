@@ -36,12 +36,14 @@ class TestMetadataScanning:
 
         # File with frontmatter
         with_metadata = claude_dir / "with_metadata.md"
-        with_metadata.write_text("""---
+        with_metadata.write_text(
+            """---
 title: Test File
 tags: [test]
 ---
 # Content
-""")
+"""
+        )
 
         # File without frontmatter
         without_metadata = claude_dir / "without_metadata.md"
@@ -57,12 +59,14 @@ tags: [test]
     def test_has_frontmatter_valid(self, tmp_path):
         """Test frontmatter detection with valid YAML."""
         test_file = tmp_path / "test.md"
-        test_file.write_text("""---
+        test_file.write_text(
+            """---
 title: Test
 tags: [python, testing]
 ---
 # Content here
-""")
+"""
+        )
 
         assert has_frontmatter(test_file) is True
 
@@ -76,9 +80,11 @@ tags: [python, testing]
     def test_has_frontmatter_malformed(self, tmp_path):
         """Test frontmatter detection with malformed YAML."""
         test_file = tmp_path / "test.md"
-        test_file.write_text("""--
+        test_file.write_text(
+            """--
 title: Malformed
-content here""")
+content here"""
+        )
 
         assert has_frontmatter(test_file) is False
 

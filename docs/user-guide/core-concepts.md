@@ -18,7 +18,7 @@ graph TB
     F --> G[知識活用・検索]
     G --> H[開発プロセス改善]
     H --> A
-    
+
     style A fill:#e1f5fe
     style F fill:#f3e5f5
     style D fill:#fff3e0
@@ -108,7 +108,7 @@ graph LR
     A[inbox/] --> B[active/]
     B --> C[knowledge/]
     C --> D[archive/]
-    
+
     A1[新規作成<br/>draft状態] --> A
     B1[プロジェクト使用<br/>tested状態] --> B
     C1[汎用化完了<br/>production状態] --> C
@@ -155,7 +155,7 @@ Obsidian内での知識発見を強化する自動関連付け：
 ## 関連プロンプト
 ```
 TABLE success_rate, tech, updated
-FROM #prompt 
+FROM #prompt
 WHERE contains(tech, "python") AND status = "production"
 SORT success_rate DESC
 ```
@@ -235,7 +235,7 @@ Claude Code開発に特化したObsidianテンプレート：
 ---
 type: prompt
 claude_model: "{{model}}"
-success_rate: 
+success_rate:
 iteration: 1
 project: "{{project_name}}"
 created: {{date}}

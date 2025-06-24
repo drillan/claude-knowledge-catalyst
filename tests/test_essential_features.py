@@ -12,13 +12,12 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-from typer.testing import CliRunner
-
 from claude_knowledge_catalyst.ai.smart_classifier import SmartContentClassifier
 from claude_knowledge_catalyst.cli.main import app
 from claude_knowledge_catalyst.core.config import CKCConfig, SyncTarget
 from claude_knowledge_catalyst.core.metadata import MetadataManager
 from claude_knowledge_catalyst.sync.obsidian import ObsidianVaultManager
+from typer.testing import CliRunner
 
 
 class TestEssentialCLICommands:
@@ -222,9 +221,9 @@ git pull origin main
             "knowledge",
         ]
         for dir_name in expected_dirs:
-            assert (vault_path / dir_name).exists(), (
-                f"Should create {dir_name} directory"
-            )
+            assert (
+                vault_path / dir_name
+            ).exists(), f"Should create {dir_name} directory"
 
         # Test file sync
         sync_result = vault_manager.sync_file(git_tips_file)
@@ -306,9 +305,10 @@ git pull origin main
                 )
 
             # Should succeed or provide meaningful feedback
-            assert add_result.exit_code in [0, 1], (
-                f"Add command failed: {add_result.stdout}"
-            )
+            assert add_result.exit_code in [
+                0,
+                1,
+            ], f"Add command failed: {add_result.stdout}"
 
             if add_result.exit_code == 0:
                 # Verify vault was added to config
@@ -371,9 +371,10 @@ Tags: python, fastapi, web-development, api
                 sync_result = cli_runner.invoke(app, ["sync"])
 
             # Should sync successfully or provide clear feedback
-            assert sync_result.exit_code in [0, 1], (
-                f"Sync command failed: {sync_result.stdout}"
-            )
+            assert sync_result.exit_code in [
+                0,
+                1,
+            ], f"Sync command failed: {sync_result.stdout}"
 
             # Step 5: Verify the complete workflow results
             # Check that vault structure was created
@@ -387,9 +388,9 @@ Tags: python, fastapi, web-development, api
             ]
             for dir_name in expected_dirs:
                 vault_dir = vault_path / dir_name
-                assert vault_dir.exists(), (
-                    f"Should create {dir_name} directory in vault"
-                )
+                assert (
+                    vault_dir.exists()
+                ), f"Should create {dir_name} directory in vault"
 
             # Step 6: Test status command shows project state
             with patch("pathlib.Path.cwd", return_value=project_path):
@@ -427,9 +428,9 @@ Tags: python, fastapi, web-development, api
                 "code" in r.suggested_value.lower() for r in type_results
             )
 
-            assert python_detected or api_detected, (
-                "Should detect Python/API technology"
-            )
+            assert (
+                python_detected or api_detected
+            ), "Should detect Python/API technology"
             assert code_detected, "Should detect code content type"
 
         finally:
@@ -447,7 +448,8 @@ Tags: python, fastapi, web-development, api
         # Create content without frontmatter (zero-config approach)
         fastapi_content = """# FastAPI RESTful API Development
 
-FastAPI is a modern, fast (high-performance), web framework for building APIs with Python.
+FastAPI is a modern, fast (high-performance), web framework for building APIs \
+with Python.
 
 ## Key Features
 - Automatic API documentation
@@ -487,17 +489,19 @@ Technologies: Python, FastAPI, Pydantic, async, REST API"""
         metadata = metadata_manager.extract_metadata_from_file(fastapi_file)
 
         # Verify automatic detection
-        assert metadata.type in ["code", "concept", "resource"], (
-            "Should detect appropriate type"
-        )
+        assert metadata.type in [
+            "code",
+            "concept",
+            "resource",
+        ], "Should detect appropriate type"
         assert metadata.tech, "Should extract technology tags"
 
         # Verify specific technologies were detected
         tech_tags = [tag.lower() for tag in metadata.tech]
         assert any("python" in tag for tag in tech_tags), "Should detect Python"
-        assert any("api" in tag or "fastapi" in tag for tag in tech_tags), (
-            "Should detect API technology"
-        )
+        assert any(
+            "api" in tag or "fastapi" in tag for tag in tech_tags
+        ), "Should detect API technology"
 
         # Test classification with AI
         classifier = SmartContentClassifier()

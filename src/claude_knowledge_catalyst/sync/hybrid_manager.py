@@ -66,7 +66,7 @@ class StructureManager:
 
     def _add_subdirectories(
         self, flattened: dict, structure: dict, base_path: str = ""
-    ):
+    ) -> None:
         """Recursively add subdirectories to flattened structure."""
         for key, value in structure.items():
             current_path = f"{base_path}/{key}" if base_path else key
@@ -133,8 +133,9 @@ class KnowledgeClassifier:
     ) -> str:
         """Classify content and return target directory path."""
 
-        # SHARED KNOWLEDGE FIRST: Category/Tag-based classification takes absolute priority
-        # Always classify shared knowledge (prompt, code, concept, resource) regardless of project
+        # SHARED KNOWLEDGE FIRST: Category/Tag-based classification takes priority
+        # Always classify shared knowledge (prompt, code, concept, resource)
+        # regardless of project
 
         # Phase 1: Category metadata takes absolute priority
         category = (
@@ -834,7 +835,7 @@ class HybridObsidianVaultManager(ObsidianVaultManager):
 
         return content
 
-    def _deploy_automation_assets(self):
+    def _deploy_automation_assets(self) -> None:
         """Deploy automation scripts and templates."""
         scripts_dir = self.vault_path / "_scripts"
         if scripts_dir.exists():

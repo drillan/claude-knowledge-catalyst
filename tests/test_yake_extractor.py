@@ -3,7 +3,6 @@
 from unittest.mock import patch
 
 import pytest
-
 from claude_knowledge_catalyst.ai.yake_extractor import (
     YAKE_AVAILABLE,
     Keyword,
@@ -61,7 +60,10 @@ class TestLanguageDetector:
 
     def test_language_detection_english(self, detector):
         """Test English language detection."""
-        text = "This is a sample English text about machine learning and artificial intelligence."
+        text = (
+            "This is a sample English text about machine learning and "
+            "artificial intelligence."
+        )
 
         result = detector.detect_language(text)
         assert result in ["en", "en"]  # Should detect English
@@ -152,8 +154,10 @@ class TestYAKEKeywordExtractor:
         return """
         # Machine Learning Pipeline
 
-        This document describes a machine learning pipeline using Python and scikit-learn.
-        The pipeline includes data preprocessing, feature extraction, model training, and evaluation.
+        This document describes a machine learning pipeline using Python and \
+scikit-learn.
+        The pipeline includes data preprocessing, feature extraction, model \
+training, and evaluation.
 
         ## Key Components
         - Data validation and cleaning
@@ -161,7 +165,8 @@ class TestYAKEKeywordExtractor:
         - Model selection and hyperparameter tuning
         - Performance evaluation metrics
 
-        The implementation uses modern DevOps practices including CI/CD, containerization with Docker,
+        The implementation uses modern DevOps practices including CI/CD, \
+containerization with Docker,
         and deployment to cloud infrastructure.
         """
 

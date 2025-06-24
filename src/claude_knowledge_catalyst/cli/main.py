@@ -25,22 +25,6 @@ from .interactive import (
 from .smart_sync import migrate_to_tag_centered_cli, smart_sync_command
 
 
-def get_config() -> CKCConfig:
-    """Get or create configuration."""
-    try:
-        return load_config()
-    except Exception:
-        # Create default config if none exists
-        config = CKCConfig()
-        config.project_root = Path.cwd()
-        return config
-
-
-def get_metadata_manager() -> MetadataManager:
-    """Get metadata manager instance."""
-    return MetadataManager()
-
-
 def version_callback(value: bool) -> None:
     """Show version information."""
     if value:
@@ -798,8 +782,8 @@ def smart_sync(
     )
 
 
-@app.command()
-def migrate(
+@app.command("migrate-legacy")
+def migrate_legacy(
     source: str = typer.Option(
         ".", "--source", "-s", help="Source directory to migrate from"
     ),
@@ -1855,7 +1839,7 @@ def _run_batch_classification(
         TextColumn,
     )
 
-    def progress_callback(current: int, total: int, filename: str):
+    def progress_callback(current: int, total: int, filename: str) -> None:
         pass  # Progress is handled by the outer progress bar
 
     # Classify all files

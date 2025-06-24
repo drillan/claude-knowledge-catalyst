@@ -1,0 +1,63 @@
+repos:
+  # Ruff - Fast Python linter and formatter (replaces flake8, black, isort)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.6
+    hooks:
+      - id: ruff
+        name: ruff linting
+        args: [--fix]
+        types: [python]
+      - id: ruff-format
+        name: ruff formatting
+        types: [python]
+
+  # mypy - Static type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.7.1
+    hooks:
+      - id: mypy
+        name: mypy type checking
+        args: [--ignore-missing-imports]
+        additional_dependencies: [types-PyYAML]
+        types: [python]
+        exclude: ^tests/
+
+  # Local hooks for project-specific checks
+  - repo: local
+    hooks:
+      # pytest - Run tests
+      - id: pytest
+        name: pytest testing
+        entry: uv run pytest
+        language: system
+        types: [python]
+        pass_filenames: false
+        always_run: true
+
+      # Build test - Ensure package builds correctly
+      - id: build-test
+        name: package build test
+        entry: uv build
+        language: system
+        pass_filenames: false
+        always_run: true
+        files: ^(pyproject\.toml|src/.*)$
+
+  # Basic file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        name: trim trailing whitespace
+      - id: end-of-file-fixer
+        name: fix end of files
+      - id: check-yaml
+        name: check yaml syntax
+      - id: check-toml
+        name: check toml syntax
+      - id: check-merge-conflict
+        name: check for merge conflicts
+
+# Configuration
+default_stages: [pre-commit]
+fail_fast: false

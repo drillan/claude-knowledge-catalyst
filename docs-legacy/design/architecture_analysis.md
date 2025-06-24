@@ -21,7 +21,7 @@ Claude Knowledge Catalyst (CKC) の既存アーキテクチャを詳細分析し
 # 既存の番号システム (連番: 00, 01, 02...)
 vault_structure = {
     "00_Inbox": "未整理のアイデアや一時メモ",
-    "01_Projects": "プロジェクト別管理", 
+    "01_Projects": "プロジェクト別管理",
     "02_Knowledge_Base": "共有知識ベース",
     "03_Templates": "ノート作成用テンプレート",
     "04_Analytics": "知見の活用状況分析",
@@ -60,7 +60,7 @@ class ObsidianVaultManager:
         "01_Projects": "説明文",
         # ...
     }
-    
+
     def _determine_target_path(metadata, source_path, project_name):
         # メタデータベースの配置ロジック
         # 現在: 固定パス決定
@@ -88,20 +88,20 @@ class KnowledgeMetadata(BaseModel):
     created: datetime
     updated: datetime
     version: str = "1.0"
-    
+
     # 分類情報
     category: str | None
     tags: list[str] = []
-    
+
     # Claude固有
     model: str | None
-    confidence: str | None  
+    confidence: str | None
     success_rate: int | None
-    
+
     # プロジェクト情報
     purpose: str | None
     related_projects: list[str] = []
-    
+
     # 品質管理
     status: str = "draft"
     quality: str | None
@@ -134,7 +134,7 @@ version: "2.0"
 project_name: "sample-project"
 sync_targets:
   - name: "obsidian"
-    type: "obsidian" 
+    type: "obsidian"
     path: "/path/to/vault"
 
 # 新規: 構造設定
@@ -143,12 +143,12 @@ vault_structure:
   structure_version: "hybrid_v1"
   auto_enhancement: true
   validation_enabled: true
-  
+
   # カスタム構造定義（オプション）
   custom_structure:
     system_dirs:
       "_templates": "テンプレート集"
-      "_attachments": "添付ファイル" 
+      "_attachments": "添付ファイル"
       "_scripts": "自動化スクリプト"
     core_dirs:
       "00_Catalyst_Lab": "実験・プロトタイプ"
@@ -175,7 +175,7 @@ class CKCConfig(BaseModel):
     version: str = "2.0"
     project_name: str = ""
     sync_targets: list[SyncTarget] = []
-    
+
     # 新規追加
     vault_structure: VaultStructureConfig = VaultStructureConfig()
 ```
@@ -185,29 +185,29 @@ class CKCConfig(BaseModel):
 #### 構造管理の動的化
 ```python
 class EnhancedObsidianVaultManager(ObsidianVaultManager):
-    def __init__(self, vault_path: Path, metadata_manager: MetadataManager, 
+    def __init__(self, vault_path: Path, metadata_manager: MetadataManager,
                  structure_config: VaultStructureConfig):
         super().__init__(vault_path, metadata_manager)
         self.structure_config = structure_config
         self.vault_structure = self._build_vault_structure()
-    
+
     def _build_vault_structure(self) -> dict[str, str]:
         """設定に基づいて構造を動的構築"""
         if self.structure_config.numbering_system == "ten_step":
             return self._get_ten_step_structure()
         else:
             return self._get_sequential_structure()
-    
-    def _determine_target_path(self, metadata: KnowledgeMetadata, 
+
+    def _determine_target_path(self, metadata: KnowledgeMetadata,
                              source_path: Path, project_name: str | None) -> Path:
         """拡張配置ロジック"""
         # 1. 既存ロジックの実行
         legacy_path = super()._determine_target_path(metadata, source_path, project_name)
-        
+
         # 2. 新構造での最適化
         if self.structure_config.numbering_system == "ten_step":
             return self._optimize_path_for_ten_step(legacy_path, metadata)
-        
+
         return legacy_path
 ```
 
@@ -217,18 +217,18 @@ class EnhancedObsidianVaultManager(ObsidianVaultManager):
 ```python
 class MigrationManager:
     """既存→新構造のマイグレーション管理"""
-    
+
     def detect_current_structure(self, vault_path: Path) -> StructureType:
         """現在の構造タイプを自動検出"""
-        
-    def plan_migration(self, from_structure: StructureType, 
+
+    def plan_migration(self, from_structure: StructureType,
                       to_structure: StructureType) -> MigrationPlan:
         """マイグレーション計画の生成"""
-        
-    def execute_migration(self, plan: MigrationPlan, 
+
+    def execute_migration(self, plan: MigrationPlan,
                          backup: bool = True) -> MigrationResult:
         """マイグレーション実行"""
-        
+
     def rollback_migration(self, migration_id: str) -> bool:
         """マイグレーション取り消し"""
 ```
@@ -254,7 +254,7 @@ class MigrationManager:
 
 ### 課題1: 設定複雑性の増大
 **問題**: 新機能追加による設定の複雑化
-**解決策**: 
+**解決策**:
 - インテリジェントデフォルト
 - 段階的設定公開
 - 設定ウィザード機能
@@ -309,6 +309,6 @@ class MigrationManager:
 
 ---
 
-**分析完了日**: 2024-06-18  
-**次期**: 適応型システム基盤統合設計  
+**分析完了日**: 2024-06-18
+**次期**: 適応型システム基盤統合設計
 **責任者**: CKC Architecture Team

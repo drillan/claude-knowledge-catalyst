@@ -22,7 +22,7 @@ console = Console()
 
 
 @click.group()
-def structure():
+def structure() -> None:
     """Manage vault structure configuration."""
     pass
 
@@ -30,7 +30,7 @@ def structure():
 @structure.command()
 @click.option("--config-path", type=click.Path(), help="Path to configuration file")
 @click.option("--vault-path", type=click.Path(), help="Path to vault directory")
-def status(config_path: str | None, vault_path: str | None):
+def status(config_path: str | None, vault_path: str | None) -> None:
     """Show current structure status."""
     try:
         # Load configuration
@@ -128,7 +128,7 @@ def status(config_path: str | None, vault_path: str | None):
 @click.option("--config-path", type=click.Path(), help="Path to configuration file")
 @click.option("--vault-path", type=click.Path(), help="Path to vault directory")
 @click.option("--fix", is_flag=True, help="Automatically fix issues where possible")
-def validate(config_path: str | None, vault_path: str | None, fix: bool):
+def validate(config_path: str | None, vault_path: str | None, fix: bool) -> None:
     """Validate structure integrity."""
     try:
         # Load configuration
@@ -182,7 +182,8 @@ Tier Distribution:
   • Core: {stats.get("tier_distribution", {}).get("core", 0)}
   • Auxiliary: {stats.get("tier_distribution", {}).get("auxiliary", 0)}
 
-Largest Directory: {stats.get("largest_directory", "N/A")} ({stats.get("largest_directory_size", 0)} bytes)""",
+Largest Directory: {stats.get("largest_directory", "N/A")}
+({stats.get("largest_directory_size", 0)} bytes)""",
                 title="📊 Structure Statistics",
                 border_style="blue",
             )
@@ -201,7 +202,7 @@ Largest Directory: {stats.get("largest_directory", "N/A")} ({stats.get("largest_
 @click.option("--config-path", type=click.Path(), help="Path to configuration file")
 @click.option("--vault-path", type=click.Path(), help="Path to vault directory")
 @click.option("--days", default=7, help="Number of days to show trend for")
-def health(config_path: str | None, vault_path: str | None, days: int):
+def health(config_path: str | None, vault_path: str | None, days: int) -> None:
     """Show structure health monitoring."""
     try:
         # Load configuration
@@ -243,7 +244,8 @@ def health(config_path: str | None, vault_path: str | None, days: int):
         # Show current health
         status_color = "green" if current_result.passed else "red"
         console.print(
-            f"\n🏥 Current Health: [bold {status_color}]{'HEALTHY' if current_result.passed else 'ISSUES'}[/bold {status_color}]"
+            f"\n🏥 Current Health: [bold {status_color}]"
+            f"{'HEALTHY' if current_result.passed else 'ISSUES'}[/bold {status_color}]"
         )
 
         if current_result.errors:
@@ -263,7 +265,8 @@ def health(config_path: str | None, vault_path: str | None, days: int):
             console.print(f"  • Passing Rate: {trend_data['passing_rate']:.1f}%")
             console.print(f"  • Total Checks: {trend_data['total_checks']}")
             console.print(
-                f"  • Latest Status: {'✅ PASS' if trend_data['latest_passed'] else '❌ FAIL'}"
+                f"  • Latest Status: "
+                f"{'✅ PASS' if trend_data['latest_passed'] else '❌ FAIL'}"
             )
 
             trend_status = (
@@ -303,7 +306,7 @@ def configure(
     numbering_system: str | None,
     auto_classification: bool | None,
     legacy_support: bool | None,
-):
+) -> None:
     """Configure hybrid structure settings."""
     try:
         # Load configuration
@@ -329,7 +332,8 @@ def configure(
             config.hybrid_structure.auto_classification = auto_classification
             changes_made = True
             console.print(
-                f"✅ Auto classification {'enabled' if auto_classification else 'disabled'}"
+                f"✅ Auto classification "
+                f"{'enabled' if auto_classification else 'disabled'}"
             )
 
         if legacy_support is not None:
@@ -361,7 +365,7 @@ def configure(
 @click.option("--config-path", type=click.Path(), help="Path to configuration file")
 @click.option("--vault-path", type=click.Path(), help="Path to vault directory")
 @click.option("--force", is_flag=True, help="Force initialization even if vault exists")
-def init(config_path: str | None, vault_path: str | None, force: bool):
+def init(config_path: str | None, vault_path: str | None, force: bool) -> None:
     """Initialize hybrid structure in vault."""
     try:
         # Load configuration
@@ -445,7 +449,7 @@ Directory Count: {structure_info["directory_count"]}""",
         console.print(f"❌ Error initializing structure: {e}", style="red")
 
 
-def _show_recommendations(config: CKCConfig, current_structure: str):
+def _show_recommendations(config: CKCConfig, current_structure: str) -> None:
     """Show recommendations based on current configuration."""
     recommendations = []
 
@@ -481,7 +485,7 @@ def _show_recommendations(config: CKCConfig, current_structure: str):
             console.print(f"  • {rec}", style="blue")
 
 
-def _attempt_auto_fix(vault_dir: Path, config: CKCConfig, validation_result):
+def _attempt_auto_fix(vault_dir: Path, config: CKCConfig, validation_result) -> None:
     """Attempt to automatically fix validation issues."""
     fixed_count = 0
 

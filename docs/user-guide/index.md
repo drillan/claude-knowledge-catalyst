@@ -37,7 +37,7 @@ CLAUDE.mdファイルをObsidianに同期する機能の詳細な使用方法と
 ### Best Practices
 効果的な知識管理とワークフローのためのベストプラクティス（準備中）。
 
-### Troubleshooting  
+### Troubleshooting
 よくある問題と解決方法（準備中）。
 
 ### FAQ

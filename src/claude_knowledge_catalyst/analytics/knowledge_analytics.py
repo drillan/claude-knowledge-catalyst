@@ -33,8 +33,8 @@ class KnowledgeAnalytics:
         self.reports_dir.mkdir(exist_ok=True)
 
         # Data cache
-        self._cache = {}
-        self._cache_timestamp = None
+        self._cache: dict[str, Any] = {}
+        self._cache_timestamp: datetime | None = None
 
     def generate_comprehensive_report(self) -> dict[str, Any]:
         """Generate comprehensive analytics report."""
@@ -54,18 +54,18 @@ class KnowledgeAnalytics:
 
         # Generate report sections
         report["report_sections"]["overview"] = self._generate_overview(knowledge_items)
-        report["report_sections"]["content_analysis"] = (
-            self._analyze_content_distribution(knowledge_items)
-        )
+        report["report_sections"][
+            "content_analysis"
+        ] = self._analyze_content_distribution(knowledge_items)
         report["report_sections"]["quality_metrics"] = self._analyze_quality_metrics(
             knowledge_items
         )
         report["report_sections"]["usage_patterns"] = self._analyze_usage_patterns(
             knowledge_items
         )
-        report["report_sections"]["knowledge_evolution"] = (
-            self._analyze_knowledge_evolution(knowledge_items)
-        )
+        report["report_sections"][
+            "knowledge_evolution"
+        ] = self._analyze_knowledge_evolution(knowledge_items)
         report["report_sections"]["structure_health"] = self._analyze_structure_health()
         report["report_sections"]["recommendations"] = self._generate_recommendations(
             knowledge_items
@@ -109,14 +109,21 @@ class KnowledgeAnalytics:
         self, knowledge_items: list[tuple[Path, KnowledgeMetadata]]
     ) -> dict[str, Any]:
         """Generate overview statistics."""
-        overview = {
+        content_distribution: defaultdict[str, int] = defaultdict(int)
+        tag_distribution: Counter[str] = Counter()
+        status_distribution: Counter[str] = Counter()
+        quality_distribution: Counter[str] = Counter()
+        creation_timeline: defaultdict[str, int] = defaultdict(int)
+        update_timeline: defaultdict[str, int] = defaultdict(int)
+
+        overview: dict[str, Any] = {
             "total_files": len(knowledge_items),
-            "content_distribution": defaultdict(int),
-            "tag_distribution": Counter(),
-            "status_distribution": Counter(),
-            "quality_distribution": Counter(),
-            "creation_timeline": defaultdict(int),
-            "update_timeline": defaultdict(int),
+            "content_distribution": content_distribution,
+            "tag_distribution": tag_distribution,
+            "status_distribution": status_distribution,
+            "quality_distribution": quality_distribution,
+            "creation_timeline": creation_timeline,
+            "update_timeline": update_timeline,
         }
 
         for file_path, metadata in knowledge_items:
@@ -163,9 +170,13 @@ class KnowledgeAnalytics:
         self, knowledge_items: list[tuple[Path, KnowledgeMetadata]]
     ) -> dict[str, Any]:
         """Analyze content distribution and patterns."""
-        analysis = {
-            "category_distribution": Counter(),
-            "complexity_distribution": Counter(),
+        category_distribution: Counter[str] = Counter()
+        complexity_distribution: Counter[str] = Counter()
+        directory_files: defaultdict[str, int] = defaultdict(int)
+
+        analysis: dict[str, Any] = {
+            "category_distribution": category_distribution,
+            "complexity_distribution": complexity_distribution,
             "success_rate_analysis": {
                 "high_success": 0,  # >80%
                 "medium_success": 0,  # 50-80%
@@ -175,8 +186,6 @@ class KnowledgeAnalytics:
             "content_maturity": {"experimental": 0, "developing": 0, "mature": 0},
             "knowledge_density": {},  # Files per directory
         }
-
-        directory_files = defaultdict(int)
 
         for file_path, metadata in knowledge_items:
             # Skip invalid metadata
@@ -223,31 +232,37 @@ class KnowledgeAnalytics:
         self, knowledge_items: list[tuple[Path, KnowledgeMetadata]]
     ) -> dict[str, Any]:
         """Analyze quality metrics and trends."""
-        metrics = {
-            "metadata_completeness": {
-                "has_title": 0,
-                "has_tags": 0,
-                "has_category": 0,
-                "has_purpose": 0,
-                "has_quality_rating": 0,
-                "complete_metadata": 0,
-            },
-            "content_quality_indicators": {
-                "high_quality": 0,
-                "medium_quality": 0,
-                "low_quality": 0,
-                "quality_unknown": 0,
-            },
-            "validation_metrics": {
-                "files_with_success_rate": 0,
-                "average_success_rate": 0,
-                "confidence_distribution": Counter(),
-            },
-            "maintenance_metrics": {
-                "recently_updated": 0,  # <30 days
-                "needs_attention": 0,  # >180 days
-                "stale_content": 0,  # >1 year
-            },
+        metadata_completeness: dict[str, int] = {
+            "has_title": 0,
+            "has_tags": 0,
+            "has_category": 0,
+            "has_purpose": 0,
+            "has_quality_rating": 0,
+            "complete_metadata": 0,
+        }
+        content_quality_indicators: dict[str, int] = {
+            "high_quality": 0,
+            "medium_quality": 0,
+            "low_quality": 0,
+            "quality_unknown": 0,
+        }
+        confidence_distribution: Counter[str] = Counter()
+        validation_metrics: dict[str, Any] = {
+            "files_with_success_rate": 0,
+            "average_success_rate": 0,
+            "confidence_distribution": confidence_distribution,
+        }
+        maintenance_metrics: dict[str, int] = {
+            "recently_updated": 0,  # <30 days
+            "needs_attention": 0,  # >180 days
+            "stale_content": 0,  # >1 year
+        }
+
+        metrics: dict[str, Any] = {
+            "metadata_completeness": metadata_completeness,
+            "content_quality_indicators": content_quality_indicators,
+            "validation_metrics": validation_metrics,
+            "maintenance_metrics": maintenance_metrics,
         }
 
         total_files = len(knowledge_items)
@@ -356,15 +371,23 @@ class KnowledgeAnalytics:
         self, knowledge_items: list[tuple[Path, KnowledgeMetadata]]
     ) -> dict[str, Any]:
         """Analyze usage patterns and trends."""
-        patterns = {
+        creation_by_month: defaultdict[str, int] = defaultdict(int)
+        creation_by_day: defaultdict[str, int] = defaultdict(int)
+        creation_by_hour: defaultdict[int, int] = defaultdict(int)
+        update_by_month: defaultdict[str, int] = defaultdict(int)
+        frequent_updaters: Counter[str] = Counter()
+        authors: Counter[str] = Counter()
+        projects: Counter[str] = Counter()
+
+        patterns: dict[str, Any] = {
             "creation_patterns": {
-                "by_month": defaultdict(int),
-                "by_day_of_week": defaultdict(int),
-                "by_hour": defaultdict(int),
+                "by_month": creation_by_month,
+                "by_day_of_week": creation_by_day,
+                "by_hour": creation_by_hour,
             },
             "update_patterns": {
-                "by_month": defaultdict(int),
-                "frequent_updaters": Counter(),  # Files updated most often
+                "by_month": update_by_month,
+                "frequent_updaters": frequent_updaters,
                 "update_intervals": [],
             },
             "content_lifecycle": {
@@ -373,7 +396,7 @@ class KnowledgeAnalytics:
                 "stable_content": 0,  # 180-365 days
                 "archived_content": 0,  # >365 days
             },
-            "collaboration_patterns": {"authors": Counter(), "projects": Counter()},
+            "collaboration_patterns": {"authors": authors, "projects": projects},
         }
 
         now = datetime.now()
@@ -448,21 +471,30 @@ class KnowledgeAnalytics:
         self, knowledge_items: list[tuple[Path, KnowledgeMetadata]]
     ) -> dict[str, Any]:
         """Analyze how knowledge evolves over time."""
-        evolution = {
+        monthly_growth: defaultdict[str, int] = defaultdict(int)
+        category_growth: defaultdict[str, defaultdict[str, int]] = defaultdict(
+            lambda: defaultdict(int)
+        )
+        status_transitions: Counter[str] = Counter()
+        most_connected_topics: Counter[str] = Counter()
+        project_knowledge_map: defaultdict[str, list[str]] = defaultdict(list)
+        tag_relationships: defaultdict[str, set[str]] = defaultdict(set)
+
+        evolution: dict[str, Any] = {
             "knowledge_growth": {
                 "total_growth_rate": 0,
-                "monthly_growth": defaultdict(int),
-                "category_growth": defaultdict(lambda: defaultdict(int)),
+                "monthly_growth": monthly_growth,
+                "category_growth": category_growth,
             },
             "knowledge_maturation": {
-                "status_transitions": Counter(),
+                "status_transitions": status_transitions,
                 "quality_improvements": 0,
                 "success_rate_trends": [],
             },
             "knowledge_connections": {
-                "most_connected_topics": Counter(),
-                "project_knowledge_map": defaultdict(list),
-                "tag_relationships": defaultdict(set),
+                "most_connected_topics": most_connected_topics,
+                "project_knowledge_map": project_knowledge_map,
+                "tag_relationships": tag_relationships,
             },
         }
 
@@ -595,7 +627,10 @@ class KnowledgeAnalytics:
                     "priority": "high",
                     "category": "metadata_quality",
                     "title": "Improve Tag Coverage",
-                    "description": f"{files_without_tags} files lack tags. Add tags to improve discoverability.",
+                    "description": (
+                        f"{files_without_tags} files lack tags. "
+                        "Add tags to improve discoverability."
+                    ),
                     "action": "Review files without tags and add relevant tags",
                     "impact": "Improved content organization and searchability",
                 }
@@ -619,7 +654,9 @@ class KnowledgeAnalytics:
                     "priority": "medium",
                     "category": "content_maintenance",
                     "title": "Review Outdated Content",
-                    "description": f"{outdated_files} files haven't been updated in 6+ months.",
+                    "description": (
+                        f"{outdated_files} files haven't been updated in 6+ months."
+                    ),
                     "action": "Review and update or archive outdated content",
                     "impact": "Maintain content relevance and accuracy",
                 }
@@ -637,7 +674,9 @@ class KnowledgeAnalytics:
                     "priority": "low",
                     "category": "quality_improvement",
                     "title": "Promote High-Quality Content",
-                    "description": "Consider promoting more content to high quality status.",
+                    "description": (
+                        "Consider promoting more content to high quality status."
+                    ),
                     "action": "Review and upgrade quality ratings for mature content",
                     "impact": "Better identification of trusted knowledge",
                 }
@@ -665,7 +704,7 @@ class KnowledgeAnalytics:
 
         return recommendations
 
-    def _save_report(self, report: dict[str, Any]):
+    def _save_report(self, report: dict[str, Any]) -> None:
         """Save analytics report."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         report_file = self.reports_dir / f"analytics_report_{timestamp}.json"

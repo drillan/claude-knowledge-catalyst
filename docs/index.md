@@ -196,5 +196,5 @@ uv run ckc analytics report --team backend --days 30
 
 ---
 
-**Claude Code ⇄ Obsidian統合の新時代へようこそ！**  
+**Claude Code ⇄ Obsidian統合の新時代へようこそ！**
 *開発プロセスと知識管理の完全なシームレス統合を体験してください。*

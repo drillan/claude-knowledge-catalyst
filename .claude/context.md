@@ -67,7 +67,7 @@ version: '1.0'
 src/claude_knowledge_catalyst/
 ├── core/                   # コア機能
 │   ├── config.py          # 設定管理
-│   ├── metadata.py        # メタデータ抽出・管理  
+│   ├── metadata.py        # メタデータ抽出・管理
 │   └── watcher.py         # ファイルシステム監視
 ├── ai/                    # AI分類システム
 │   ├── smart_classifier.py # ハイブリッド分類エンジン

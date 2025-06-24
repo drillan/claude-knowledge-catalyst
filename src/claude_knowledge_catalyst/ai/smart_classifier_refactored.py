@@ -102,6 +102,8 @@ class SmartContentClassifier:
         """
         try:
             # Extract keywords using YAKE
+            if self.yake_extractor is None:
+                return pattern_results
             yake_keywords = self.yake_extractor.extract_keywords(content)
             keyword_texts = [kw.text.lower() for kw in yake_keywords]
 
@@ -330,7 +332,7 @@ class SmartContentClassifier:
     def _deduplicate_results(
         self, results: list[ClassificationResult]
     ) -> list[ClassificationResult]:
-        """Remove duplicate results, keeping the highest confidence for each tag type + value.
+        """Remove duplicate results, keeping highest confidence for each tag type.
 
         Args:
             results: List of classification results.

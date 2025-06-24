@@ -60,7 +60,7 @@ class CKCConfig(BaseModel):
     project_name: str
     auto_sync: bool = True
     sync_targets: List[SyncTarget] = []
-    
+
     class Config:
         extra = "forbid"  # 未知のフィールドを拒否
         validate_assignment = True  # 代入時バリデーション
@@ -108,14 +108,14 @@ except Exception as e:
 def extract_metadata(content: str, file_path: Path) -> KnowledgeMetadata:
     """ファイルからメタデータを抽出"""
     frontmatter = extract_frontmatter(content)
-    
+
     # フロントマターが存在しない場合の自動生成
     if not frontmatter:
         frontmatter = generate_default_metadata(file_path)
-    
+
     # コンテンツ分析による強化
     enhanced_metadata = analyze_content_patterns(content)
-    
+
     return merge_metadata(frontmatter, enhanced_metadata)
 ```
 
@@ -170,10 +170,10 @@ def display_status():
     table = Table(title="CKC Status")
     table.add_column("項目", style="cyan")
     table.add_column("値", style="green")
-    
+
     table.add_row("プロジェクト", config.project_name)
     table.add_row("同期ターゲット", str(len(config.sync_targets)))
-    
+
     console.print(table)
 ```
 
@@ -195,7 +195,7 @@ auto_sync: true
 """
     config_path = tmp_path / "ckc_config.yaml"
     config_path.write_text(config_content)
-    
+
     config = load_config(config_path)
     assert config.project_name == "テストプロジェクト"
     assert config.auto_sync is True
@@ -207,7 +207,7 @@ auto_sync: true
 @patch('claude_knowledge_catalyst.sync.obsidian.Path.exists')
 def test_obsidian_sync_with_missing_vault(mock_exists):
     mock_exists.return_value = False
-    
+
     with pytest.raises(CKCError, match="ボルトが存在しません"):
         sync_manager.sync_file(test_file)
 ```
@@ -291,14 +291,14 @@ class TestEnvironmentHelper:
     def __init__(self, workspace_path: Path):
         self.workspace = workspace_path
         self.projects: Dict[str, Path] = {}
-        
+
     def create_config(self, project_name: str) -> CKCConfig:
         """Path.cwd()問題を回避する安全な設定作成"""
         project_root = self.projects.get(project_name, self.workspace)
-        
+
         with patch('pathlib.Path.cwd', return_value=project_root):
             config = CKCConfig()
-        
+
         config.project_root = project_root
         return config
 ```
@@ -306,7 +306,7 @@ class TestEnvironmentHelper:
 **適用範囲**:
 - `test_demo_integration.py`: DemoTestEnvironment
 - `test_hybrid_integration.py`: hybrid_config, legacy_config fixtures
-- `test_integration_comprehensive.py`: full_config fixture  
+- `test_integration_comprehensive.py`: full_config fixture
 - `test_performance.py`: performance_setup fixture
 
 ### デモテスト設計原則
@@ -316,13 +316,13 @@ class TestEnvironmentHelper:
 def test_complete_user_demo_workflow(self, demo_env):
     # Step 1: プロジェクト初期化
     project_path = demo_env.create_project("my_project")
-    
+
     # Step 2: ボルト追加
     vault_path = demo_env.create_vault("my_obsidian")
-    
+
     # Step 3: コンテンツ作成と同期
     created_files = demo_env.create_claude_content("my_project", demo_content)
-    
+
     # Step 4: 検証
     assert all(sync_results), "All demo files should sync successfully"
 ```
@@ -340,10 +340,10 @@ def test_complete_user_demo_workflow(self, demo_env):
 def demo_env(self):
     temp_dir = tempfile.mkdtemp()
     workspace = Path(temp_dir)
-    
+
     env = DemoTestEnvironment(workspace)
     yield env
-    
+
     shutil.rmtree(temp_dir)  # 確実なクリーンアップ
 ```
 
@@ -356,7 +356,7 @@ with patch('pathlib.Path.cwd', return_value=safe_path):
     config = CKCConfig()
 
 # フィクスチャ統合
-@pytest.fixture 
+@pytest.fixture
 def safe_config(self, temp_path):
     with patch('pathlib.Path.cwd', return_value=temp_path):
         config = CKCConfig()
@@ -425,7 +425,7 @@ jobs:
 # プルリクエスト品質ゲート設計原則
 blocking_checks:
   - "Lint errors (ruff)"
-  - "Format errors" 
+  - "Format errors"
   - "Essential features tests"
   - "Package build verification"
   - "Coverage threshold (25%)"

@@ -711,6 +711,83 @@ impact_scope: "{context.get("impact_scope", "high")}"
 
         return {**base_templates, **hybrid_templates}
 
+    def _create_prompt_template(self, context: dict[str, Any]) -> str:
+        """Create prompt template."""
+        return """# Prompt Template
+
+## Purpose
+{purpose}
+
+## Parameters
+{parameters}
+
+## Expected Output
+{expected_output}
+
+## Example Usage
+{example}
+"""
+
+    def _create_code_snippet_template(self, context: dict[str, Any]) -> str:
+        """Create code snippet template."""
+        return """# Code Snippet: {title}
+
+## Description
+{description}
+
+## Language
+{language}
+
+## Code
+```{language}
+{code_content}
+```
+
+## Usage Notes
+{usage_notes}
+"""
+
+    def _create_concept_explanation_template(self, context: dict[str, Any]) -> str:
+        """Create concept explanation template."""
+        return """# Concept: {concept_name}
+
+## Overview
+{overview}
+
+## Key Points
+{key_points}
+
+## Examples
+{examples}
+
+## Related Concepts
+{related_concepts}
+"""
+
+    def _create_resource_catalog_template(self, context: dict[str, Any]) -> str:
+        """Create resource catalog template."""
+        return """# Resource Catalog: {catalog_name}
+
+## Overview
+{overview}
+
+## Resources
+{resources}
+
+## Categories
+{categories}
+
+## Maintenance Notes
+{maintenance_notes}
+"""
+
+    def get_template_content(self, template_name: str, context: dict[str, Any]) -> str:
+        """Get template content by name."""
+        if template_name in self.hybrid_templates:
+            template_func = self.hybrid_templates[template_name]
+            return template_func(context)
+        return self.create_file_from_template(template_name, context)
+
 
 def create_hybrid_template_manager(config: CKCConfig) -> HybridTemplateManager:
     """Create hybrid template manager from configuration."""

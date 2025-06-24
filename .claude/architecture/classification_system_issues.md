@@ -77,7 +77,7 @@ version: '1.0'
 category: "concept"  # ← 明確に概念と示されているが無視
 tags: ["concept", "api", "design"]
 
-# Git Utility Commands のメタデータ  
+# Git Utility Commands のメタデータ
 category: "code"     # ← 明確にコードと示されているが無視
 tags: ["code", "git", "utilities"]
 ```
@@ -117,7 +117,7 @@ tags: ["code", "git", "utilities"]
 - プロンプトではなく、概念的な指針として機能
 
 **Git Utility Commands → Code_Snippets/Bash/**
-- `category: "code"`と明示  
+- `category: "code"`と明示
 - 実用的なコマンド集として再利用価値が高い
 - Bashスクリプトとして実行される実装コード
 
@@ -135,22 +135,22 @@ def classify_content_by_category(metadata, content_body):
     categoryメタデータを最優先とした分類システム
     """
     category = metadata.get('category', '').lower()
-    
+
     # 第1段階: 最上位カテゴリの判定
     if category == 'concept':
         domain = extract_domain_from_tags(metadata.get('tags', []))
         return f"20_Knowledge_Base/Concepts/{domain}/"
-    
+
     elif category == 'code':
         language = detect_language_from_content(content_body, metadata)
         return f"20_Knowledge_Base/Code_Snippets/{language}/"
-    
+
     elif category == 'prompt':
         return classify_prompt_subcategory(metadata, content_body)
-    
+
     elif category == 'resource':
         return "20_Knowledge_Base/Resources/"
-    
+
     else:
         # categoryが不明な場合は一時的にInboxへ
         return "00_Catalyst_Lab/"
@@ -161,19 +161,19 @@ def classify_prompt_subcategory(metadata, content_body):
     """
     success_rate = metadata.get('success_rate', 0)
     status = metadata.get('status', '').lower()
-    
+
     # 高成功率または本番運用中のプロンプト
     if success_rate >= 80 or status == 'production':
         return "20_Knowledge_Base/Prompts/Best_Practices/"
-    
+
     # テンプレート的な汎用プロンプト
     elif is_template_prompt(content_body, metadata):
         return "20_Knowledge_Base/Prompts/Templates/"
-    
+
     # プロンプト改善の記録・バージョン管理
     elif is_improvement_record(content_body, metadata):
         return "20_Knowledge_Base/Prompts/Improvement_Log/"
-    
+
     else:
         # 判定不能な場合はTemplatesをデフォルトとする
         return "20_Knowledge_Base/Prompts/Templates/"
@@ -218,7 +218,7 @@ def validate_classification_quality():
     分類品質の定期チェック
     """
     issues = []
-    
+
     # Improvement_Log内の非プロンプトコンテンツを検出
     improvement_files = scan_directory("20_Knowledge_Base/Prompts/Improvement_Log/")
     for file in improvement_files:
@@ -229,7 +229,7 @@ def validate_classification_quality():
                 'issue': 'Non-prompt content in Improvement_Log',
                 'suggested_path': classify_content_by_category(metadata, read_content(file))
             })
-    
+
     return issues
 ```
 

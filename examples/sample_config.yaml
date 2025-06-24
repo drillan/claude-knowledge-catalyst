@@ -35,7 +35,7 @@ tags:
     - "resource"
     - "project_log"
     - "improvement_log"
-  
+
   tech_tags:
     - "python"
     - "javascript"
@@ -45,19 +45,19 @@ tags:
     - "fastapi"
     - "docker"
     - "git"
-  
+
   claude_tags:
     - "opus"
     - "sonnet"
     - "haiku"
-  
+
   status_tags:
     - "draft"
     - "review"
     - "tested"
     - "production"
     - "deprecated"
-  
+
   quality_tags:
     - "high"
     - "medium"
@@ -69,21 +69,21 @@ watch:
   watch_paths:
     - ".claude"
     - "docs/claude"  # Additional directory to watch
-  
+
   file_patterns:
     - "*.md"
     - "*.txt"
     - "*.json"  # Watch JSON files too
-  
+
   ignore_patterns:
     - ".git"
     - "__pycache__"
     - "*.pyc"
     - ".DS_Store"
     - "node_modules"
-  
+
   debounce_seconds: 1.0
-  
+
   # CLAUDE.md synchronization settings
   include_claude_md: false  # Set to true to sync CLAUDE.md files to Obsidian
   claude_md_patterns:

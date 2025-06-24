@@ -62,26 +62,26 @@ class KnowledgeMetadata(BaseModel):
     created: datetime            # 作成日時
     updated: datetime            # 更新日時
     version: str                 # バージョン（例: "1.0", "2.1"）
-    
+
     # コンテンツ分類
     category: str | None         # 主カテゴリ
     tags: list[str]             # タグリスト
-    
+
     # Claude特有のメタデータ
     model: str | None           # 使用モデル（opus, sonnet, haiku）
     confidence: str | None      # 信頼度レベル
     success_rate: int | None    # 成功率（0-100）
-    
+
     # プロジェクト文脈
     project: str | None         # 主プロジェクト名
     purpose: str | None         # 目的・用途
     related_projects: list[str] # 関連プロジェクト
-    
+
     # ステータス・品質管理
     status: str                 # ステータス（draft, tested, production, deprecated）
     quality: str | None         # 品質評価（high, medium, low, experimental）
     complexity: str | None      # 複雑度レベル
-    
+
     # 管理情報
     author: str | None          # 作成者
     source: str | None          # ソースファイルパス
@@ -226,12 +226,12 @@ def _auto_detect_project(self, file_path: Path) -> str | None:
     claude_dir = self._find_claude_directory(file_path)
     if claude_dir and (claude_dir / "project.yaml").exists():
         return self._load_project_config(claude_dir / "project.yaml")
-    
+
     # 2. Git リポジトリ名
     git_project = self._detect_project_from_git(file_path)
     if git_project:
         return git_project
-    
+
     # 3. ファイルパス解析
     return self._detect_project_from_path(file_path)
 ```
@@ -248,7 +248,7 @@ tags:
     - concept
     - resource
     - project_log
-  
+
   tech_tags:
     - python
     - javascript
@@ -256,18 +256,18 @@ tags:
     - nodejs
     - docker
     - git
-  
+
   claude_tags:
     - opus
     - sonnet
     - haiku
-  
+
   status_tags:
     - draft
     - tested
     - production
     - deprecated
-  
+
   quality_tags:
     - high
     - medium

@@ -6,7 +6,6 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
-
 from claude_knowledge_catalyst.analytics.knowledge_analytics import KnowledgeAnalytics
 from claude_knowledge_catalyst.core.config import CKCConfig, HybridStructureConfig
 from claude_knowledge_catalyst.core.metadata import KnowledgeMetadata
@@ -14,7 +13,8 @@ from claude_knowledge_catalyst.core.metadata import KnowledgeMetadata
 # Analytics tests re-enabled for Phase 4 quality improvement
 # Fixed external dependencies and stability issues for v0.10.0+
 # pytestmark = pytest.mark.skip(
-#     reason="Analytics tests require external dependencies - skipping for v0.9.2 release"
+#     reason="Analytics tests require external dependencies - \
+#     skipping for v0.9.2 release"
 # )
 
 
@@ -56,7 +56,8 @@ class TestKnowledgeAnalytics:
         knowledge_dir = temp_vault_path / "knowledge"
 
         files.append(knowledge_dir / "python_basics.md")
-        files[-1].write_text("""---
+        files[-1].write_text(
+            """---
 title: "Python Basics"
 tags: ["python", "programming", "beginner"]
 category: "concept"
@@ -65,10 +66,12 @@ created: "2024-01-01"
 
 # Python Basics
 Introduction to Python programming.
-""")
+"""
+        )
 
         files.append(knowledge_dir / "api_design.md")
-        files[-1].write_text("""---
+        files[-1].write_text(
+            """---
 title: "API Design Patterns"
 tags: ["api", "design", "advanced"]
 category: "concept"
@@ -77,10 +80,12 @@ success_rate: 85
 
 # API Design Patterns
 Best practices for API development.
-""")
+"""
+        )
 
         files.append(knowledge_dir / "debugging_prompt.md")
-        files[-1].write_text("""---
+        files[-1].write_text(
+            """---
 title: "Debug Helper Prompt"
 tags: ["debugging", "prompt", "productivity"]
 category: "prompt"
@@ -89,7 +94,8 @@ success_rate: 92
 
 # Debug Helper
 Please help debug this code issue.
-""")
+"""
+        )
 
         return files
 
@@ -493,7 +499,8 @@ class TestKnowledgeAnalyticsIntegration:
             knowledge_dir = vault_path / "knowledge"
 
             # Python content
-            (knowledge_dir / "python_guide.md").write_text("""---
+            (knowledge_dir / "python_guide.md").write_text(
+                """---
 title: "Python Programming Guide"
 tags: ["python", "programming", "guide", "beginner"]
 category: "concept"
@@ -503,10 +510,12 @@ success_rate: 88
 
 # Python Programming Guide
 Comprehensive guide to Python programming.
-""")
+"""
+            )
 
             # API content
-            (knowledge_dir / "rest_api_design.md").write_text("""---
+            (knowledge_dir / "rest_api_design.md").write_text(
+                """---
 title: "REST API Design"
 tags: ["api", "rest", "design", "web", "backend"]
 category: "concept"
@@ -516,10 +525,12 @@ success_rate: 92
 
 # REST API Design Principles
 Best practices for REST API development.
-""")
+"""
+            )
 
             # Prompt content
-            (knowledge_dir / "code_review_prompt.md").write_text("""---
+            (knowledge_dir / "code_review_prompt.md").write_text(
+                """---
 title: "Code Review Assistant"
 tags: ["prompt", "code-review", "quality", "automation"]
 category: "prompt"
@@ -530,7 +541,8 @@ usage_count: 15
 
 # Code Review Assistant Prompt
 Please review the following code for quality and best practices.
-""")
+"""
+            )
 
             yield vault_path
 

@@ -85,7 +85,7 @@ obsidian_vault_path: "~/Documents/MyVault"
 sync:
   auto_sync: true
   watch_directories: [".claude"]
-  
+
 # メタデータ設定
 metadata:
   auto_extract: true

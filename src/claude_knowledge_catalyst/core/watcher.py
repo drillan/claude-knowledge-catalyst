@@ -129,6 +129,10 @@ class KnowledgeWatcher:
             watch_config,
             metadata_manager,
         )
+        # Initialize CLAUDE.md processor
+        self.claude_md_processor = ClaudeMdProcessor(
+            sections_exclude=watch_config.claude_md_sections_exclude
+        )
         self.is_running = False
         self.watched_paths: set[Path] = set()
 
@@ -310,7 +314,7 @@ class KnowledgeWatcher:
 class WatcherManager:
     """Manager for multiple watchers."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize watcher manager."""
         self.watchers: dict[str, KnowledgeWatcher] = {}
 

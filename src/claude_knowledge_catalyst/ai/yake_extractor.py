@@ -234,7 +234,8 @@ class YAKEKeywordExtractor:
             # Debug: Print the format of raw_keywords
             if raw_keywords:
                 logger.debug(
-                    f"YAKE raw keywords sample: {raw_keywords[0]} (type: {type(raw_keywords[0])})"
+                    f"YAKE raw keywords sample: {raw_keywords[0]} "
+                    f"(type: {type(raw_keywords[0])})"
                 )
 
             # Process and filter results
