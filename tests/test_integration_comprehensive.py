@@ -141,9 +141,9 @@ class TestComprehensiveIntegration:
                 existing_dirs.append(dir_name)
 
         # At least some core directories should exist
-        assert (
-            len(existing_dirs) >= 3
-        ), f"Should have at least 3 core directories, found: {existing_dirs}"
+        assert len(existing_dirs) >= 3, (
+            f"Should have at least 3 core directories, found: {existing_dirs}"
+        )
 
         # Step 2: Create diverse test content
         test_files = self._create_test_content(workspace["project"])
@@ -200,9 +200,9 @@ class TestComprehensiveIntegration:
             analytics = KnowledgeAnalytics(workspace["vault"], config)
             analytics_report = analytics.generate_comprehensive_report()
 
-            assert (
-                "report_sections" in analytics_report
-            ), "Analytics report should have sections"
+            assert "report_sections" in analytics_report, (
+                "Analytics report should have sections"
+            )
             # Be more lenient about file count requirements
             total_files = (
                 analytics_report.get("report_sections", {})
@@ -226,9 +226,9 @@ class TestComprehensiveIntegration:
             usage_collector.track_file_access(test_files[i % len(test_files)], "read")
 
         usage_report = usage_collector.generate_usage_report(days=1)
-        assert (
-            usage_report["operation_statistics"]["total_operations"] >= 10
-        ), "Should track operations"
+        assert usage_report["operation_statistics"]["total_operations"] >= 10, (
+            "Should track operations"
+        )
 
         # Step 8: AI assistance functionality
         ai_assistant = AIKnowledgeAssistant(workspace["vault"], config)
@@ -246,9 +246,9 @@ class TestComprehensiveIntegration:
 
         # Test knowledge organization suggestions
         org_suggestions = ai_assistant.suggest_knowledge_organization()
-        assert (
-            "organization_suggestions" in org_suggestions
-        ), "Should generate organization suggestions"
+        assert "organization_suggestions" in org_suggestions, (
+            "Should generate organization suggestions"
+        )
 
         # Step 9: Validate final structure integrity
         final_validation = automation_manager.validator.validate_full_structure()
@@ -295,15 +295,15 @@ This is a test file in legacy structure.
 
         # Verify both legacy and hybrid directories exist
         for legacy_dir in legacy_dirs:
-            assert (
-                workspace["vault"] / legacy_dir
-            ).exists(), f"Legacy directory {legacy_dir} should be preserved"
+            assert (workspace["vault"] / legacy_dir).exists(), (
+                f"Legacy directory {legacy_dir} should be preserved"
+            )
 
         hybrid_dirs = ["00_Catalyst_Lab", "10_Projects", "20_Knowledge_Base"]
         for hybrid_dir in hybrid_dirs:
-            assert (
-                workspace["vault"] / hybrid_dir
-            ).exists(), f"Hybrid directory {hybrid_dir} should be created"
+            assert (workspace["vault"] / hybrid_dir).exists(), (
+                f"Hybrid directory {hybrid_dir} should be created"
+            )
 
         # Test structure validation with mixed structure
         from claude_knowledge_catalyst.core.structure_validator import (
@@ -314,9 +314,9 @@ This is a test file in legacy structure.
         validation_result = validator.validate_full_structure()
 
         # Should pass with warnings about legacy structure
-        assert (
-            len(validation_result.warnings) >= 0
-        ), "May have warnings about mixed structure"
+        assert len(validation_result.warnings) >= 0, (
+            "May have warnings about mixed structure"
+        )
 
     def test_multi_project_vault_sharing(self, temp_workspace, full_config):
         """Test multiple projects sharing a single vault."""
@@ -465,25 +465,25 @@ Content specific to project 2.
         org_suggestions = ai_assistant.suggest_knowledge_organization()
 
         # Verify AI can provide recommendations based on vault state
-        assert (
-            "organization_suggestions" in org_suggestions
-        ), "AI should provide organization suggestions"
+        assert "organization_suggestions" in org_suggestions, (
+            "AI should provide organization suggestions"
+        )
 
         # Test content insights for specific files
         if test_files:
             insights = ai_assistant.provide_content_insights(test_files[0])
             assert "content_analysis" in insights, "Should provide content analysis"
-            assert (
-                "knowledge_connections" in insights
-            ), "Should analyze knowledge connections"
+            assert "knowledge_connections" in insights, (
+                "Should analyze knowledge connections"
+            )
 
         # Test AI template generation informed by existing content
         categories = ["prompt", "code", "concept"]
         for category in categories:
             template = ai_assistant.generate_content_template(category)
-            assert (
-                category in template.lower()
-            ), f"Template should be relevant to {category}"
+            assert category in template.lower(), (
+                f"Template should be relevant to {category}"
+            )
 
     def test_performance_under_load(self, temp_workspace, full_config):
         """Test system performance with larger datasets."""
@@ -540,9 +540,9 @@ Additional notes and content to test processing performance.
         sync_duration = time.time() - start_time
 
         assert all(sync_results), "All files should sync successfully"
-        assert (
-            sync_duration < 30
-        ), f"Sync should complete in reasonable time, took {sync_duration:.2f}s"
+        assert sync_duration < 30, (
+            f"Sync should complete in reasonable time, took {sync_duration:.2f}s"
+        )
 
         # Measure analytics performance
         start_time = time.time()
@@ -550,12 +550,12 @@ Additional notes and content to test processing performance.
         analytics_report = analytics.generate_comprehensive_report()
         analytics_duration = time.time() - start_time
 
-        assert (
-            analytics_report["report_sections"]["overview"]["total_files"] >= 50
-        ), "Should analyze all files"
-        assert (
-            analytics_duration < 15
-        ), f"Analytics should complete quickly, took {analytics_duration:.2f}s"
+        assert analytics_report["report_sections"]["overview"]["total_files"] >= 50, (
+            "Should analyze all files"
+        )
+        assert analytics_duration < 15, (
+            f"Analytics should complete quickly, took {analytics_duration:.2f}s"
+        )
 
         # Measure automation performance
         start_time = time.time()
@@ -563,12 +563,12 @@ Additional notes and content to test processing performance.
         maintenance_result = automation_manager.run_automated_maintenance()
         automation_duration = time.time() - start_time
 
-        assert (
-            "error" not in maintenance_result
-        ), "Maintenance should complete without errors"
-        assert (
-            automation_duration < 10
-        ), f"Automation should be fast, took {automation_duration:.2f}s"
+        assert "error" not in maintenance_result, (
+            "Maintenance should complete without errors"
+        )
+        assert automation_duration < 10, (
+            f"Automation should be fast, took {automation_duration:.2f}s"
+        )
 
     def test_error_recovery_and_resilience(self, temp_workspace, full_config):
         """Test system resilience and error recovery."""
@@ -604,9 +604,9 @@ Content with corrupted frontmatter.
             assert isinstance(result, bool), "Should return boolean result"
         except Exception as e:
             # Should not crash the system
-            assert (
-                "yaml" in str(e).lower() or "metadata" in str(e).lower()
-            ), "Should give meaningful error"
+            assert "yaml" in str(e).lower() or "metadata" in str(e).lower(), (
+                "Should give meaningful error"
+            )
 
         # Test 2: Missing directory handling
         missing_target_file = workspace["project"] / "test.md"
@@ -629,9 +629,9 @@ category: "nonexistent_category"
 
         # Should handle vault with minimal content
         report = analytics.generate_comprehensive_report()
-        assert (
-            "report_sections" in report
-        ), "Should generate report even with minimal data"
+        assert "report_sections" in report, (
+            "Should generate report even with minimal data"
+        )
 
         # Test 4: Automation recovery from partial failures
         automation_manager = AutomatedStructureManager(workspace["vault"], config)
@@ -649,9 +649,9 @@ category: "nonexistent_category"
 
             # Automation should continue despite individual file issues
             result = automation_manager.run_automated_maintenance()
-            assert (
-                "tasks_completed" in result
-            ), "Should complete some tasks despite issues"
+            assert "tasks_completed" in result, (
+                "Should complete some tasks despite issues"
+            )
 
             # Restore permissions for cleanup
             unreadable_file.chmod(0o644)

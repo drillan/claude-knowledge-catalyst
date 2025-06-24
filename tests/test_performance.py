@@ -62,9 +62,9 @@ class TestPerformance:
         init_duration = time.time() - start_time
 
         assert success, "Vault initialization should succeed"
-        assert (
-            init_duration < 5.0
-        ), f"Vault initialization took {init_duration:.2f}s, should be under 5s"
+        assert init_duration < 5.0, (
+            f"Vault initialization took {init_duration:.2f}s, should be under 5s"
+        )
 
         # Verify all directories were created
         expected_dirs = [
@@ -78,9 +78,9 @@ class TestPerformance:
         ]
 
         for dir_name in expected_dirs:
-            assert (
-                setup["vault_path"] / dir_name
-            ).exists(), f"Directory {dir_name} should exist"
+            assert (setup["vault_path"] / dir_name).exists(), (
+                f"Directory {dir_name} should exist"
+            )
 
     def test_file_sync_performance(self, performance_setup):
         """Test file synchronization performance."""
@@ -131,15 +131,15 @@ Additional content to make files substantial.
         sync_duration = time.time() - start_time
 
         assert all(sync_results), "All files should sync successfully"
-        assert (
-            sync_duration < 30
-        ), f"Sync of 100 files took {sync_duration:.2f}s, should be under 30s"
+        assert sync_duration < 30, (
+            f"Sync of 100 files took {sync_duration:.2f}s, should be under 30s"
+        )
 
         # Calculate per-file performance
         per_file_time = sync_duration / len(test_files)
-        assert (
-            per_file_time < 0.3
-        ), f"Per-file sync time {per_file_time:.3f}s should be under 0.3s"
+        assert per_file_time < 0.3, (
+            f"Per-file sync time {per_file_time:.3f}s should be under 0.3s"
+        )
 
     def test_concurrent_sync_performance(self, performance_setup):
         """Test concurrent file synchronization performance."""
@@ -181,17 +181,17 @@ Test content for concurrent processing.
         concurrent_duration = time.time() - start_time
 
         assert all(results), "All concurrent syncs should succeed"
-        assert (
-            concurrent_duration < 20
-        ), f"Concurrent sync took {concurrent_duration:.2f}s, should be under 20s"
+        assert concurrent_duration < 20, (
+            f"Concurrent sync took {concurrent_duration:.2f}s, should be under 20s"
+        )
 
         # Should be faster than sequential for this workload
         # Note: This is a rough estimate, actual performance depends on system
         expected_sequential_time = len(test_files) * 0.1  # Rough estimate
         efficiency = expected_sequential_time / concurrent_duration
-        assert (
-            efficiency > 0.5
-        ), f"Concurrent efficiency {efficiency:.2f} should be reasonable"
+        assert efficiency > 0.5, (
+            f"Concurrent efficiency {efficiency:.2f} should be reasonable"
+        )
 
     # Performance test for analytics generation
     def test_analytics_performance(self, performance_setup):
@@ -262,12 +262,12 @@ Additional content to test analytics processing.
         report = analytics.generate_comprehensive_report()
         analytics_duration = time.time() - start_time
 
-        assert (
-            report["report_sections"]["overview"]["total_files"] >= 200
-        ), "Should analyze all files"
-        assert (
-            analytics_duration < 15
-        ), f"Analytics took {analytics_duration:.2f}s, should be under 15s"
+        assert report["report_sections"]["overview"]["total_files"] >= 200, (
+            "Should analyze all files"
+        )
+        assert analytics_duration < 15, (
+            f"Analytics took {analytics_duration:.2f}s, should be under 15s"
+        )
 
         # Test analytics sections exist and have data
         sections = report["report_sections"]
@@ -350,9 +350,9 @@ Outdated content.
         automation_duration = time.time() - start_time
 
         assert "error" not in result, "Automation should complete without errors"
-        assert (
-            automation_duration < 10
-        ), f"Automation took {automation_duration:.2f}s, should be under 10s"
+        assert automation_duration < 10, (
+            f"Automation took {automation_duration:.2f}s, should be under 10s"
+        )
 
         # Check that maintenance tasks were completed
         tasks_completed = result.get("tasks_completed", [])
@@ -424,9 +424,9 @@ structure, completeness, and technical depth.
         enhancement_duration = time.time() - start_time
 
         assert len(enhanced_files) == len(test_files), "Should enhance all files"
-        assert (
-            enhancement_duration < 20
-        ), f"Enhancement took {enhancement_duration:.2f}s, should be under 20s"
+        assert enhancement_duration < 20, (
+            f"Enhancement took {enhancement_duration:.2f}s, should be under 20s"
+        )
 
         # Verify enhancement quality
         for _file_path, metadata in enhanced_files[:5]:  # Check first 5 files
@@ -487,18 +487,18 @@ def memory_test_function_{i}():
                 memory_increase = current_memory - baseline_memory
 
                 # Memory should not grow excessively
-                assert (
-                    memory_increase < 500
-                ), f"Memory usage increased by {memory_increase:.1f}MB after {i} files"
+                assert memory_increase < 500, (
+                    f"Memory usage increased by {memory_increase:.1f}MB after {i} files"
+                )
 
         # Final memory check
         final_memory = process.memory_info().rss / 1024 / 1024  # MB
         total_increase = final_memory - baseline_memory
 
         # Total memory increase should be reasonable
-        assert (
-            total_increase < 1000
-        ), f"Total memory increase {total_increase:.1f}MB should be under 1GB"
+        assert total_increase < 1000, (
+            f"Total memory increase {total_increase:.1f}MB should be under 1GB"
+        )
 
     # Performance test for large vault analytics
     def test_large_vault_analytics_performance(self, performance_setup):
@@ -562,9 +562,9 @@ File {file_i} in subdirectory {sub_i} of {dir_name}.
         assert (
             report["report_sections"]["overview"]["total_files"] >= total_files * 0.9
         ), "Should analyze most files"
-        assert (
-            analytics_duration < 30
-        ), f"Large vault analytics took {analytics_duration:.2f}s, should be under 30s"
+        assert analytics_duration < 30, (
+            f"Large vault analytics took {analytics_duration:.2f}s, should be under 30s"
+        )
 
         # Verify report completeness
         sections = report["report_sections"]

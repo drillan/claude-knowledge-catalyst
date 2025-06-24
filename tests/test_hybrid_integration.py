@@ -183,9 +183,9 @@ Test content for {filename}
         # Check that legacy directories are accessible
         for legacy_dir in legacy_dirs:
             legacy_path = temp_vault / legacy_dir
-            assert (
-                legacy_path.exists()
-            ), f"Legacy directory {legacy_dir} should be accessible"
+            assert legacy_path.exists(), (
+                f"Legacy directory {legacy_dir} should be accessible"
+            )
 
     def test_structure_validation(self, temp_vault, hybrid_config):
         """Test structure validation."""
