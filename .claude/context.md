@@ -111,8 +111,11 @@ uv run pytest tests/test_yake_extractor.py::test_fallback_without_yake
 # リンティング
 uv run ruff check src/ tests/
 
-# フォーマット
+# フォーマット（手動実行）
 uv run ruff format src/ tests/
+
+# フォーマットチェック（CI/Pre-commit用）
+uv run ruff format src/ tests/ --check
 
 # 型チェック
 uv run mypy src/
@@ -121,12 +124,17 @@ uv run mypy src/
 uv run pytest tests/
 uv run pytest --cov=src/claude_knowledge_catalyst --cov-report=html
 
-# CI/CD (GitHub Actions)
-# - 自動品質チェック（lint, format, test, security）
-# - マルチPythonバージョンテスト（3.11, 3.12）
-# - 自動リリース・PyPI公開
-# - 依存関係脆弱性監視
+# Pre-commit統合
+uv run pre-commit run --all-files
 ```
+
+### CI/CD統合（GitHub Actions）
+- **Pre-commit統合**: ruff format --checkで一貫性確保
+- **自動品質チェック**: lint, format check, type check, security
+- **マルチPythonバージョンテスト**: 3.11, 3.12
+- **自動リリース・PyPI公開**: タグベースリリース
+- **依存関係脆弱性監視**: safety, bandit統合
+- **ドキュメント自動生成**: sphinx-build統合
 
 ### ファイルパス操作
 - **必須**: `pathlib.Path`の使用（`os.path`ではない）
