@@ -12,12 +12,13 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
+from typer.testing import CliRunner
+
 from claude_knowledge_catalyst.ai.smart_classifier import SmartContentClassifier
 from claude_knowledge_catalyst.cli.main import app
 from claude_knowledge_catalyst.core.config import CKCConfig, SyncTarget
 from claude_knowledge_catalyst.core.metadata import MetadataManager
 from claude_knowledge_catalyst.sync.obsidian import ObsidianVaultManager
-from typer.testing import CliRunner
 
 
 class TestEssentialCLICommands:

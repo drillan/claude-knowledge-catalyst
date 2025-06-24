@@ -15,6 +15,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
+
 from claude_knowledge_catalyst.core.config import CKCConfig, SyncTarget
 from claude_knowledge_catalyst.core.metadata import MetadataManager
 from claude_knowledge_catalyst.sync.hybrid_manager import HybridObsidianVaultManager
