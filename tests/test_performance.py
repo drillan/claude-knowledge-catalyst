@@ -13,6 +13,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
+
 from claude_knowledge_catalyst.analytics.knowledge_analytics import (
     KnowledgeAnalytics,
 )
