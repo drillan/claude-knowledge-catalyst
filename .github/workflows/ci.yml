@@ -123,7 +123,7 @@ jobs:
 
     - name: Install built package
       run: |
-        uv pip install dist/*.whl
+        uv pip install dist/*.whl --system
 
     - name: Test CLI functionality
       run: |
