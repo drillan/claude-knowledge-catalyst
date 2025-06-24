@@ -49,7 +49,7 @@ class LanguageDetector:
 
     def __init__(self, cache_size: int = 200):
         self._cache_size = cache_size
-        self._language_cache = {}
+        self._language_cache: dict[str, str] = {}
 
     def detect_language(self, text: str) -> str:
         """Detect the primary language of the text."""

@@ -531,13 +531,16 @@ def memory_test_function_{i}():
                 sub_dir.mkdir(exist_ok=True)
 
                 # Create files in subdirectory
+                categories = ["prompt", "code", "concept", "project_log", "experiment"]
+                statuses = ["draft", "review", "published"]
+
                 for file_i in range(20):  # 20 files per subdirectory
                     file_path = sub_dir / f"file_{file_i:03d}.md"
                     content = f"""---
 title: "Large Vault Test {total_files}"
 tags: ["large-vault", "test", "subdir-{sub_i}", "dir-{dir_name.split("/")[-1]}"]
-category: "{["prompt", "code", "concept", "project_log", "experiment"][total_files % 5]}"
-status: "{["draft", "review", "published"][total_files % 3]}"
+category: "{categories[total_files % 5]}"
+status: "{statuses[total_files % 3]}"
 ---
 
 # Large Vault Test {total_files}

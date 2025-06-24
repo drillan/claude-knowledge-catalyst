@@ -97,8 +97,8 @@ html_short_title = "CKC Docs"
 
 # SEO and metadata
 html_meta = {
-    "description": "Claude Knowledge Catalyst - 知識の触媒作用を実現する統合的な知識管理システム",
-    "keywords": "Claude, Automation, Knowledge Management, Obsidian, Documentation, Python",
+    "description": "Claude Knowledge Catalyst - 知識管理システム",
+    "keywords": "Claude, Automation, Knowledge Management, Obsidian",
     "author": "driller",
     "viewport": "width=device-width, initial-scale=1.0",
 }

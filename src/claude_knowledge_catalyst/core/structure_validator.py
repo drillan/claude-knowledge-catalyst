@@ -305,7 +305,7 @@ class StructureValidator:
         self, result: ValidationResult, expected_structure: dict[str, dict[str, str]]
     ) -> None:
         """Check for unexpected directories in vault root."""
-        expected_names = set()
+        expected_names: set[str] = set()
 
         for tier_dirs in expected_structure.values():
             expected_names.update(tier_dirs.keys())

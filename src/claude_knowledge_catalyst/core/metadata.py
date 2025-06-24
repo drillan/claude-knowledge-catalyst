@@ -582,7 +582,12 @@ class MetadataManager:
         self, content: str, existing_metadata: dict[str, Any]
     ) -> dict[str, list[str]]:
         """Suggest tag enhancements based on content analysis."""
-        suggestions = {"tech": [], "domain": [], "claude_feature": [], "tags": []}
+        suggestions: dict[str, list[str]] = {
+            "tech": [],
+            "domain": [],
+            "claude_feature": [],
+            "tags": [],
+        }
 
         # Infer technical tags
         inferred_tech = self._infer_tech_tags(content)
@@ -767,7 +772,7 @@ class MetadataManager:
         self, metadata_list: list[dict[str, Any]]
     ) -> dict[str, dict[str, int]]:
         """Get statistics about tag usage across multiple files."""
-        stats = {
+        stats: dict[str, dict[str, int]] = {
             "type": {},
             "status": {},
             "tech": {},

@@ -22,9 +22,9 @@ class PatternLoader:
             self.patterns_dir = Path(patterns_dir)
 
         # Manual caching to avoid B019 warnings
-        self._tech_patterns_cache = None
-        self._domain_patterns_cache = None
-        self._content_patterns_cache = None
+        self._tech_patterns_cache: dict[str, dict[str, list[str]]] | None = None
+        self._domain_patterns_cache: dict[str, dict[str, list[str]]] | None = None
+        self._content_patterns_cache: dict[str, dict[str, list[str]]] | None = None
 
     def load_tech_patterns(self) -> dict[str, dict[str, list[str]]]:
         """Load technology detection patterns.
