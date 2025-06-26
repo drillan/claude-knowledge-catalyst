@@ -11,68 +11,73 @@
 - **Claude Codeプロジェクト**: `.claude/`ディレクトリを含むプロジェクト
 - **Obsidianボルト**: 接続先のObsidianボルト
 
-## Step 1: CKCインストール
+## 連携コマンド
+
+基本的なセットアップから初回同期までを、以下のコマンドで一貫して実行します。
 
 ```bash
-# CKCをインストール
+# 1. CKCをインストール
 uv pip install claude-knowledge-catalyst
 
-# インストール確認
-uv run ckc --version
-```
-
-## Step 2: Claude Codeプロジェクトで初期化
-
-```bash
-# Claude Codeプロジェクトに移動
+# 2. Claude Codeプロジェクトで初期化
 cd your-claude-project
-
-# .claude/ディレクトリの存在を確認
-ls -la .claude/
-
-# CKCを初期化（.claude/ディレクトリを自動検出）
 uv run ckc init
+
+# 3. Obsidianボルトに接続
+uv run ckc add my-vault /path/to/obsidian/vault
+
+# 4. .claude/ファイルをObsidianと同期
+uv run ckc sync
 ```
 
 **何が起こるか:**
-- プロジェクトディレクトリに`ckc_config.yaml`が作成されます
-- `.claude/`ディレクトリがCKC管理対象として認識されます
-- Obsidian統合のための基本設定が準備されます
+- ✅ **シームレス統合**: Claude Code開発とObsidian知識管理の完全連携が実現します。
+- ✅ **自動構造化**: `.claude/`ディレクトリ内のコンテンツが、Obsidianに最適化された構造で自動的に整理されます。
+- ✅ **リアルタイム同期**: この後 `uv run ckc watch` を実行すれば、開発中の知識がリアルタイムでObsidianに反映されます。
 
-## Step 3: Obsidianボルトに接続
+---
+## コマンド詳細
+
+ここからは、各コマンドの動作や、より高度な使い方を解説します。
+
+## Step 1: CKCインストール
+
+CKCをインストールします。
 
 ```bash
-# Obsidianボルトを追加
+uv pip install claude-knowledge-catalyst
+```
+
+## Step 2: プロジェクト初期化
+
+Claude Codeプロジェクト内でCKCを初期化します。これにより、`ckc_config.yaml`が生成されます。
+
+```bash
+cd your-claude-project
+uv run ckc init
+```
+
+## Step 3: Obsidianボルト接続
+
+ObsidianボルトへのパスをCKCに登録します。
+
+```bash
 uv run ckc add main-vault /path/to/your/obsidian/vault
-
-# 設定確認
-uv run ckc status
 ```
 
-**設定例:**
-```yaml
-# ckc_config.yaml（自動生成）
-version: "1.0"
-project_name: "your-claude-project"
-auto_sync: true
+## Step 4: 同期と自動化
 
-sync_targets:
-  - name: "main-vault"
-    type: "obsidian"
-    path: "/path/to/your/obsidian/vault"
-    enabled: true
-```
-
-## Step 4: シームレス同期の体験
-
-### 自動同期開始
+`.claude`ディレクトリのナレッジをObsidianに同期します。
 
 ```bash
-# リアルタイム同期を開始
+# 初回同期
+uv run ckc sync
+
+# リアルタイム自動同期
 uv run ckc watch
 ```
 
-### サンプルコンテンツで体験
+### サンプルコンテンツでの体験
 
 ````bash
 # .claude/にサンプルファイルを作成
